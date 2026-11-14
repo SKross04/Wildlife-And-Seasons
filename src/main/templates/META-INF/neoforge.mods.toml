@@ -20,12 +20,15 @@ version="${mod_version}" #mandatory
 # A display name for the mod
 displayName="${mod_name}" #mandatory
 
+# The square mod icon shown in the mod list (file in src/main/resources)
+iconFile="wildalmanac.png" #optional
+
 # The authors of the mod, displayed in the mod UI (optional)
 authors="Skross04"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Seasons, spreading nature and wild animals that hunt, nest, breed and raise their young, all connected in one living ecosystem.
+Adds seasons and wild animals that hunt, nest, burrow and raise their young.
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
@@ -62,5 +65,14 @@ Seasons, spreading nature and wild animals that hunt, nest, breed and raise thei
     type="required"
     # This version range declares a minimum of the current minecraft version up to but not including the next major version
     versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+# Wild Almanac has its own seasons, so it can't run together with Serene Seasons
+[[dependencies.${mod_id}]]
+    modId="sereneseasons"
+    type="incompatible"
+    reason="Wild Almanac has its own season system."
+    versionRange="[0,)"
     ordering="NONE"
     side="BOTH"
