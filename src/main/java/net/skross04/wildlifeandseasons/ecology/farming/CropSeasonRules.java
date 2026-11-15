@@ -43,4 +43,20 @@ public final class CropSeasonRules {
     public static boolean growsAnyway(double outOfSeasonGrowth, double random) {
         return random < outOfSeasonGrowth;
     }
+
+    /**
+     * Growth stages a crop makes per in-season day, on average: a crop gets about 17.6 random ticks a day and
+     * grows on roughly 1 in 5 of them on a normal watered farm (vanilla's chance depends on the farmland around it).
+     */
+    public static final double STAGES_PER_DAY = 3.5;
+
+    /**
+     * How many growth stages a crop catches up on, for a chunk nobody was near.
+     *
+     * @param growingDays days it could grow (in-season days count 1, out-of-season days count the config's growth speed)
+     * @param random      0–1, so neighbouring crops don't all end up at exactly the same stage
+     */
+    public static int catchUpStages(double growingDays, double random) {
+        return (int) Math.floor(growingDays * STAGES_PER_DAY * (0.75 + 0.5 * random));
+    }
 }

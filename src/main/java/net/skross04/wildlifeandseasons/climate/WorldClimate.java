@@ -108,6 +108,20 @@ public final class WorldClimate {
                 pos.getY(), moment.yearPosition());
     }
 
+    /**
+     * Today's average temperature for a biome you already have (server side), or NaN where there are no seasons.
+     * For chunks that are still loading, where the world can't look up the biome yet.
+     */
+    public static double dailyMeanAt(ServerLevel level, Holder<Biome> biome, BlockPos pos) {
+        BiomeZones.BiomeClimate climate = BiomeZones.of(biome.value());
+        if (!climate.zone().hasSeasons()) {
+            return Double.NaN;
+        }
+        double yearPosition = SeasonSavedData.get(level.getServer()).calendar().yearPosition(SeasonDate.DEFAULT_YEAR_LENGTH);
+        return ClimateModel.dailyMeanTemperature(climate.zone(), climate.biomeTemperature(), climate.extraOffset(),
+                pos.getY(), yearPosition);
+    }
+
     /** The average temperature of today at a position (server side), or NaN where there are no seasons. */
     public static double dailyMeanAt(ServerLevel level, BlockPos pos) {
         BiomeZones.BiomeClimate climate = BiomeZones.of(level.getBiome(pos).value());

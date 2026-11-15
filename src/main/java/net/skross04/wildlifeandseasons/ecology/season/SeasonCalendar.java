@@ -22,6 +22,13 @@ public final class SeasonCalendar {
      */
     public static final long MAX_NATURAL_STEP = 100L;
 
+    /**
+     * A new world starts on this day of the year (0-based): day 15, mid-spring. Day 1 of spring is still cold
+     * (winter only just ended, about 0 °C on the plains, with snow), which feels wrong for a fresh world.
+     * On day 15 the plains are around 9 °C, flowers bloom and the cherry trees are pink.
+     */
+    public static final long NEW_WORLD_START_DAY = 14;
+
     private long elapsedTicks;
     private long lastClockTicks;
     private boolean started;
@@ -46,9 +53,9 @@ public final class SeasonCalendar {
      */
     public boolean update(long clockTicks, boolean slept) {
         if (!started) {
-            // First time Wildlife & Seasons runs in this world: start from the world's age.
-            // A new world is at 0 (day 1 of spring); an old world continues where its year would be.
-            elapsedTicks = Math.max(0L, clockTicks);
+            // First time Wildlife & Seasons runs in this world: start in mid-spring, plus the world's age
+            // (a new world is at 0; an older world continues where its year would be).
+            elapsedTicks = NEW_WORLD_START_DAY * TICKS_PER_DAY + Math.max(0L, clockTicks);
             lastClockTicks = clockTicks;
             started = true;
             return true;

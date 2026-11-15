@@ -30,16 +30,23 @@ import net.skross04.wildlifeandseasons.climate.WorldClimate;
  */
 @EventBusSubscriber(modid = WildlifeAndSeasons.MODID, value = Dist.CLIENT)
 public final class Atmosphere {
-    /** °C: at or below this, breath turns into little clouds. */
-    private static final double BREATH_TEMPERATURE = 3.0;
-    /** Ticks between two breaths of one creature (3 seconds). */
-    private static final int BREATH_INTERVAL = 60;
+    /** °C: at or below this, breath turns into little clouds (only properly cold air, not a cool morning). */
+    private static final double BREATH_TEMPERATURE = 0.0;
+    /** °C: in hard frost, breath shows twice as often. */
+    private static final double HARD_FROST = -10.0;
+    /** Ticks between two moments a creature may breathe out a cloud (10 seconds). */
+    private static final int BREATH_INTERVAL = 200;
+    /** Chance at each of those moments, so it's irregular and not everyone puffs in rhythm. */
+    private static final double BREATH_CHANCE = 0.5;
     private static final double BREATH_DISTANCE = 32.0;
 
     private Atmosphere() {
     }
 
-    /** Breath clouds: every few seconds, each nearby player, animal and villager breathes out a little cloud. */
+    /**
+     * Breath clouds below 0 °C: now and then (about every 20 seconds, twice as often in hard frost) a nearby player,
+     * animal or villager breathes out a little cloud.
+     */
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -53,8 +60,9 @@ public final class Atmosphere {
             if (!(entity instanceof Player || entity instanceof Animal || entity instanceof AbstractVillager)) {
                 continue; // undead, fish, golems… don't breathe
             }
-            if ((time + entity.getId() * 37L) % BREATH_INTERVAL != 0) {
-                continue; // each creature breathes at its own moment
+            long moment = (time + entity.getId() * 37L) % BREATH_INTERVAL;
+            if (moment != 0 && moment != BREATH_INTERVAL / 2) {
+                continue; // each creature at its own moments: every 5 seconds, the second one only in hard frost
             }
             if (entity.distanceToSqr(viewer) > BREATH_DISTANCE * BREATH_DISTANCE || entity.isInWater() || entity.isInvisible()) {
                 continue;
@@ -62,7 +70,8 @@ public final class Atmosphere {
             Vec3 eyes = entity.getEyePosition();
             BlockPos pos = BlockPos.containing(eyes);
             double temperature = WorldClimate.temperatureNow(level.getBiome(pos).value(), pos);
-            if (Double.isNaN(temperature) || temperature > BREATH_TEMPERATURE) {
+            if (Double.isNaN(temperature) || temperature > BREATH_TEMPERATURE
+                    || (moment != 0 && temperature > HARD_FROST) || level.getRandom().nextDouble() >= BREATH_CHANCE) {
                 continue;
             }
             boolean firstPerson = entity == minecraft.player && minecraft.options.getCameraType().isFirstPerson();

@@ -22,6 +22,14 @@ public class DormantFlowerBlockEntity extends BlockEntity {
         return flower;
     }
 
+    /**
+     * Sets the flower without telling the world (for chunks that are still loading: the world can't be asked
+     * about them yet). The caller marks the chunk as changed.
+     */
+    public void setFlowerQuietly(BlockState flower) {
+        this.flower = flower;
+    }
+
     public void setFlower(BlockState flower) {
         this.flower = flower;
         setChanged(); // tells Minecraft this chunk needs saving

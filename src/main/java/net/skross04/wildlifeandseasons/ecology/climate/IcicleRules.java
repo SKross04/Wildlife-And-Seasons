@@ -28,4 +28,18 @@ public final class IcicleRules {
     public static double meltChance(double dailyMeanTemperature) {
         return Double.isNaN(dailyMeanTemperature) ? 0.0 : SnowAndIce.meltChance(dailyMeanTemperature);
     }
+
+    /** Random ticks a block gets per in-game day at the default random tick speed. */
+    private static final double TICKS_PER_DAY = 3.0 * 24000 / 4096;
+
+    /** Chance that an icicle hangs under a snowy roof edge in a chunk that missed this many freezing days. */
+    public static double catchUpFormChance(long freezingDays) {
+        return 1.0 - Math.pow(1.0 - FORM_CHANCE, freezingDays * TICKS_PER_DAY);
+    }
+
+    /** How long (1–3) an icicle that formed while nobody was near has grown. */
+    public static int catchUpLength(long freezingDays, double random) {
+        double expectedGrowth = freezingDays * TICKS_PER_DAY * GROW_CHANCE;
+        return 1 + (int) Math.min(MAX_LENGTH - 1, Math.floor(random * (expectedGrowth + 1)));
+    }
 }

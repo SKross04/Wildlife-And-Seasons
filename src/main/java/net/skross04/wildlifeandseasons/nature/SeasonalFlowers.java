@@ -55,17 +55,8 @@ public final class SeasonalFlowers {
 
     /** Called when the grass under {@code ground} gets a random tick. */
     public static void onGroundRandomTick(ServerLevel level, BlockPos ground, RandomSource random) {
-        update(level, ground, random, false);
-    }
-
-    /** A chunk nobody was near for a while: settle the flower here straight away (see {@link ChunkCatchUp}). */
-    public static void catchUp(ServerLevel level, BlockPos ground, RandomSource random) {
-        update(level, ground, random, true);
-    }
-
-    private static void update(ServerLevel level, BlockPos ground, RandomSource random, boolean catchUp) {
-        double wiltChance = catchUp ? 1.0 : FlowerRules.WILT_CHANCE;
-        double bloomChance = catchUp ? 1.0 : FlowerRules.BLOOM_CHANCE;
+        double wiltChance = FlowerRules.WILT_CHANCE;
+        double bloomChance = FlowerRules.BLOOM_CHANCE;
         BlockPos pos = ground.above();
         BlockState state = level.getBlockState(pos);
         boolean flower = isSeasonalFlower(state) || isSeasonalTallFlower(state);

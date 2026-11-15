@@ -7,6 +7,7 @@ import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.skross04.wildlifeandseasons.Config;
@@ -62,7 +63,7 @@ public final class CropSeasons {
      * A crop is in a greenhouse when the first solid block above it is glass.
      * Things you can walk through (other crops, torches, flowers) are looked past; walls aren't needed.
      */
-    public static boolean isGreenhouse(Level level, BlockPos pos) {
+    public static boolean isGreenhouse(BlockGetter level, BlockPos pos) {
         BlockPos.MutableBlockPos cursor = pos.mutable();
         int maxHeight = Config.greenhouseMaxHeight();
         for (int i = 0; i < maxHeight; i++) {

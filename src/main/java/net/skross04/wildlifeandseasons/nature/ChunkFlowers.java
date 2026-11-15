@@ -58,6 +58,11 @@ public final class ChunkFlowers {
         return wilted.containsKey(pos);
     }
 
+    /** All spots where a wild flower wilted and waits to come back. */
+    public List<BlockPos> wiltedPositions() {
+        return List.copyOf(wilted.keySet());
+    }
+
     /** The remembered flower at this spot, without forgetting it. */
     public @Nullable BlockState peekWilted(BlockPos pos) {
         return wilted.get(pos);
