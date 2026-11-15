@@ -4,6 +4,7 @@ import net.minecraft.data.PackOutput;
 import net.skross04.wildalmanac.climate.ClimateTranslations;
 import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.season.Season;
+import net.skross04.wildalmanac.block.ModBlocks;
 import net.skross04.wildalmanac.item.ModCreativeModeTabs;
 import net.skross04.wildalmanac.item.ModItems;
 import net.skross04.wildalmanac.season.SeasonTranslations;
@@ -18,6 +19,7 @@ public class EnUsLanguageProvider extends ModLanguageProvider {
     protected void addTranslations() {
         add(ModCreativeModeTabs.WILD_ALMANAC_TAB_TITLE, "Wild Almanac");
 
+        addBlock(ModBlocks.DORMANT_FLOWER, "Dormant Flower");
         addItem(ModItems.SEASON_CALENDAR, "Season Calendar");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Right-click to see the season and day");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – day %2$s of %3$s, year %4$s");

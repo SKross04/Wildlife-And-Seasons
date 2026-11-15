@@ -8,6 +8,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
+import net.skross04.wildalmanac.attachment.ModAttachments;
+import net.skross04.wildalmanac.block.ModBlocks;
+import net.skross04.wildalmanac.block.entity.ModBlockEntities;
 import net.skross04.wildalmanac.item.ModCreativeModeTabs;
 import net.skross04.wildalmanac.item.ModItems;
 
@@ -24,6 +27,9 @@ public class WildAlmanac {
     public WildAlmanac(IEventBus modEventBus, ModContainer modContainer) {
         ModCreativeModeTabs.register(modEventBus);
         ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+        ModAttachments.register(modEventBus);
 
         modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);

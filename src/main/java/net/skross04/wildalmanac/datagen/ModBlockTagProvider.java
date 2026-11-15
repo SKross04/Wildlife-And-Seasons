@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagEntry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -50,6 +51,18 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         var deciduous = tag(ModTags.Blocks.DROPS_LEAF_LITTER);
         for (Block leaves : new Block[]{Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.BIRCH_LEAVES}) {
             deciduous.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(leaves)));
+        }
+
+        // Seasonal flowers: all small flowers (also modded ones in that tag), pink petals and wildflowers.
+        tag(ModTags.Blocks.SEASONAL_FLOWERS)
+                .addTag(BlockTags.SMALL_FLOWERS)
+                .add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(Blocks.PINK_PETALS)))
+                .add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(Blocks.WILDFLOWERS)));
+        // Not seasonal: the wither rose (not a wild flower), eyeblossoms (they open and close every night already)
+        // and the torchflower (a crop).
+        var notSeasonal = tag(ModTags.Blocks.NOT_SEASONAL_FLOWERS);
+        for (Block block : new Block[]{Blocks.WITHER_ROSE, Blocks.OPEN_EYEBLOSSOM, Blocks.CLOSED_EYEBLOSSOM, Blocks.TORCHFLOWER}) {
+            notSeasonal.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(block)));
         }
 
         tag(ModTags.Blocks.GREENHOUSE_GLASS)

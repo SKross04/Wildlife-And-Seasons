@@ -32,6 +32,11 @@ public class ModTags {
         /** Leaves that turn colour and drop in autumn (falling leaves, leaf litter). */
         public static final TagKey<Block> DROPS_LEAF_LITTER = createTag("drops_leaf_litter");
 
+        /** Flowers that bloom in spring and wilt (wild) or go dormant (planted) the rest of the year. */
+        public static final TagKey<Block> SEASONAL_FLOWERS = createTag("seasonal_flowers");
+        /** Exceptions: flowers in the seasonal tag that should stay as they are (e.g. wither rose). */
+        public static final TagKey<Block> NOT_SEASONAL_FLOWERS = createTag("not_seasonal_flowers");
+
         /** Vanilla's crop tag. Crops from other mods that are in it, but in no season tag, get spring–autumn. */
         public static final TagKey<Block> VANILLA_CROPS =
                 TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("crops"));
