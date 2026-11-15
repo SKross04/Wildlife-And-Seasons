@@ -1,0 +1,18 @@
+{
+  "creativetab.wildalmanac.wild_almanac": "Wild Almanac",
+  "item.wildalmanac.season_calendar": "Jahreszeitenkalender",
+  "item.wildalmanac.season_calendar.date": "%1$s – Tag %2$s von %3$s, Jahr %4$s",
+  "item.wildalmanac.season_calendar.tooltip": "Rechtsklick, um Jahreszeit und Tag zu sehen",
+  "season.wildalmanac.early_autumn": "Herbstanfang",
+  "season.wildalmanac.early_spring": "Frühlingsanfang",
+  "season.wildalmanac.early_summer": "Sommeranfang",
+  "season.wildalmanac.early_winter": "Winteranfang",
+  "season.wildalmanac.late_autumn": "Herbstende",
+  "season.wildalmanac.late_spring": "Frühlingsende",
+  "season.wildalmanac.late_summer": "Sommerende",
+  "season.wildalmanac.late_winter": "Winterende",
+  "season.wildalmanac.mid_autumn": "Herbstmitte",
+  "season.wildalmanac.mid_spring": "Frühlingsmitte",
+  "season.wildalmanac.mid_summer": "Sommermitte",
+  "season.wildalmanac.mid_winter": "Wintermitte"
+}

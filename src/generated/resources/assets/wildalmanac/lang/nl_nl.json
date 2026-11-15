@@ -1,0 +1,18 @@
+{
+  "creativetab.wildalmanac.wild_almanac": "Wild Almanac",
+  "item.wildalmanac.season_calendar": "Seizoenskalender",
+  "item.wildalmanac.season_calendar.date": "%1$s – dag %2$s van %3$s, jaar %4$s",
+  "item.wildalmanac.season_calendar.tooltip": "Rechtsklik om het seizoen en de dag te zien",
+  "season.wildalmanac.early_autumn": "Begin herfst",
+  "season.wildalmanac.early_spring": "Begin lente",
+  "season.wildalmanac.early_summer": "Begin zomer",
+  "season.wildalmanac.early_winter": "Begin winter",
+  "season.wildalmanac.late_autumn": "Eind herfst",
+  "season.wildalmanac.late_spring": "Eind lente",
+  "season.wildalmanac.late_summer": "Eind zomer",
+  "season.wildalmanac.late_winter": "Eind winter",
+  "season.wildalmanac.mid_autumn": "Midden herfst",
+  "season.wildalmanac.mid_spring": "Midden lente",
+  "season.wildalmanac.mid_summer": "Midden zomer",
+  "season.wildalmanac.mid_winter": "Midden winter"
+}

@@ -1,0 +1,18 @@
+{
+  "creativetab.wildalmanac.wild_almanac": "Wild Almanac",
+  "item.wildalmanac.season_calendar": "Årstidskalender",
+  "item.wildalmanac.season_calendar.date": "%1$s – dag %2$s av %3$s, år %4$s",
+  "item.wildalmanac.season_calendar.tooltip": "Högerklicka för att se årstid och dag",
+  "season.wildalmanac.early_autumn": "Tidig höst",
+  "season.wildalmanac.early_spring": "Tidig vår",
+  "season.wildalmanac.early_summer": "Tidig sommar",
+  "season.wildalmanac.early_winter": "Tidig vinter",
+  "season.wildalmanac.late_autumn": "Sen höst",
+  "season.wildalmanac.late_spring": "Sen vår",
+  "season.wildalmanac.late_summer": "Sen sommar",
+  "season.wildalmanac.late_winter": "Sen vinter",
+  "season.wildalmanac.mid_autumn": "Mitten av hösten",
+  "season.wildalmanac.mid_spring": "Mitten av våren",
+  "season.wildalmanac.mid_summer": "Mitten av sommaren",
+  "season.wildalmanac.mid_winter": "Mitten av vintern"
+}

@@ -26,5 +26,23 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x ./gradlew
 
+      # Runs datagen (models, recipes, language files) so the jar always has up-to-date data
+      - name: Generate data
+        run: ./gradlew runData
+
       - name: Build with Gradle
         run: ./gradlew build
+
+      # Fails if someone changed a data provider but forgot to run runData and commit src/generated
+      - name: Check generated files are committed
+        run: |
+          git add -N src/generated
+          if ! git diff --quiet -- src/generated; then
+            echo "Datagen output differs from the committed files. Run the runData task and commit src/generated."
+            git diff --stat -- src/generated
+            echo "----- BEGIN GENERATED (tar.gz base64) -----"
+            tar czf - --exclude=.cache src/generated/resources | base64 -w 0
+            echo
+            echo "----- END GENERATED -----"
+            exit 1
+          fi
