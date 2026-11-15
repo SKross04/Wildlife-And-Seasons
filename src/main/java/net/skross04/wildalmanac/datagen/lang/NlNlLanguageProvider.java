@@ -22,6 +22,8 @@ public class NlNlLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.DORMANT_FLOWER, "Slapende bloem");
         addItem(ModItems.SEASON_CALENDAR, "Seizoenskalender");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Rechtsklik om het seizoen en de dag te zien");
+        add(SeasonTranslations.WET_SEASON, "Regenseizoen · %s");
+        add(SeasonTranslations.DRY_SEASON, "Droog seizoen · %s");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – dag %2$s van %3$s, jaar %4$s");
         add(SeasonTranslations.COMMAND_SET, "Seizoen ingesteld: %s");
 

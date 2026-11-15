@@ -22,6 +22,8 @@ public class DeDeLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.DORMANT_FLOWER, "Ruhende Blume");
         addItem(ModItems.SEASON_CALENDAR, "Jahreszeitenkalender");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Rechtsklick, um Jahreszeit und Tag zu sehen");
+        add(SeasonTranslations.WET_SEASON, "Regenzeit · %s");
+        add(SeasonTranslations.DRY_SEASON, "Trockenzeit · %s");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – Tag %2$s von %3$s, Jahr %4$s");
         add(SeasonTranslations.COMMAND_SET, "Jahreszeit gesetzt: %s");
 

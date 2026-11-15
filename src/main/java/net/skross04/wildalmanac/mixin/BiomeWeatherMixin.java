@@ -26,4 +26,13 @@ public abstract class BiomeWeatherMixin {
             cir.setReturnValue(SnowAndIce.isRainTemperature(temperature));
         }
     }
+
+    /** Wet and dry seasons: savannas and jungles only rain in their wet season, deserts on a few spring days. */
+    @Inject(method = "hasPrecipitation", at = @At("HEAD"), cancellable = true)
+    private void wildalmanac$wetAndDrySeasons(CallbackInfoReturnable<Boolean> cir) {
+        Boolean rain = WorldClimate.wetSeasonRain((Biome) (Object) this);
+        if (rain != null) {
+            cir.setReturnValue(rain);
+        }
+    }
 }

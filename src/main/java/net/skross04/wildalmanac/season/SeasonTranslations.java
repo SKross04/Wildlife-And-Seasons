@@ -17,6 +17,9 @@ public final class SeasonTranslations {
     /** "Season set: %s" (feedback of /season set) */
     public static final String COMMAND_SET = "commands." + WildAlmanac.MODID + ".season.set";
 
+    /** "Wet season · %s" and "Dry season · %s" (calendar in savannas and jungles) */
+    public static final String WET_SEASON = "item." + WildAlmanac.MODID + ".season_calendar.wet_season";
+    public static final String DRY_SEASON = "item." + WildAlmanac.MODID + ".season_calendar.dry_season";
     /** "Grows in:" (the seasons follow on their own lines) */
     public static final String CROP_GROWS_IN = "tooltip." + WildAlmanac.MODID + ".crop.grows_in";
 

@@ -22,6 +22,8 @@ public class FrFrLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.DORMANT_FLOWER, "Fleur en dormance");
         addItem(ModItems.SEASON_CALENDAR, "Calendrier des saisons");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Clic droit pour voir la saison et le jour");
+        add(SeasonTranslations.WET_SEASON, "Saison des pluies · %s");
+        add(SeasonTranslations.DRY_SEASON, "Saison sèche · %s");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – jour %2$s sur %3$s, année %4$s");
         add(SeasonTranslations.COMMAND_SET, "Saison réglée : %s");
 

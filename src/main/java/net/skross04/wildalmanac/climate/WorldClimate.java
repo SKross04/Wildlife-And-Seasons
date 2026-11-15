@@ -7,10 +7,12 @@ import net.minecraft.core.Holder;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
+import net.skross04.wildalmanac.Config;
 import net.neoforged.neoforge.common.Tags;
 import net.skross04.wildalmanac.ecology.climate.ClimateModel;
 import net.skross04.wildalmanac.ecology.climate.ClimateState;
 import net.skross04.wildalmanac.ecology.climate.ClimateZone;
+import net.skross04.wildalmanac.ecology.climate.SeasonalWeather;
 import net.skross04.wildalmanac.ecology.season.SeasonCalendar;
 import net.skross04.wildalmanac.ecology.season.SeasonDate;
 import net.skross04.wildalmanac.season.SeasonSavedData;
@@ -75,6 +77,21 @@ public final class WorldClimate {
         }
         return ClimateModel.sample(climate.zone(), climate.biomeTemperature(), climate.extraOffset(), pos.getY(),
                 moment.yearPosition(), moment.dayPosition()).temperature();
+    }
+
+    /**
+     * Wet and dry seasons for code without a world (the Biome mixin): whether this biome can have rain now,
+     * or null where vanilla decides (also when the season isn't known yet).
+     */
+    public static Boolean wetSeasonRain(Biome biome) {
+        ClimateSnapshot.Moment moment = ClimateSnapshot.current();
+        if (moment == null || !Config.seasonalWeather()) {
+            return null;
+        }
+        BiomeZones.BiomeClimate climate = BiomeZones.of(biome);
+        double rainfall = ClimateModel.sample(climate.zone(), climate.biomeTemperature(), climate.extraOffset(), 64,
+                moment.yearPosition(), moment.dayPosition()).rainfall();
+        return SeasonalWeather.hasRain(climate.zone(), rainfall);
     }
 
     /** The average temperature of today at a position (server side), or NaN where there are no seasons. */

@@ -22,6 +22,8 @@ public class EnUsLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.DORMANT_FLOWER, "Dormant Flower");
         addItem(ModItems.SEASON_CALENDAR, "Season Calendar");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Right-click to see the season and day");
+        add(SeasonTranslations.WET_SEASON, "Wet season · %s");
+        add(SeasonTranslations.DRY_SEASON, "Dry season · %s");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – day %2$s of %3$s, year %4$s");
         add(SeasonTranslations.COMMAND_SET, "Season set: %s");
 

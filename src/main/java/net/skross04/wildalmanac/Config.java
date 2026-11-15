@@ -32,6 +32,15 @@ public class Config {
         BUILDER.comment("Nature around you").push("ambience");
     }
 
+    public static final ModConfigSpec.BooleanValue SEASONAL_WEATHER = BUILDER
+            .comment("Rain, snow and thunder follow the seasons (showers in spring, storms in summer, long rain in autumn).",
+                    "Savannas and jungles get wet and dry seasons, deserts a few rainy days in spring.")
+            .define("seasonalWeather", true);
+
+    public static final ModConfigSpec.BooleanValue SEASONAL_DAY_LENGTH = BUILDER
+            .comment("Long days in summer, short days in winter. A whole day still takes 20 minutes.")
+            .define("seasonalDayLength", true);
+
     public static final ModConfigSpec.BooleanValue LEAF_LITTER = BUILDER
             .comment("In autumn, fallen leaves slowly gather on forest floors under trees; they rot away in spring.")
             .define("leafLitter", true);
@@ -58,5 +67,13 @@ public class Config {
 
     public static boolean leafLitter() {
         return SPEC.isLoaded() ? LEAF_LITTER.get() : LEAF_LITTER.getDefault();
+    }
+
+    public static boolean seasonalWeather() {
+        return SPEC.isLoaded() ? SEASONAL_WEATHER.get() : SEASONAL_WEATHER.getDefault();
+    }
+
+    public static boolean seasonalDayLength() {
+        return SPEC.isLoaded() ? SEASONAL_DAY_LENGTH.get() : SEASONAL_DAY_LENGTH.getDefault();
     }
 }

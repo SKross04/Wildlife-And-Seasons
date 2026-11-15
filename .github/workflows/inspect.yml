@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       files:
-        description: 'Source files to print, separated by spaces (e.g. net/minecraft/world/level/biome/Biome.java)'
+        description: 'Classes (net/minecraft/.../X.java) or resource files (assets/minecraft/...json) to print, separated by spaces'
         required: true
       grep:
         description: 'Optional: instead of whole files, only show lines matching this pattern (grep -n -E)'
@@ -69,7 +69,14 @@ jobs:
           for f in $FILES; do
             echo "===== $f ====="
             NOT_FOUND=""
-            if [ -n "$SOURCES" ]; then
+            if [[ "$f" != *.java ]]; then
+              # Not a class: a resource file (model, blockstate, item definition…) from the Minecraft jars
+              OUT=""
+              for jar in "$CLASSES" $(find build ~/.gradle -name '*.jar' -path '*minecraft*' 2>/dev/null); do
+                OUT=$(unzip -p "$jar" "$f" 2>/dev/null) && [ -n "$OUT" ] && break
+              done
+              [ -z "$OUT" ] && OUT="(resource not found)"
+            elif [ -n "$SOURCES" ]; then
               OUT=$(unzip -p "$SOURCES" "$f" 2>/dev/null)
             else
               CLASS=$(echo "$f" | sed 's/\.java$//; s#/#.#g')

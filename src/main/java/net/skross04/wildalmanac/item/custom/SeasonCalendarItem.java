@@ -15,6 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
+import net.skross04.wildalmanac.climate.WorldClimate;
+import net.skross04.wildalmanac.ecology.climate.ClimateZone;
+import net.skross04.wildalmanac.ecology.climate.SeasonalWeather;
 import net.skross04.wildalmanac.season.SeasonTranslations;
 import net.skross04.wildalmanac.season.WorldSeasons;
 
@@ -31,10 +34,25 @@ public class SeasonCalendarItem extends Item {
         // use() runs on both the client and the server. Only the server knows the real day count,
         // so the work happens there; the client just plays the arm-swing animation.
         if (level instanceof ServerLevel serverLevel) {
-            player.sendOverlayMessage(SeasonTranslations.describe(WorldSeasons.currentDate(serverLevel)));
+            player.sendOverlayMessage(describeHere(serverLevel, player));
             level.playSound(null, player.blockPosition(), SoundEvents.BOOK_PAGE_TURN, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
         return InteractionResult.SUCCESS;
+    }
+
+    /**
+     * The date, and in savannas and jungles also whether it's the wet or the dry season there
+     * (those zones have wet and dry seasons instead of a cold winter).
+     */
+    private static Component describeHere(ServerLevel level, Player player) {
+        Component date = SeasonTranslations.describe(WorldSeasons.currentDate(level));
+        ClimateZone zone = WorldClimate.zoneOf(level.getBiome(player.blockPosition()));
+        if (zone != ClimateZone.TROPICAL && zone != ClimateZone.SAVANNA) {
+            return date;
+        }
+        double rainfall = WorldClimate.climateAt(level, player.blockPosition()).rainfall();
+        boolean wet = Boolean.TRUE.equals(SeasonalWeather.hasRain(zone, rainfall));
+        return Component.translatable(wet ? SeasonTranslations.WET_SEASON : SeasonTranslations.DRY_SEASON, date);
     }
 
     @Override

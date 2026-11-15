@@ -22,6 +22,8 @@ public class SvSeLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.DORMANT_FLOWER, "Vilande blomma");
         addItem(ModItems.SEASON_CALENDAR, "Årstidskalender");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Högerklicka för att se årstid och dag");
+        add(SeasonTranslations.WET_SEASON, "Regnperiod · %s");
+        add(SeasonTranslations.DRY_SEASON, "Torrperiod · %s");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – dag %2$s av %3$s, år %4$s");
         add(SeasonTranslations.COMMAND_SET, "Årstid ändrad: %s");
 

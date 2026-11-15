@@ -15,6 +15,7 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.skross04.wildalmanac.WildAlmanac;
 import net.skross04.wildalmanac.climate.BiomeZones;
 import net.skross04.wildalmanac.climate.ClimateSnapshot;
+import net.skross04.wildalmanac.climate.WeatherAndDaylight;
 import net.skross04.wildalmanac.command.SeasonCommand;
 import net.skross04.wildalmanac.ecology.season.SeasonDate;
 import net.skross04.wildalmanac.network.ModNetworking;
@@ -34,6 +35,7 @@ public class SeasonEvents {
         // For code without a world at hand (the Biome mixin): where we are in the year and the day.
         ClimateSnapshot.updateServer(data.calendar().yearPosition(SeasonDate.DEFAULT_YEAR_LENGTH),
                 ClimateSnapshot.dayPosition(server.overworld()));
+        WeatherAndDaylight.tick(server);
         if (data.needsSync()) {
             ModNetworking.syncSeasonToAll(server); // once per day, players learn the new date
         }
@@ -62,6 +64,7 @@ public class SeasonEvents {
     public static void onServerStopped(ServerStoppedEvent event) {
         ClimateSnapshot.clearServer();
         BiomeZones.clear();
+        WeatherAndDaylight.reset();
     }
 
     /** Datapacks can move biomes between climate zones, so forget the cached zones when tags reload. */

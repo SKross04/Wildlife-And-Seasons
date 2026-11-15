@@ -22,6 +22,8 @@ public class EsEsLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.DORMANT_FLOWER, "Flor latente");
         addItem(ModItems.SEASON_CALENDAR, "Calendario de estaciones");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Clic derecho para ver la estación y el día");
+        add(SeasonTranslations.WET_SEASON, "Estación lluviosa · %s");
+        add(SeasonTranslations.DRY_SEASON, "Estación seca · %s");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – día %2$s de %3$s, año %4$s");
         add(SeasonTranslations.COMMAND_SET, "Estación cambiada: %s");
 
