@@ -58,10 +58,17 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .addTag(BlockTags.SMALL_FLOWERS)
                 .add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(Blocks.PINK_PETALS)))
                 .add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(Blocks.WILDFLOWERS)));
+        // Seasonal tall flowers: the four vanilla ones, plus modded tall flowers in the common c:flowers/tall tag.
+        var tallFlowers = tag(ModTags.Blocks.SEASONAL_TALL_FLOWERS);
+        for (Block block : new Block[]{Blocks.LILAC, Blocks.PEONY, Blocks.ROSE_BUSH, Blocks.SUNFLOWER}) {
+            tallFlowers.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(block)));
+        }
+        tallFlowers.add(TagEntry.optionalTag(Identifier.fromNamespaceAndPath("c", "flowers/tall")));
         // Not seasonal: the wither rose (not a wild flower), eyeblossoms (they open and close every night already)
-        // and the torchflower (a crop).
+        // and the torchflower and pitcher plant (ancient plants grown from sniffer seeds).
         var notSeasonal = tag(ModTags.Blocks.NOT_SEASONAL_FLOWERS);
-        for (Block block : new Block[]{Blocks.WITHER_ROSE, Blocks.OPEN_EYEBLOSSOM, Blocks.CLOSED_EYEBLOSSOM, Blocks.TORCHFLOWER}) {
+        for (Block block : new Block[]{Blocks.WITHER_ROSE, Blocks.OPEN_EYEBLOSSOM, Blocks.CLOSED_EYEBLOSSOM, Blocks.TORCHFLOWER,
+                Blocks.PITCHER_PLANT}) {
             notSeasonal.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(block)));
         }
 

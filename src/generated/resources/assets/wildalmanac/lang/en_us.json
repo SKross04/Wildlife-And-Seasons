@@ -1,5 +1,8 @@
 {
   "block.wildalmanac.dormant_flower": "Dormant Flower",
+  "block.wildalmanac.icicle": "Icicle",
+  "block.wildalmanac.rain_gauge": "Rain Gauge",
+  "block.wildalmanac.thermometer": "Thermometer",
   "climate_zone.wildalmanac.arid": "Arid zone",
   "climate_zone.wildalmanac.cold": "Cold zone",
   "climate_zone.wildalmanac.no_seasons": "No seasons",
@@ -16,6 +19,8 @@
   "item.wildalmanac.season_calendar.dry_season": "Dry season · %s",
   "item.wildalmanac.season_calendar.tooltip": "Right-click to see the season and day",
   "item.wildalmanac.season_calendar.wet_season": "Wet season · %s",
+  "message.wildalmanac.rain_gauge": "Rain gauge: %1$s%% full · %2$s%% rainfall this season",
+  "message.wildalmanac.thermometer": "Thermometer: %s °C",
   "season.wildalmanac.autumn": "Autumn",
   "season.wildalmanac.early_autumn": "Early Autumn",
   "season.wildalmanac.early_spring": "Early Spring",

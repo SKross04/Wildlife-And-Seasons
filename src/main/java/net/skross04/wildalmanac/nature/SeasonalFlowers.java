@@ -4,7 +4,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -15,13 +18,14 @@ import net.skross04.wildalmanac.attachment.ModAttachments;
 import net.skross04.wildalmanac.block.ModBlocks;
 import net.skross04.wildalmanac.block.entity.DormantFlowerBlockEntity;
 import net.skross04.wildalmanac.climate.BiomeZones;
+import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.season.SeasonDate;
 import net.skross04.wildalmanac.ecology.vegetation.FlowerRules;
 import net.skross04.wildalmanac.season.SeasonSavedData;
 import net.skross04.wildalmanac.util.ModTags;
 
 /**
- * Flowers bloom in spring (see {@link FlowerRules}).
+ * Flowers bloom in spring, tall flowers in spring and summer (see {@link FlowerRules}).
  * <ul>
  *     <li>Wild flowers wilt after their bloom time and disappear; the chunk remembers them and they regrow in spring.</li>
  *     <li>Flowers a player planted become a dormant flower (closed bud) and open again in spring.</li>
@@ -39,11 +43,21 @@ public final class SeasonalFlowers {
         return state.is(ModTags.Blocks.SEASONAL_FLOWERS) && !state.is(ModTags.Blocks.NOT_SEASONAL_FLOWERS);
     }
 
+    /** The bottom half of a seasonal tall flower ({@code wildalmanac:seasonal_tall_flowers}), e.g. a lilac. */
+    public static boolean isSeasonalTallFlower(BlockState state) {
+        return state.is(ModTags.Blocks.SEASONAL_TALL_FLOWERS) && !state.is(ModTags.Blocks.NOT_SEASONAL_FLOWERS)
+                && state.hasProperty(DoublePlantBlock.HALF) && state.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.LOWER;
+    }
+
+    private static boolean isTall(BlockState flower) {
+        return flower.getBlock() instanceof DoublePlantBlock;
+    }
+
     /** Called when the grass under {@code ground} gets a random tick. */
     public static void onGroundRandomTick(ServerLevel level, BlockPos ground, RandomSource random) {
         BlockPos pos = ground.above();
         BlockState state = level.getBlockState(pos);
-        boolean flower = isSeasonalFlower(state);
+        boolean flower = isSeasonalFlower(state) || isSeasonalTallFlower(state);
         boolean dormant = state.is(ModBlocks.DORMANT_FLOWER.get());
         LevelChunk chunk = level.getChunkAt(pos);
         ChunkFlowers memory = chunk.getExistingDataOrNull(ModAttachments.CHUNK_FLOWERS.get());
@@ -53,10 +67,16 @@ public final class SeasonalFlowers {
         }
 
         double yearPosition = SeasonSavedData.get(level.getServer()).calendar().yearPosition(SeasonDate.DEFAULT_YEAR_LENGTH);
-        boolean bloomTime = FlowerRules.isBloomTime(BiomeZones.of(level.getBiome(pos).value()).zone(), yearPosition);
+        ClimateZone zone = BiomeZones.of(level.getBiome(pos).value()).zone();
+        boolean bloomTime = FlowerRules.isBloomTime(zone, yearPosition);
+        boolean tallBloomTime = FlowerRules.isTallBloomTime(zone, yearPosition);
 
-        if (flower && !bloomTime && random.nextDouble() < FlowerRules.WILT_CHANCE) {
+        if (flower) {
+            if ((isTall(state) ? tallBloomTime : bloomTime) || random.nextDouble() >= FlowerRules.WILT_CHANCE) {
+                return;
+            }
             ChunkFlowers data = chunk.getData(ModAttachments.CHUNK_FLOWERS.get());
+            // Replacing the bottom half also removes the top half of a tall flower (vanilla does that).
             if (data.isPlanted(pos)) {
                 level.setBlockAndUpdate(pos, ModBlocks.DORMANT_FLOWER.get().defaultBlockState());
                 if (level.getBlockEntity(pos) instanceof DormantFlowerBlockEntity bud) {
@@ -67,17 +87,35 @@ public final class SeasonalFlowers {
                 level.removeBlock(pos, false);
             }
             chunk.markUnsaved();
-        } else if (dormant && bloomTime && random.nextDouble() < FlowerRules.BLOOM_CHANCE) {
-            if (level.getBlockEntity(pos) instanceof DormantFlowerBlockEntity bud) {
-                level.setBlockAndUpdate(pos, bud.getFlower());
+        } else if (dormant) {
+            if (level.getBlockEntity(pos) instanceof DormantFlowerBlockEntity bud
+                    && (isTall(bud.getFlower()) ? tallBloomTime : bloomTime)
+                    && random.nextDouble() < FlowerRules.BLOOM_CHANCE) {
+                regrow(level, pos, bud.getFlower());
             }
-        } else if (wiltedHere && bloomTime && random.nextDouble() < FlowerRules.BLOOM_CHANCE) {
-            BlockState regrown = memory.takeWilted(pos);
-            if (regrown != null && regrown.canSurvive(level, pos)) {
-                level.setBlockAndUpdate(pos, regrown);
+        } else if (random.nextDouble() < FlowerRules.BLOOM_CHANCE) {
+            BlockState wilted = memory.peekWilted(pos);
+            if (wilted != null && (isTall(wilted) ? tallBloomTime : bloomTime) && regrow(level, pos, wilted)) {
+                memory.takeWilted(pos);
+                chunk.markUnsaved();
             }
-            chunk.markUnsaved();
         }
+    }
+
+    /** Puts a flower back (both halves for a tall one). False when it doesn't fit or can't stand here (yet). */
+    private static boolean regrow(ServerLevel level, BlockPos pos, BlockState flower) {
+        if (!flower.canSurvive(level, pos)) {
+            return false;
+        }
+        if (isTall(flower)) {
+            if (!level.getBlockState(pos.above()).isAir()) {
+                return false; // no room for the top half: try again later
+            }
+            DoublePlantBlock.placeAt(level, flower, pos, Block.UPDATE_ALL);
+        } else {
+            level.setBlockAndUpdate(pos, flower);
+        }
+        return true;
     }
 
     /** Remember flowers that players plant (also a wild flower that was picked and replanted). */
@@ -88,7 +126,8 @@ public final class SeasonalFlowers {
         }
         BlockPos pos = event.getPos();
         LevelChunk chunk = level.getChunkAt(pos);
-        boolean planting = event.getEntity() instanceof Player && isSeasonalFlower(event.getPlacedBlock());
+        BlockState placed = event.getPlacedBlock();
+        boolean planting = event.getEntity() instanceof Player && (isSeasonalFlower(placed) || isSeasonalTallFlower(placed));
         ChunkFlowers memory = planting
                 ? chunk.getData(ModAttachments.CHUNK_FLOWERS.get())
                 : chunk.getExistingDataOrNull(ModAttachments.CHUNK_FLOWERS.get());
@@ -107,8 +146,15 @@ public final class SeasonalFlowers {
         if (event.getLevel() instanceof ServerLevel level) {
             LevelChunk chunk = level.getChunkAt(event.getPos());
             ChunkFlowers memory = chunk.getExistingDataOrNull(ModAttachments.CHUNK_FLOWERS.get());
-            if (memory != null && memory.isPlanted(event.getPos())) {
-                memory.unplant(event.getPos());
+            if (memory == null) {
+                return;
+            }
+            // Breaking the top half of a planted tall flower: the flower was remembered at its bottom half.
+            BlockState broken = level.getBlockState(event.getPos());
+            BlockPos flowerPos = broken.hasProperty(DoublePlantBlock.HALF)
+                    && broken.getValue(DoublePlantBlock.HALF) == DoubleBlockHalf.UPPER ? event.getPos().below() : event.getPos();
+            if (memory.isPlanted(flowerPos)) {
+                memory.unplant(flowerPos);
                 chunk.markUnsaved();
             }
         }

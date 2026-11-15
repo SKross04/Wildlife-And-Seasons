@@ -1,5 +1,8 @@
 {
   "block.wildalmanac.dormant_flower": "Ruhende Blume",
+  "block.wildalmanac.icicle": "Eiszapfen",
+  "block.wildalmanac.rain_gauge": "Regenmesser",
+  "block.wildalmanac.thermometer": "Thermometer",
   "climate_zone.wildalmanac.arid": "Trockenzone",
   "climate_zone.wildalmanac.cold": "Kalte Zone",
   "climate_zone.wildalmanac.no_seasons": "Keine Jahreszeiten",
@@ -16,6 +19,8 @@
   "item.wildalmanac.season_calendar.dry_season": "Trockenzeit · %s",
   "item.wildalmanac.season_calendar.tooltip": "Rechtsklick, um Jahreszeit und Tag zu sehen",
   "item.wildalmanac.season_calendar.wet_season": "Regenzeit · %s",
+  "message.wildalmanac.rain_gauge": "Regenmesser: %1$s%% voll · %2$s%% Niederschlag in dieser Jahreszeit",
+  "message.wildalmanac.thermometer": "Thermometer: %s °C",
   "season.wildalmanac.autumn": "Herbst",
   "season.wildalmanac.early_autumn": "Herbstanfang",
   "season.wildalmanac.early_spring": "Frühlingsanfang",

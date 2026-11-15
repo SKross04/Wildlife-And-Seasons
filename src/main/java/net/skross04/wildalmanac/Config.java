@@ -45,6 +45,10 @@ public class Config {
             .comment("In autumn, fallen leaves slowly gather on forest floors under trees; they rot away in spring.")
             .define("leafLitter", true);
 
+    public static final ModConfigSpec.BooleanValue ICICLES = BUILDER
+            .comment("Icicles grow under snowy roof edges in winter and melt in spring.")
+            .define("icicles", true);
+
     static {
         BUILDER.pop();
     }
@@ -75,5 +79,9 @@ public class Config {
 
     public static boolean seasonalDayLength() {
         return SPEC.isLoaded() ? SEASONAL_DAY_LENGTH.get() : SEASONAL_DAY_LENGTH.getDefault();
+    }
+
+    public static boolean icicles() {
+        return SPEC.isLoaded() ? ICICLES.get() : ICICLES.getDefault();
     }
 }

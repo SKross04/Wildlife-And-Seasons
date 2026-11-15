@@ -58,6 +58,11 @@ public final class ChunkFlowers {
         return wilted.containsKey(pos);
     }
 
+    /** The remembered flower at this spot, without forgetting it. */
+    public @Nullable BlockState peekWilted(BlockPos pos) {
+        return wilted.get(pos);
+    }
+
     /** Takes the remembered flower out (it's about to regrow, or the spot is no longer free). */
     public @Nullable BlockState takeWilted(BlockPos pos) {
         return wilted.remove(pos);

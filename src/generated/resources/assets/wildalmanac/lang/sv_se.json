@@ -1,5 +1,8 @@
 {
   "block.wildalmanac.dormant_flower": "Vilande blomma",
+  "block.wildalmanac.icicle": "Istapp",
+  "block.wildalmanac.rain_gauge": "Regnmätare",
+  "block.wildalmanac.thermometer": "Termometer",
   "climate_zone.wildalmanac.arid": "Torr zon",
   "climate_zone.wildalmanac.cold": "Kall zon",
   "climate_zone.wildalmanac.no_seasons": "Inga årstider",
@@ -16,6 +19,8 @@
   "item.wildalmanac.season_calendar.dry_season": "Torrperiod · %s",
   "item.wildalmanac.season_calendar.tooltip": "Högerklicka för att se årstid och dag",
   "item.wildalmanac.season_calendar.wet_season": "Regnperiod · %s",
+  "message.wildalmanac.rain_gauge": "Regnmätare: %1$s%% full · %2$s%% nederbörd denna årstid",
+  "message.wildalmanac.thermometer": "Termometer: %s °C",
   "season.wildalmanac.autumn": "Höst",
   "season.wildalmanac.early_autumn": "Tidig höst",
   "season.wildalmanac.early_spring": "Tidig vår",

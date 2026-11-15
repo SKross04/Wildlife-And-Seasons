@@ -22,6 +22,8 @@ public class ModCreativeModeTabs {
                     .title(Component.translatable(WILD_ALMANAC_TAB_TITLE))
                     .displayItems((parameters, output) -> {
                         output.accept(ModItems.SEASON_CALENDAR.get());
+                        output.accept(ModItems.THERMOMETER.get());
+                        output.accept(ModItems.RAIN_GAUGE.get());
                     })
                     .build());
 

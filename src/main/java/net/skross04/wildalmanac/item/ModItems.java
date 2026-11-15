@@ -1,9 +1,11 @@
 package net.skross04.wildalmanac.item;
 
+import net.minecraft.world.item.BlockItem;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.skross04.wildalmanac.WildAlmanac;
+import net.skross04.wildalmanac.block.ModBlocks;
 import net.skross04.wildalmanac.item.custom.SeasonCalendarItem;
 
 public class ModItems {
@@ -11,6 +13,10 @@ public class ModItems {
 
     public static final DeferredItem<SeasonCalendarItem> SEASON_CALENDAR = ITEMS.registerItem("season_calendar",
             SeasonCalendarItem::new, properties -> properties.stacksTo(1));
+
+    // Block items: the item you hold and place. Its name comes from the block's translation.
+    public static final DeferredItem<BlockItem> THERMOMETER = ITEMS.registerSimpleBlockItem(ModBlocks.THERMOMETER);
+    public static final DeferredItem<BlockItem> RAIN_GAUGE = ITEMS.registerSimpleBlockItem(ModBlocks.RAIN_GAUGE);
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

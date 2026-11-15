@@ -1,5 +1,7 @@
 package net.skross04.wildalmanac.datagen;
 
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -37,5 +39,6 @@ public class DataGenerators {
     @SubscribeEvent
     public static void gatherRegistryEntries(GatherDataRegistryEntriesEvent event) {
         event.recipe(ModRecipeProvider::new);
+        event.lootTable(new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK));
     }
 }

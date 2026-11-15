@@ -2,6 +2,7 @@ package net.skross04.wildalmanac.datagen.lang;
 
 import net.minecraft.data.PackOutput;
 import net.skross04.wildalmanac.climate.ClimateTranslations;
+import net.skross04.wildalmanac.climate.Instruments;
 import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.season.Season;
 import net.skross04.wildalmanac.block.ModBlocks;
@@ -20,6 +21,11 @@ public class EsEsLanguageProvider extends ModLanguageProvider {
         add(ModCreativeModeTabs.WILD_ALMANAC_TAB_TITLE, "Wild Almanac");
 
         addBlock(ModBlocks.DORMANT_FLOWER, "Flor latente");
+        addBlock(ModBlocks.ICICLE, "Carámbano");
+        addBlock(ModBlocks.THERMOMETER, "Termómetro");
+        addBlock(ModBlocks.RAIN_GAUGE, "Pluviómetro");
+        add(Instruments.THERMOMETER_READING, "Termómetro: %s °C");
+        add(Instruments.RAIN_GAUGE_READING, "Pluviómetro: lleno al %1$s%% · %2$s%% de lluvia esta estación");
         addItem(ModItems.SEASON_CALENDAR, "Calendario de estaciones");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Clic derecho para ver la estación y el día");
         add(SeasonTranslations.WET_SEASON, "Estación lluviosa · %s");

@@ -11,8 +11,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.skross04.wildalmanac.climate.SeasonalThaw;
+import net.skross04.wildalmanac.nature.Icicles;
 
-/** Snow open to the sky melts away one layer at a time when it gets warm. */
+/** Snow open to the sky melts away one layer at a time when it gets warm; snow on roof edges grows icicles. */
 @Mixin(SnowLayerBlock.class)
 public abstract class SnowLayerBlockMixin {
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
@@ -25,6 +26,8 @@ public abstract class SnowLayerBlockMixin {
                 level.removeBlock(pos, false);
             }
             ci.cancel();
+            return;
         }
+        Icicles.onSnowRandomTick(level, pos, random);
     }
 }

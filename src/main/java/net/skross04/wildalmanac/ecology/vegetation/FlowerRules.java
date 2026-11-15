@@ -9,6 +9,8 @@ import net.skross04.wildalmanac.ecology.climate.ClimateZone;
  *     <li>Cold zones: spring comes late, so they bloom from mid-spring into early summer.</li>
  *     <li>Tropical, savanna, desert and seasonless places: flowers stay all year.</li>
  * </ul>
+ * Tall flowers (lilac, peony, rose bush, sunflower) bloom longer: spring and summer
+ * (cold zones: mid-spring to the end of summer).
  * Outside the bloom time, wild flowers wilt and disappear (and come back next spring in the same spot);
  * flowers a player planted become dormant buds instead.
  */
@@ -26,6 +28,15 @@ public final class FlowerRules {
         return switch (zone) {
             case TEMPERATE, OCEAN -> yearPosition < 0.25;
             case COLD -> yearPosition >= 0.10 && yearPosition < 0.35;
+            case TROPICAL, SAVANNA, ARID, NO_SEASONS -> true;
+        };
+    }
+
+    /** Tall flowers flower from spring right through summer. */
+    public static boolean isTallBloomTime(ClimateZone zone, double yearPosition) {
+        return switch (zone) {
+            case TEMPERATE, OCEAN -> yearPosition < 0.5;
+            case COLD -> yearPosition >= 0.10 && yearPosition < 0.5;
             case TROPICAL, SAVANNA, ARID, NO_SEASONS -> true;
         };
     }

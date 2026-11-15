@@ -27,6 +27,27 @@ public class ModRecipeProvider extends RecipeProvider {
                 .requires(Items.STICK)
                 .unlockedBy("has_paper", has(Items.PAPER))
                 .save(output, recipeKey("season_calendar"));
+
+        // A glass tube with red "mercury" (redstone) on a stick.
+        shaped(RecipeCategory.REDSTONE, ModItems.THERMOMETER.get())
+                .pattern("G")
+                .pattern("R")
+                .pattern("S")
+                .define('G', Items.GLASS_PANE)
+                .define('R', Items.REDSTONE)
+                .define('S', Items.STICK)
+                .unlockedBy("has_redstone", has(Items.REDSTONE))
+                .save(output, recipeKey("thermometer"));
+
+        // An open glass cup on a stick.
+        shaped(RecipeCategory.REDSTONE, ModItems.RAIN_GAUGE.get())
+                .pattern("G G")
+                .pattern("GGG")
+                .pattern(" S ")
+                .define('G', Items.GLASS_PANE)
+                .define('S', Items.STICK)
+                .unlockedBy("has_glass_pane", has(Items.GLASS_PANE))
+                .save(output, recipeKey("rain_gauge"));
     }
 
     private static ResourceKey<Recipe<?>> recipeKey(String path) {

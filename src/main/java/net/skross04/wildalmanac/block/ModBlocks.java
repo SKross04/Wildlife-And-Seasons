@@ -8,6 +8,9 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.skross04.wildalmanac.WildAlmanac;
 import net.skross04.wildalmanac.block.custom.DormantFlowerBlock;
+import net.skross04.wildalmanac.block.custom.IcicleBlock;
+import net.skross04.wildalmanac.block.custom.RainGaugeBlock;
+import net.skross04.wildalmanac.block.custom.ThermometerBlock;
 
 public class ModBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(WildAlmanac.MODID);
@@ -22,6 +25,35 @@ public class ModBlocks {
                     .noCollision()
                     .instabreak()
                     .sound(SoundType.GRASS)
+                    .pushReaction(PushReaction.POPPED));
+
+    /** An icicle under a snowy roof edge in winter. Breaks easily and leaves nothing behind (it's just ice). */
+    public static final DeferredBlock<IcicleBlock> ICICLE = BLOCKS.registerBlock("icicle",
+            IcicleBlock::new, properties -> properties
+                    .mapColor(MapColor.ICE)
+                    .noCollision()
+                    .noOcclusion()
+                    .strength(0.1F)
+                    .sound(SoundType.GLASS)
+                    .randomTicks()
+                    .pushReaction(PushReaction.POPPED));
+
+    /** A garden thermometer; right-click to read, comparator gives the temperature as a signal. */
+    public static final DeferredBlock<ThermometerBlock> THERMOMETER = BLOCKS.registerBlock("thermometer",
+            ThermometerBlock::new, properties -> properties
+                    .mapColor(MapColor.WOOD)
+                    .noOcclusion()
+                    .strength(0.5F)
+                    .sound(SoundType.WOOD)
+                    .pushReaction(PushReaction.POPPED));
+
+    /** A rain gauge that fills when it rains; comparator gives how full it is. */
+    public static final DeferredBlock<RainGaugeBlock> RAIN_GAUGE = BLOCKS.registerBlock("rain_gauge",
+            RainGaugeBlock::new, properties -> properties
+                    .mapColor(MapColor.NONE)
+                    .noOcclusion()
+                    .strength(0.3F)
+                    .sound(SoundType.GLASS)
                     .pushReaction(PushReaction.POPPED));
 
     public static void register(IEventBus eventBus) {

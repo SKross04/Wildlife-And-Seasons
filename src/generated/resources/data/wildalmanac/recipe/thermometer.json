@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:glass_pane",
+    "R": "minecraft:redstone",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "G",
+    "R",
+    "S"
+  ],
+  "result": {
+    "id": "wildalmanac:thermometer"
+  }
+}
