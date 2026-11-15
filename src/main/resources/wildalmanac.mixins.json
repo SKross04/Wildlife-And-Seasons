@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.skross04.wildalmanac.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [],
+  "client": [
+    "BiomeColorMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

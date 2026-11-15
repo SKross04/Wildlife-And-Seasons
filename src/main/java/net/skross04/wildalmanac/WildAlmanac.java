@@ -26,5 +26,6 @@ public class WildAlmanac {
         ModItems.register(modEventBus);
 
         modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
     }
 }
