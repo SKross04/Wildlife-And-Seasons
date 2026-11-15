@@ -19,6 +19,7 @@ public class DeDeLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.SEASON_CALENDAR, "Jahreszeitenkalender");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Rechtsklick, um Jahreszeit und Tag zu sehen");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – Tag %2$s von %3$s, Jahr %4$s");
+        add(SeasonTranslations.COMMAND_SET, "Jahreszeit gesetzt: %s");
 
         addSeason(Season.SPRING, "Frühlingsanfang", "Frühlingsmitte", "Frühlingsende");
         addSeason(Season.SUMMER, "Sommeranfang", "Sommermitte", "Sommerende");

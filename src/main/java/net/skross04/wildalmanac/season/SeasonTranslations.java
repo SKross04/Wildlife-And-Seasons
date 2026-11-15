@@ -14,6 +14,8 @@ public final class SeasonTranslations {
     /** "%1$s – day %2$s of %3$s, year %4$s" */
     public static final String CALENDAR_DATE = "item." + WildAlmanac.MODID + ".season_calendar.date";
     public static final String CALENDAR_TOOLTIP = "item." + WildAlmanac.MODID + ".season_calendar.tooltip";
+    /** "Season set: %s" (feedback of /season set) */
+    public static final String COMMAND_SET = "commands." + WildAlmanac.MODID + ".season.set";
 
     private SeasonTranslations() {
     }

@@ -19,6 +19,7 @@ public class FrFrLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.SEASON_CALENDAR, "Calendrier des saisons");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Clic droit pour voir la saison et le jour");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – jour %2$s sur %3$s, année %4$s");
+        add(SeasonTranslations.COMMAND_SET, "Saison réglée : %s");
 
         addSeason(Season.SPRING, "Début du printemps", "Mi-printemps", "Fin du printemps");
         addSeason(Season.SUMMER, "Début de l'été", "Mi-été", "Fin de l'été");

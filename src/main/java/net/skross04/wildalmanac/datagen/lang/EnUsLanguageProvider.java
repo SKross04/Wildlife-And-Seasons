@@ -19,6 +19,7 @@ public class EnUsLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.SEASON_CALENDAR, "Season Calendar");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Right-click to see the season and day");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – day %2$s of %3$s, year %4$s");
+        add(SeasonTranslations.COMMAND_SET, "Season set: %s");
 
         addSeason(Season.SPRING, "Early Spring", "Mid Spring", "Late Spring");
         addSeason(Season.SUMMER, "Early Summer", "Mid Summer", "Late Summer");

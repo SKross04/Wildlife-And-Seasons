@@ -19,6 +19,7 @@ public class NlNlLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.SEASON_CALENDAR, "Seizoenskalender");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Rechtsklik om het seizoen en de dag te zien");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – dag %2$s van %3$s, jaar %4$s");
+        add(SeasonTranslations.COMMAND_SET, "Seizoen ingesteld: %s");
 
         addSeason(Season.SPRING, "Begin lente", "Midden lente", "Eind lente");
         addSeason(Season.SUMMER, "Begin zomer", "Midden zomer", "Eind zomer");

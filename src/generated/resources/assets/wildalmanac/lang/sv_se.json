@@ -1,4 +1,5 @@
 {
+  "commands.wildalmanac.season.set": "Årstid ändrad: %s",
   "creativetab.wildalmanac.wild_almanac": "Wild Almanac",
   "item.wildalmanac.season_calendar": "Årstidskalender",
   "item.wildalmanac.season_calendar.date": "%1$s – dag %2$s av %3$s, år %4$s",

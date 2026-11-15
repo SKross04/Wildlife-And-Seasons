@@ -19,6 +19,7 @@ public class SvSeLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.SEASON_CALENDAR, "Årstidskalender");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Högerklicka för att se årstid och dag");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – dag %2$s av %3$s, år %4$s");
+        add(SeasonTranslations.COMMAND_SET, "Årstid ändrad: %s");
 
         addSeason(Season.SPRING, "Tidig vår", "Mitten av våren", "Sen vår");
         addSeason(Season.SUMMER, "Tidig sommar", "Mitten av sommaren", "Sen sommar");

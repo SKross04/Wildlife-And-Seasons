@@ -1,4 +1,5 @@
 {
+  "commands.wildalmanac.season.set": "Saison réglée : %s",
   "creativetab.wildalmanac.wild_almanac": "Wild Almanac",
   "item.wildalmanac.season_calendar": "Calendrier des saisons",
   "item.wildalmanac.season_calendar.date": "%1$s – jour %2$s sur %3$s, année %4$s",

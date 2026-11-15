@@ -19,6 +19,7 @@ public class EsEsLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.SEASON_CALENDAR, "Calendario de estaciones");
         add(SeasonTranslations.CALENDAR_TOOLTIP, "Clic derecho para ver la estación y el día");
         add(SeasonTranslations.CALENDAR_DATE, "%1$s – día %2$s de %3$s, año %4$s");
+        add(SeasonTranslations.COMMAND_SET, "Estación cambiada: %s");
 
         addSeason(Season.SPRING, "Principios de primavera", "Mediados de primavera", "Finales de primavera");
         addSeason(Season.SUMMER, "Principios de verano", "Mediados de verano", "Finales de verano");
