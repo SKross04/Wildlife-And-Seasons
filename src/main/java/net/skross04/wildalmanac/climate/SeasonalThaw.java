@@ -31,7 +31,7 @@ public final class SeasonalThaw {
      * Nothing above this block that stops rain, or only a tree's leaves (snow also lies under trees in forests).
      * A real roof (igloo, house, ice storage) keeps snow and ice from melting.
      */
-    private static boolean isOpenToSkyOrCanopy(ServerLevel level, BlockPos pos) {
+    public static boolean isOpenToSkyOrCanopy(ServerLevel level, BlockPos pos) {
         BlockPos top = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos);
         if (top.getY() <= pos.getY() + 1) {
             return true;

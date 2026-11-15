@@ -2,6 +2,8 @@ package net.skross04.wildalmanac.attachment;
 
 import java.util.function.Supplier;
 
+import com.mojang.serialization.Codec;
+
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -20,6 +22,13 @@ public class ModAttachments {
     /** Which wild flowers wilted where, and which flowers players planted (per chunk). */
     public static final Supplier<AttachmentType<ChunkFlowers>> CHUNK_FLOWERS = ATTACHMENT_TYPES.register("chunk_flowers",
             () -> AttachmentType.builder(() -> new ChunkFlowers()).serialize(ChunkFlowers.MAP_CODEC).build());
+
+    /**
+     * The calendar day a chunk was last up to date with the seasons (-1 = not known yet).
+     * Chunks nobody was near catch up when they load again (see {@code ChunkCatchUp}).
+     */
+    public static final Supplier<AttachmentType<Long>> SEASON_DAY = ATTACHMENT_TYPES.register("season_day",
+            () -> AttachmentType.builder(() -> -1L).serialize(Codec.LONG.fieldOf("day")).build());
 
     public static void register(IEventBus eventBus) {
         ATTACHMENT_TYPES.register(eventBus);

@@ -45,6 +45,11 @@ public class Config {
             .comment("In autumn, fallen leaves slowly gather on forest floors under trees; they rot away in spring.")
             .define("leafLitter", true);
 
+    public static final ModConfigSpec.BooleanValue CATCH_UP_CHUNKS = BUILDER
+            .comment("Places nobody was near catch up with the season when you come back:",
+                    "winter snow melts in summer, flowers wilt or bloom, autumn leaves have fallen.")
+            .define("catchUpUnvisitedChunks", true);
+
     public static final ModConfigSpec.BooleanValue ICICLES = BUILDER
             .comment("Icicles grow under snowy roof edges in winter and melt in spring.")
             .define("icicles", true);
@@ -83,5 +88,9 @@ public class Config {
 
     public static boolean icicles() {
         return SPEC.isLoaded() ? ICICLES.get() : ICICLES.getDefault();
+    }
+
+    public static boolean catchUpChunks() {
+        return SPEC.isLoaded() ? CATCH_UP_CHUNKS.get() : CATCH_UP_CHUNKS.getDefault();
     }
 }

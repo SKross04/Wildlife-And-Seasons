@@ -55,6 +55,17 @@ public final class SeasonalFlowers {
 
     /** Called when the grass under {@code ground} gets a random tick. */
     public static void onGroundRandomTick(ServerLevel level, BlockPos ground, RandomSource random) {
+        update(level, ground, random, false);
+    }
+
+    /** A chunk nobody was near for a while: settle the flower here straight away (see {@link ChunkCatchUp}). */
+    public static void catchUp(ServerLevel level, BlockPos ground, RandomSource random) {
+        update(level, ground, random, true);
+    }
+
+    private static void update(ServerLevel level, BlockPos ground, RandomSource random, boolean catchUp) {
+        double wiltChance = catchUp ? 1.0 : FlowerRules.WILT_CHANCE;
+        double bloomChance = catchUp ? 1.0 : FlowerRules.BLOOM_CHANCE;
         BlockPos pos = ground.above();
         BlockState state = level.getBlockState(pos);
         boolean flower = isSeasonalFlower(state) || isSeasonalTallFlower(state);
@@ -72,7 +83,7 @@ public final class SeasonalFlowers {
         boolean tallBloomTime = FlowerRules.isTallBloomTime(zone, yearPosition);
 
         if (flower) {
-            if ((isTall(state) ? tallBloomTime : bloomTime) || random.nextDouble() >= FlowerRules.WILT_CHANCE) {
+            if ((isTall(state) ? tallBloomTime : bloomTime) || random.nextDouble() >= wiltChance) {
                 return;
             }
             ChunkFlowers data = chunk.getData(ModAttachments.CHUNK_FLOWERS.get());
@@ -90,10 +101,10 @@ public final class SeasonalFlowers {
         } else if (dormant) {
             if (level.getBlockEntity(pos) instanceof DormantFlowerBlockEntity bud
                     && (isTall(bud.getFlower()) ? tallBloomTime : bloomTime)
-                    && random.nextDouble() < FlowerRules.BLOOM_CHANCE) {
+                    && random.nextDouble() < bloomChance) {
                 regrow(level, pos, bud.getFlower());
             }
-        } else if (random.nextDouble() < FlowerRules.BLOOM_CHANCE) {
+        } else if (random.nextDouble() < bloomChance) {
             BlockState wilted = memory.peekWilted(pos);
             if (wilted != null && (isTall(wilted) ? tallBloomTime : bloomTime) && regrow(level, pos, wilted)) {
                 memory.takeWilted(pos);

@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.skross04.wildalmanac.Config;
 import net.skross04.wildalmanac.climate.BiomeZones;
+import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.climate.SeasonalColors;
 import net.skross04.wildalmanac.ecology.season.SeasonDate;
 import net.skross04.wildalmanac.ecology.vegetation.LeafLitterRules;
@@ -79,6 +80,47 @@ public final class LeafLitter {
                     .setValue(LeafLitterBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(random))
                     .setValue(SegmentableBlock.AMOUNT, 1);
             level.setBlockAndUpdate(above, litter);
+        }
+    }
+
+    /**
+     * A chunk nobody was near for {@code missedDays}: bring the litter on this forest floor spot to what it would
+     * be by now (more layers after an autumn, none after a spring), and snow over it if it's a snowy winter day.
+     */
+    public static void catchUp(ServerLevel level, BlockPos ground, RandomSource random, long missedDays, boolean snowy) {
+        if (!Config.leafLitter() || !level.getBlockState(ground).is(Blocks.GRASS_BLOCK)) {
+            return;
+        }
+        BlockPos above = ground.above();
+        BlockState aboveState = level.getBlockState(above);
+        boolean hasLitter = aboveState.is(Blocks.LEAF_LITTER);
+        if (!hasLitter && !aboveState.isAir()) {
+            return;
+        }
+        Holder<Biome> biome = level.getBiome(ground);
+        if (!biome.is(ModTags.Biomes.HAS_LEAF_LITTER) || !underDeciduousTree(level, ground)
+                || random.nextDouble() >= LeafLitterRules.catchUpChance(missedDays)) {
+            return;
+        }
+        if (snowy) {
+            level.setBlockAndUpdate(above, Blocks.SNOW.defaultBlockState());
+            return;
+        }
+        ClimateZone zone = BiomeZones.of(biome.value()).zone();
+        double yearPosition = SeasonSavedData.get(level.getServer()).calendar().yearPosition(SeasonDate.DEFAULT_YEAR_LENGTH);
+        double expected = LeafLitterRules.expectedLayers(position -> SeasonalColors.tint(zone, position).leafAutumn(),
+                yearPosition, SeasonDate.DEFAULT_YEAR_LENGTH);
+        int target = (int) Math.floor(expected + random.nextDouble()); // 1.4 → 1 or 2 layers, 2 in 40 % of the spots
+        int layers = hasLitter ? aboveState.getValue(SegmentableBlock.AMOUNT) : 0;
+        if (target == layers) {
+            return;
+        }
+        if (target == 0) {
+            level.removeBlock(above, false);
+        } else {
+            BlockState litter = hasLitter ? aboveState : Blocks.LEAF_LITTER.defaultBlockState()
+                    .setValue(LeafLitterBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(random));
+            level.setBlockAndUpdate(above, litter.setValue(SegmentableBlock.AMOUNT, Math.min(target, LeafLitterRules.MAX_LAYERS)));
         }
     }
 
