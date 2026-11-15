@@ -37,5 +37,11 @@ public class NlNlLanguageProvider extends ModLanguageProvider {
         add(ClimateTranslations.zoneKey(ClimateZone.ARID), "Droge zone");
         add(ClimateTranslations.zoneKey(ClimateZone.OCEAN), "Zee & kust");
         add(ClimateTranslations.zoneKey(ClimateZone.NO_SEASONS), "Geen seizoenen");
+
+        add(SeasonTranslations.seasonNameKey(Season.SPRING), "Lente");
+        add(SeasonTranslations.seasonNameKey(Season.SUMMER), "Zomer");
+        add(SeasonTranslations.seasonNameKey(Season.AUTUMN), "Herfst");
+        add(SeasonTranslations.seasonNameKey(Season.WINTER), "Winter");
+        add(SeasonTranslations.CROP_GROWS_IN, "Groeit in:");
     }
 }

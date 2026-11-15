@@ -54,4 +54,15 @@ public class SeasonSavedData extends SavedData {
         }
         slept = false;
     }
+
+    /** True when the day changed since players last got the season (not saved; after a restart everyone gets it on join). */
+    private long lastSyncedDay = Long.MIN_VALUE;
+
+    public boolean needsSync() {
+        return calendar.dayIndex() != lastSyncedDay;
+    }
+
+    public void markSynced() {
+        lastSyncedDay = calendar.dayIndex();
+    }
 }

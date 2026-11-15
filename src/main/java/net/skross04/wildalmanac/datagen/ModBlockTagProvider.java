@@ -1,0 +1,67 @@
+package net.skross04.wildalmanac.datagen;
+
+import java.util.concurrent.CompletableFuture;
+
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagEntry;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.skross04.wildalmanac.WildAlmanac;
+import net.skross04.wildalmanac.ecology.season.Season;
+import net.skross04.wildalmanac.util.ModTags;
+
+/**
+ * Which crops grow in which season, and what counts as greenhouse glass.
+ * Everything here can be changed by modpack makers with a datapack.
+ */
+public class ModBlockTagProvider extends BlockTagsProvider {
+    private static final String FARMERS_DELIGHT = "farmersdelight";
+
+    public ModBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+        super(output, lookupProvider, WildAlmanac.MODID);
+    }
+
+    @Override
+    protected void addTags(HolderLookup.Provider registries) {
+        // --- Vanilla crops ---
+        growsIn(Season.SPRING, Blocks.WHEAT, Blocks.CARROTS, Blocks.POTATOES, Blocks.BEETROOTS,
+                Blocks.SUGAR_CANE, Blocks.TORCHFLOWER_CROP, Blocks.SWEET_BERRY_BUSH);
+        growsIn(Season.SUMMER, Blocks.WHEAT, Blocks.CARROTS, Blocks.POTATOES, Blocks.MELON_STEM, Blocks.PUMPKIN_STEM,
+                Blocks.SUGAR_CANE, Blocks.TORCHFLOWER_CROP, Blocks.SWEET_BERRY_BUSH, Blocks.COCOA);
+        growsIn(Season.AUTUMN, Blocks.WHEAT, Blocks.CARROTS, Blocks.BEETROOTS, Blocks.PUMPKIN_STEM, Blocks.SWEET_BERRY_BUSH);
+        // Beetroot is the hardy winter crop, so winter isn't a dead season.
+        growsIn(Season.WINTER, Blocks.BEETROOTS);
+
+        // --- Farmer's Delight (optional entries: ignored when the mod isn't installed) ---
+        growsInOptional(Season.SPRING, FARMERS_DELIGHT, "cabbages", "onions", "rice", "rice_panicles");
+        growsInOptional(Season.SUMMER, FARMERS_DELIGHT, "onions", "rice", "rice_panicles",
+                "budding_tomatoes", "tomatoes", "tomatoes_on_rope");
+        growsInOptional(Season.AUTUMN, FARMERS_DELIGHT, "cabbages", "onions");
+
+        // Empty on purpose: for datapacks that want a crop to ignore seasons.
+        tag(ModTags.Blocks.GROWS_ALL_YEAR);
+
+        tag(ModTags.Blocks.GREENHOUSE_GLASS)
+                .addTag(Tags.BlockItems.GLASS_BLOCKS.block())
+                .addTag(Tags.BlockItems.GLASS_PANES.block());
+    }
+
+    private void growsIn(Season season, Block... blocks) {
+        var appender = tag(ModTags.Blocks.growsIn(season));
+        for (Block block : blocks) {
+            appender.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(block)));
+        }
+    }
+
+    private void growsInOptional(Season season, String modId, String... blockNames) {
+        var appender = tag(ModTags.Blocks.growsIn(season));
+        for (String name : blockNames) {
+            appender.add(TagEntry.optionalElement(Identifier.fromNamespaceAndPath(modId, name)));
+        }
+    }
+}

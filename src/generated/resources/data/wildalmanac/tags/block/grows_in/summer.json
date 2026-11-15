@@ -1,0 +1,37 @@
+{
+  "values": [
+    "minecraft:wheat",
+    "minecraft:carrots",
+    "minecraft:potatoes",
+    "minecraft:melon_stem",
+    "minecraft:pumpkin_stem",
+    "minecraft:sugar_cane",
+    "minecraft:torchflower_crop",
+    "minecraft:sweet_berry_bush",
+    "minecraft:cocoa",
+    {
+      "id": "farmersdelight:onions",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:rice",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:rice_panicles",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:budding_tomatoes",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:tomatoes",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:tomatoes_on_rope",
+      "required": false
+    }
+  ]
+}

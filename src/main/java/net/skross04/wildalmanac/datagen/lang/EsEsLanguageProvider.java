@@ -37,5 +37,11 @@ public class EsEsLanguageProvider extends ModLanguageProvider {
         add(ClimateTranslations.zoneKey(ClimateZone.ARID), "Zona árida");
         add(ClimateTranslations.zoneKey(ClimateZone.OCEAN), "Océano y costa");
         add(ClimateTranslations.zoneKey(ClimateZone.NO_SEASONS), "Sin estaciones");
+
+        add(SeasonTranslations.seasonNameKey(Season.SPRING), "Primavera");
+        add(SeasonTranslations.seasonNameKey(Season.SUMMER), "Verano");
+        add(SeasonTranslations.seasonNameKey(Season.AUTUMN), "Otoño");
+        add(SeasonTranslations.seasonNameKey(Season.WINTER), "Invierno");
+        add(SeasonTranslations.CROP_GROWS_IN, "Crece en:");
     }
 }

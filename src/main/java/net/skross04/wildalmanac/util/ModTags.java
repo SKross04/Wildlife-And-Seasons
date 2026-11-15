@@ -7,10 +7,41 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.Block;
 import net.skross04.wildalmanac.WildAlmanac;
 import net.skross04.wildalmanac.ecology.climate.ClimateZone;
+import net.skross04.wildalmanac.ecology.season.Season;
 
 public class ModTags {
+    public static class Blocks {
+        /** Crops that grow in a season: {@code wildalmanac:grows_in/spring}, {@code .../summer}, … */
+        private static final Map<Season, TagKey<Block>> GROWS_IN = new EnumMap<>(Season.class);
+
+        static {
+            for (Season season : Season.values()) {
+                GROWS_IN.put(season, createTag("grows_in/" + season.id()));
+            }
+        }
+
+        /** Crops that ignore seasons (empty by default; for datapacks). */
+        public static final TagKey<Block> GROWS_ALL_YEAR = createTag("grows_all_year");
+
+        /** Roof blocks that make a greenhouse: all glass blocks and panes by default. */
+        public static final TagKey<Block> GREENHOUSE_GLASS = createTag("greenhouse_glass");
+
+        /** Vanilla's crop tag. Crops from other mods that are in it, but in no season tag, get spring–autumn. */
+        public static final TagKey<Block> VANILLA_CROPS =
+                TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("crops"));
+
+        public static TagKey<Block> growsIn(Season season) {
+            return GROWS_IN.get(season);
+        }
+
+        private static TagKey<Block> createTag(String name) {
+            return TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(WildAlmanac.MODID, name));
+        }
+    }
+
     public static class Biomes {
         /**
          * One biome tag per climate zone: {@code wildalmanac:climate_zone/temperate}, {@code .../cold}, …

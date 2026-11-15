@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:wheat",
+    "minecraft:carrots",
+    "minecraft:beetroots",
+    "minecraft:pumpkin_stem",
+    "minecraft:sweet_berry_bush",
+    {
+      "id": "farmersdelight:cabbages",
+      "required": false
+    },
+    {
+      "id": "farmersdelight:onions",
+      "required": false
+    }
+  ]
+}

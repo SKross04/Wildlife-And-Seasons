@@ -13,6 +13,7 @@
   "item.wildalmanac.season_calendar": "Årstidskalender",
   "item.wildalmanac.season_calendar.date": "%1$s – dag %2$s av %3$s, år %4$s",
   "item.wildalmanac.season_calendar.tooltip": "Högerklicka för att se årstid och dag",
+  "season.wildalmanac.autumn": "Höst",
   "season.wildalmanac.early_autumn": "Tidig höst",
   "season.wildalmanac.early_spring": "Tidig vår",
   "season.wildalmanac.early_summer": "Tidig sommar",
@@ -24,5 +25,9 @@
   "season.wildalmanac.mid_autumn": "Mitten av hösten",
   "season.wildalmanac.mid_spring": "Mitten av våren",
   "season.wildalmanac.mid_summer": "Mitten av sommaren",
-  "season.wildalmanac.mid_winter": "Mitten av vintern"
+  "season.wildalmanac.mid_winter": "Mitten av vintern",
+  "season.wildalmanac.spring": "Vår",
+  "season.wildalmanac.summer": "Sommar",
+  "season.wildalmanac.winter": "Vinter",
+  "tooltip.wildalmanac.crop.grows_in": "Växer under:"
 }

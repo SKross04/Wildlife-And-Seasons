@@ -37,5 +37,11 @@ public class DeDeLanguageProvider extends ModLanguageProvider {
         add(ClimateTranslations.zoneKey(ClimateZone.ARID), "Trockenzone");
         add(ClimateTranslations.zoneKey(ClimateZone.OCEAN), "Meer & Küste");
         add(ClimateTranslations.zoneKey(ClimateZone.NO_SEASONS), "Keine Jahreszeiten");
+
+        add(SeasonTranslations.seasonNameKey(Season.SPRING), "Frühling");
+        add(SeasonTranslations.seasonNameKey(Season.SUMMER), "Sommer");
+        add(SeasonTranslations.seasonNameKey(Season.AUTUMN), "Herbst");
+        add(SeasonTranslations.seasonNameKey(Season.WINTER), "Winter");
+        add(SeasonTranslations.CROP_GROWS_IN, "Wächst im:");
     }
 }

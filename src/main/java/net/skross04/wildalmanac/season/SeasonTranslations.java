@@ -17,7 +17,15 @@ public final class SeasonTranslations {
     /** "Season set: %s" (feedback of /season set) */
     public static final String COMMAND_SET = "commands." + WildAlmanac.MODID + ".season.set";
 
+    /** "Grows in:" (the seasons follow on their own lines) */
+    public static final String CROP_GROWS_IN = "tooltip." + WildAlmanac.MODID + ".crop.grows_in";
+
     private SeasonTranslations() {
+    }
+
+    /** Just the season name, e.g. {@code season.wildalmanac.spring}. */
+    public static String seasonNameKey(Season season) {
+        return "season." + WildAlmanac.MODID + "." + season.id();
     }
 
     /**

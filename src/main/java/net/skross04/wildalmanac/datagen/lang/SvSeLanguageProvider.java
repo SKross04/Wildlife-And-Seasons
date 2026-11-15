@@ -37,5 +37,11 @@ public class SvSeLanguageProvider extends ModLanguageProvider {
         add(ClimateTranslations.zoneKey(ClimateZone.ARID), "Torr zon");
         add(ClimateTranslations.zoneKey(ClimateZone.OCEAN), "Hav & kust");
         add(ClimateTranslations.zoneKey(ClimateZone.NO_SEASONS), "Inga årstider");
+
+        add(SeasonTranslations.seasonNameKey(Season.SPRING), "Vår");
+        add(SeasonTranslations.seasonNameKey(Season.SUMMER), "Sommar");
+        add(SeasonTranslations.seasonNameKey(Season.AUTUMN), "Höst");
+        add(SeasonTranslations.seasonNameKey(Season.WINTER), "Vinter");
+        add(SeasonTranslations.CROP_GROWS_IN, "Växer under:");
     }
 }

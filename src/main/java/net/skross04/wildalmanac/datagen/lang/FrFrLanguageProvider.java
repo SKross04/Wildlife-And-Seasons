@@ -37,5 +37,11 @@ public class FrFrLanguageProvider extends ModLanguageProvider {
         add(ClimateTranslations.zoneKey(ClimateZone.ARID), "Zone aride");
         add(ClimateTranslations.zoneKey(ClimateZone.OCEAN), "Océan et côte");
         add(ClimateTranslations.zoneKey(ClimateZone.NO_SEASONS), "Sans saisons");
+
+        add(SeasonTranslations.seasonNameKey(Season.SPRING), "Printemps");
+        add(SeasonTranslations.seasonNameKey(Season.SUMMER), "Été");
+        add(SeasonTranslations.seasonNameKey(Season.AUTUMN), "Automne");
+        add(SeasonTranslations.seasonNameKey(Season.WINTER), "Hiver");
+        add(SeasonTranslations.CROP_GROWS_IN, "Pousse en :");
     }
 }

@@ -2,14 +2,17 @@ package net.skross04.wildalmanac.season;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.skross04.wildalmanac.WildAlmanac;
 import net.skross04.wildalmanac.command.SeasonCommand;
+import net.skross04.wildalmanac.network.ModNetworking;
 
 /**
  * Keeps the season calendar running. {@code @EventBusSubscriber} makes NeoForge call these
@@ -21,7 +24,11 @@ public class SeasonEvents {
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
         MinecraftServer server = event.getServer();
-        SeasonSavedData.get(server).tick(WorldSeasons.overworldClockTicks(server));
+        SeasonSavedData data = SeasonSavedData.get(server);
+        data.tick(WorldSeasons.overworldClockTicks(server));
+        if (data.needsSync()) {
+            ModNetworking.syncSeasonToAll(server); // once per day, players learn the new date
+        }
     }
 
     /**
@@ -32,6 +39,14 @@ public class SeasonEvents {
     public static void onSleepFinished(SleepFinishedTimeEvent event) {
         if (event.getLevel() instanceof ServerLevel level && level == level.getServer().overworld()) {
             SeasonSavedData.get(level.getServer()).markSlept();
+        }
+    }
+
+    /** A player joining gets the current season right away. */
+    @SubscribeEvent
+    public static void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            ModNetworking.syncSeason(player);
         }
     }
 

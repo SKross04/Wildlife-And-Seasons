@@ -37,5 +37,11 @@ public class EnUsLanguageProvider extends ModLanguageProvider {
         add(ClimateTranslations.zoneKey(ClimateZone.ARID), "Arid zone");
         add(ClimateTranslations.zoneKey(ClimateZone.OCEAN), "Ocean & coast");
         add(ClimateTranslations.zoneKey(ClimateZone.NO_SEASONS), "No seasons");
+
+        add(SeasonTranslations.seasonNameKey(Season.SPRING), "Spring");
+        add(SeasonTranslations.seasonNameKey(Season.SUMMER), "Summer");
+        add(SeasonTranslations.seasonNameKey(Season.AUTUMN), "Autumn");
+        add(SeasonTranslations.seasonNameKey(Season.WINTER), "Winter");
+        add(SeasonTranslations.CROP_GROWS_IN, "Grows in:");
     }
 }

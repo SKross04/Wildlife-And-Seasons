@@ -13,6 +13,7 @@
   "item.wildalmanac.season_calendar": "Calendario de estaciones",
   "item.wildalmanac.season_calendar.date": "%1$s – día %2$s de %3$s, año %4$s",
   "item.wildalmanac.season_calendar.tooltip": "Clic derecho para ver la estación y el día",
+  "season.wildalmanac.autumn": "Otoño",
   "season.wildalmanac.early_autumn": "Principios de otoño",
   "season.wildalmanac.early_spring": "Principios de primavera",
   "season.wildalmanac.early_summer": "Principios de verano",
@@ -24,5 +25,9 @@
   "season.wildalmanac.mid_autumn": "Mediados de otoño",
   "season.wildalmanac.mid_spring": "Mediados de primavera",
   "season.wildalmanac.mid_summer": "Mediados de verano",
-  "season.wildalmanac.mid_winter": "Mediados de invierno"
+  "season.wildalmanac.mid_winter": "Mediados de invierno",
+  "season.wildalmanac.spring": "Primavera",
+  "season.wildalmanac.summer": "Verano",
+  "season.wildalmanac.winter": "Invierno",
+  "tooltip.wildalmanac.crop.grows_in": "Crece en:"
 }

@@ -14,6 +14,7 @@ import net.skross04.wildalmanac.climate.WorldClimate;
 import net.skross04.wildalmanac.ecology.climate.ClimateState;
 import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.season.Season;
+import net.skross04.wildalmanac.network.ModNetworking;
 import net.skross04.wildalmanac.ecology.season.SeasonDate;
 import net.skross04.wildalmanac.season.SeasonSavedData;
 import net.skross04.wildalmanac.season.SeasonTranslations;
@@ -83,6 +84,7 @@ public class SeasonCommand {
 
     private static int afterSet(CommandSourceStack source, SeasonSavedData data) {
         data.setDirty();
+        ModNetworking.syncSeasonToAll(source.getServer());
         SeasonDate date = data.calendar().date(YEAR_LENGTH);
         // true = other operators also see this message, like vanilla admin commands
         source.sendSuccess(() -> Component.translatable(SeasonTranslations.COMMAND_SET, SeasonTranslations.describe(date)), true);
