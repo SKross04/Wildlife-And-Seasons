@@ -280,8 +280,13 @@ public final class ChunkCatchUp {
             BlockState surface = blocks.get(top);
             if (dailyMean <= FREEZE_TEMPERATURE && surface.is(Blocks.WATER) && chunk.getFluidState(top).isSource()) {
                 blocks.set(top, Blocks.ICE.defaultBlockState());
-            } else if (blocks.get(top.above()).isAir() && snowCanLieOn(chunk, top, surface)) {
-                placeSnow(blocks, top.above());
+            } else if (snowCanLieOn(chunk, top, surface)) {
+                BlockState onTop = blocks.get(top.above());
+                if (SnowCover.canBury(onTop)) {
+                    buryPlant(blocks, top.above(), onTop); // snow covers the grass instead of leaving a hole
+                } else if (onTop.isAir()) {
+                    placeSnow(blocks, top.above());
+                }
             }
             if (IcicleRules.canGrow(dailyMean) && Config.icicles()) {
                 hangIcicles(blocks, top, missed, random);
@@ -297,8 +302,29 @@ public final class ChunkCatchUp {
             if (blocks.get(spot).is(Blocks.SNOW) && openToSkyOrCanopy(blocks, spot, top)) {
                 blocks.set(spot, Blocks.AIR.defaultBlockState());
                 setSnowy(blocks, spot.below(), false);
+                uncoverPlant(blocks, spot);
                 return;
             }
+        }
+    }
+
+    /** Covers grass with snow and remembers it (the top half of tall grass goes too). */
+    private static void buryPlant(ChunkBlocks blocks, BlockPos pos, BlockState plant) {
+        if (isTall(plant) && blocks.get(pos.above()).is(plant.getBlock())) {
+            blocks.set(pos.above(), Blocks.AIR.defaultBlockState());
+        }
+        blocks.chunk().getData(ModAttachments.CHUNK_FLOWERS.get()).addWilted(pos, plant);
+        placeSnow(blocks, pos);
+    }
+
+    /** The grass that was under this snow grows back. */
+    private static void uncoverPlant(ChunkBlocks blocks, BlockPos pos) {
+        ChunkFlowers memory = blocks.chunk().getExistingDataOrNull(ModAttachments.CHUNK_FLOWERS.get());
+        BlockState plant = memory == null ? null : memory.peekWilted(pos);
+        if (plant != null && SnowCover.canBury(plant) && blocks.get(pos.below()).is(BlockTags.DIRT)
+                && (!isTall(plant) || blocks.get(pos.above()).isAir())) {
+            placeFlower(blocks, pos, plant);
+            memory.takeWilted(pos);
         }
     }
 
@@ -370,7 +396,7 @@ public final class ChunkCatchUp {
         }
     }
 
-    /** Wild flowers that wilted here come back when it's their time again. */
+    /** Wild flowers that wilted here come back when it's their time again, grass that was snowed under once it thaws. */
     private static void catchUpFlowersThatWilted(ServerLevel level, ChunkBlocks blocks, double yearPosition) {
         LevelChunk chunk = blocks.chunk();
         ChunkFlowers memory = chunk.getExistingDataOrNull(ModAttachments.CHUNK_FLOWERS.get());
@@ -383,8 +409,11 @@ public final class ChunkCatchUp {
                     || (isTall(flower) && !blocks.get(pos.above()).isAir())) {
                 continue; // something else is there now, or no room yet
             }
-            ClimateZone zone = BiomeZones.of(biomeAt(chunk, pos).value()).zone();
-            if (bloomsNow(flower, zone, yearPosition)) {
+            Holder<Biome> biome = biomeAt(chunk, pos);
+            boolean comesBack = SnowCover.canBury(flower)
+                    ? WorldClimate.dailyMeanAt(level, biome, pos) > SnowAndIce.THAW_TEMPERATURE // grass: once it thaws
+                    : bloomsNow(flower, BiomeZones.of(biome.value()).zone(), yearPosition);
+            if (comesBack) {
                 placeFlower(blocks, pos, flower);
                 memory.takeWilted(pos);
             }
@@ -414,12 +443,20 @@ public final class ChunkCatchUp {
         BlockPos floor = ground.above();
         BlockState floorState = blocks.get(floor);
         boolean hasLitter = floorState.is(Blocks.LEAF_LITTER);
-        if ((!hasLitter && !floorState.isAir()) || random.nextDouble() >= LeafLitterRules.catchUpChance(missed)) {
+        boolean grass = SnowCover.canBury(floorState);
+        if ((!hasLitter && !grass && !floorState.isAir()) || random.nextDouble() >= LeafLitterRules.catchUpChance(missed)) {
             return;
         }
         if (snowy) {
-            placeSnow(blocks, floor); // snow over the fallen leaves
+            if (grass) {
+                buryPlant(blocks, floor, floorState);
+            } else {
+                placeSnow(blocks, floor); // snow over the fallen leaves
+            }
             return;
+        }
+        if (grass) {
+            return; // grass under the trees stays; leaves only gather on bare ground
         }
         double expected = LeafLitterRules.expectedLayers(position -> SeasonalColors.tint(zone, position).leafAutumn(),
                 yearPosition, SeasonDate.DEFAULT_YEAR_LENGTH);

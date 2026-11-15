@@ -58,6 +58,13 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .addTag(BlockTags.SMALL_FLOWERS)
                 .add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(Blocks.PINK_PETALS)))
                 .add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(Blocks.WILDFLOWERS)));
+        // Plants that snow covers in winter (and that come back when it melts). Bush is optional: added in 1.21.5.
+        var buriedBySnow = tag(ModTags.Blocks.BURIED_BY_SNOW);
+        for (Block block : new Block[]{Blocks.SHORT_GRASS, Blocks.TALL_GRASS, Blocks.FERN, Blocks.LARGE_FERN}) {
+            buriedBySnow.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(block)));
+        }
+        buriedBySnow.add(TagEntry.optionalElement(Identifier.fromNamespaceAndPath("minecraft", "bush")));
+
         // Seasonal tall flowers: the four vanilla ones, plus modded tall flowers in the common c:flowers/tall tag.
         var tallFlowers = tag(ModTags.Blocks.SEASONAL_TALL_FLOWERS);
         for (Block block : new Block[]{Blocks.LILAC, Blocks.PEONY, Blocks.ROSE_BUSH, Blocks.SUNFLOWER}) {

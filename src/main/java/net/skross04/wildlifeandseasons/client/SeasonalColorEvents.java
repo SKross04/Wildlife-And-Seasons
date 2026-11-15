@@ -75,7 +75,8 @@ public class SeasonalColorEvents {
                 Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.ACACIA_LEAVES, Blocks.JUNGLE_LEAVES, Blocks.VINE);
         event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_BIRCH, BIRCH_RESOLVER)), Blocks.BIRCH_LEAVES);
         event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_EVERGREEN, EVERGREEN_RESOLVER)), Blocks.SPRUCE_LEAVES);
-        // Cherry leaves get a grey texture in our cherry_leaves model, so this colour decides pink or green.
+        // Cherry leaves get our own bright grey texture (models/block/cherry_leaves.json override), so this colour
+        // decides pink or green.
         event.register(List.of(seasonalTint(SeasonalColors.cherryBlossom(), CHERRY_RESOLVER)), Blocks.CHERRY_LEAVES);
     }
 

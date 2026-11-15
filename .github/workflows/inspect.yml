@@ -78,7 +78,12 @@ jobs:
               # Not a class: a resource file (model, blockstate, item definition…) from the Minecraft jars
               OUT=""
               for jar in "$CLASSES" $(find build ~/.gradle -name '*.jar' -path '*minecraft*' 2>/dev/null); do
-                OUT=$(unzip -p "$jar" "$f" 2>/dev/null) && [ -n "$OUT" ] && break
+                if [[ "$f" == *.png ]]; then
+                  # Images are binary: print them as base64 (decode with base64 -d)
+                  OUT=$(unzip -p "$jar" "$f" 2>/dev/null | base64 -w0) && [ -n "$OUT" ] && break
+                else
+                  OUT=$(unzip -p "$jar" "$f" 2>/dev/null) && [ -n "$OUT" ] && break
+                fi
               done
               [ -z "$OUT" ] && OUT="(resource not found)"
             elif [ -n "$SOURCES" ]; then

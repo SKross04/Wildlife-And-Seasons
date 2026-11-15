@@ -18,6 +18,8 @@ import net.skross04.wildlifeandseasons.attachment.ModAttachments;
 import net.skross04.wildlifeandseasons.block.ModBlocks;
 import net.skross04.wildlifeandseasons.block.entity.DormantFlowerBlockEntity;
 import net.skross04.wildlifeandseasons.climate.BiomeZones;
+import net.skross04.wildlifeandseasons.climate.WorldClimate;
+import net.skross04.wildlifeandseasons.ecology.climate.SnowAndIce;
 import net.skross04.wildlifeandseasons.ecology.climate.ClimateZone;
 import net.skross04.wildlifeandseasons.ecology.season.SeasonDate;
 import net.skross04.wildlifeandseasons.ecology.vegetation.FlowerRules;
@@ -97,7 +99,10 @@ public final class SeasonalFlowers {
             }
         } else if (random.nextDouble() < bloomChance) {
             BlockState wilted = memory.peekWilted(pos);
-            if (wilted != null && (isTall(wilted) ? tallBloomTime : bloomTime) && regrow(level, pos, wilted)) {
+            boolean comesBack = wilted != null && (SnowCover.canBury(wilted)
+                    ? WorldClimate.dailyMeanAt(level, pos) > SnowAndIce.THAW_TEMPERATURE // grass: once it thaws
+                    : (isTall(wilted) ? tallBloomTime : bloomTime));
+            if (comesBack && regrow(level, pos, wilted)) {
                 memory.takeWilted(pos);
                 chunk.markUnsaved();
             }

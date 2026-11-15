@@ -26,7 +26,13 @@ public final class SeasonalColors {
     private static final double SPRING_BIRCH_AMOUNT = 0.40, AUTUMN_BIRCH_AMOUNT = 1.0, WINTER_BIRCH_AMOUNT = 0.45;
 
     /** Cherry trees: pink blossom in spring, green in summer. */
-    private static final int CHERRY_GREEN = 0x6FA84A, CHERRY_PINK = 0xF4B7D2;
+    private static final int CHERRY_GREEN = 0x6FA84A, CHERRY_PINK = 0xFFB0D6;
+    /**
+     * Cherry leaves use our own bright texture (so the blossom can be a vivid pink), about 1.5× brighter than
+     * vanilla's grey oak leaves. Green, autumn and snow colours are darkened by this much so cherry trees look
+     * like the other trees outside spring.
+     */
+    private static final double CHERRY_TEXTURE_COMPENSATION = 0.66;
     private static final double CHERRY_BLOSSOM_STRENGTH = 1.6;
 
     /** Snow lying on leaves. */
@@ -133,13 +139,21 @@ public final class SeasonalColors {
 
     /**
      * Cherry leaves: pink blossom in spring, green in summer, autumn colours, snowy in winter.
-     * (The leaves use a grey texture that this colour paints, see the cherry_leaves model.)
+     * (The leaves use a bright grey texture that this colour paints, see the cherry_leaves model.)
      */
     public static int cherry(Tint t, int x, int z) {
-        int c = blend(CHERRY_GREEN, CHERRY_PINK, Math.min(1.0, CHERRY_BLOSSOM_STRENGTH * t.spring()));
-        c = blend(c, AUTUMN_LEAVES[patchColor(x, z, AUTUMN_LEAVES.length)], AUTUMN_LEAVES_AMOUNT * t.leafAutumn());
-        c = blend(c, WINTER_LEAVES, WINTER_LEAVES_AMOUNT * t.winter());
-        return blend(c, SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
+        int leaves = blend(CHERRY_GREEN, AUTUMN_LEAVES[patchColor(x, z, AUTUMN_LEAVES.length)], AUTUMN_LEAVES_AMOUNT * t.leafAutumn());
+        leaves = blend(leaves, WINTER_LEAVES, WINTER_LEAVES_AMOUNT * t.winter());
+        leaves = blend(leaves, SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
+        leaves = darken(leaves, CHERRY_TEXTURE_COMPENSATION);
+        return blend(leaves, CHERRY_PINK, Math.min(1.0, CHERRY_BLOSSOM_STRENGTH * t.spring()));
+    }
+
+    private static int darken(int color, double factor) {
+        int r = (int) Math.round(((color >> 16) & 0xFF) * factor);
+        int g = (int) Math.round(((color >> 8) & 0xFF) * factor);
+        int b = (int) Math.round((color & 0xFF) * factor);
+        return (color & 0xFF000000) | (r << 16) | (g << 8) | b;
     }
 
     /** Cherry pink, for the inventory and when seasonal colours are switched off. */

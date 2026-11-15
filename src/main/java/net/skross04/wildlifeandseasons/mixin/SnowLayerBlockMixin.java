@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.skross04.wildlifeandseasons.climate.SeasonalThaw;
 import net.skross04.wildlifeandseasons.nature.Icicles;
+import net.skross04.wildlifeandseasons.nature.SnowCover;
 
 /** Snow open to the sky melts away one layer at a time when it gets warm; snow on roof edges grows icicles. */
 @Mixin(SnowLayerBlock.class)
@@ -24,6 +25,7 @@ public abstract class SnowLayerBlockMixin {
                 level.setBlockAndUpdate(pos, state.setValue(SnowLayerBlock.LAYERS, layers - 1));
             } else {
                 level.removeBlock(pos, false);
+                SnowCover.onSnowMelted(level, pos); // the grass that was under it grows back
             }
             ci.cancel();
             return;

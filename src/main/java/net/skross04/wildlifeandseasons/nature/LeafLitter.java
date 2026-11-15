@@ -43,8 +43,9 @@ public final class LeafLitter {
         BlockPos above = pos.above();
         BlockState aboveState = level.getBlockState(above);
         boolean hasLitter = aboveState.is(Blocks.LEAF_LITTER);
-        if (!hasLitter && !aboveState.isAir()) {
-            return; // flowers, tall grass, snow… stay as they are
+        boolean grass = SnowCover.canBury(aboveState);
+        if (!hasLitter && !grass && !aboveState.isAir()) {
+            return; // flowers, snow… stay as they are
         }
         Holder<Biome> biome = level.getBiome(pos);
         if (!biome.is(ModTags.Biomes.HAS_LEAF_LITTER) || !underDeciduousTree(level, pos)) {
@@ -55,9 +56,16 @@ public final class LeafLitter {
         // is white. When it snows, let snow settle under deciduous trees too (it covers the leaf litter).
         if (level.isRaining() && biome.value().getPrecipitationAt(above, level.getSeaLevel()) == Biome.Precipitation.SNOW) {
             if (random.nextDouble() < SNOW_COVER_CHANCE) {
-                level.setBlockAndUpdate(above, Blocks.SNOW.defaultBlockState());
+                if (grass) {
+                    SnowCover.bury(level, above, aboveState);
+                } else {
+                    level.setBlockAndUpdate(above, Blocks.SNOW.defaultBlockState());
+                }
             }
             return;
+        }
+        if (grass) {
+            return; // grass under the trees stays; leaves only fall on bare ground or on earlier leaves
         }
 
         double yearPosition = SeasonSavedData.get(level.getServer()).calendar().yearPosition(SeasonDate.DEFAULT_YEAR_LENGTH);

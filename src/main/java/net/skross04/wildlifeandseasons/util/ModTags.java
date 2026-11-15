@@ -34,6 +34,11 @@ public class ModTags {
 
         /** Flowers that bloom in spring and wilt (wild) or go dormant (planted) the rest of the year. */
         public static final TagKey<Block> SEASONAL_FLOWERS = createTag("seasonal_flowers");
+        /**
+         * Low plants that snow covers in winter instead of leaving holes in it (short and tall grass, ferns, bushes).
+         * They grow back in the same spot when the snow melts.
+         */
+        public static final TagKey<Block> BURIED_BY_SNOW = createTag("buried_by_snow");
         /** Tall (two-block) flowers that bloom in spring and summer and wilt or go dormant the rest of the year. */
         public static final TagKey<Block> SEASONAL_TALL_FLOWERS = createTag("seasonal_tall_flowers");
         /** Exceptions: flowers in the seasonal tag that should stay as they are (e.g. wither rose). */
