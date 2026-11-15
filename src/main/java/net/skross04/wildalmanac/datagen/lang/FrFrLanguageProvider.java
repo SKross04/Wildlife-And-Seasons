@@ -1,6 +1,8 @@
 package net.skross04.wildalmanac.datagen.lang;
 
 import net.minecraft.data.PackOutput;
+import net.skross04.wildalmanac.climate.ClimateTranslations;
+import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.season.Season;
 import net.skross04.wildalmanac.item.ModCreativeModeTabs;
 import net.skross04.wildalmanac.item.ModItems;
@@ -25,5 +27,15 @@ public class FrFrLanguageProvider extends ModLanguageProvider {
         addSeason(Season.SUMMER, "Début de l'été", "Mi-été", "Fin de l'été");
         addSeason(Season.AUTUMN, "Début de l'automne", "Mi-automne", "Fin de l'automne");
         addSeason(Season.WINTER, "Début de l'hiver", "Mi-hiver", "Fin de l'hiver");
+
+        add(ClimateTranslations.COMMAND_CLIMATE, "%1$s – %2$s °C, précipitations %3$s %%, jour %4$s %%");
+        add(ClimateTranslations.COMMAND_NO_SEASONS, "Il n'y a pas de saisons ici");
+        add(ClimateTranslations.zoneKey(ClimateZone.TEMPERATE), "Zone tempérée");
+        add(ClimateTranslations.zoneKey(ClimateZone.COLD), "Zone froide");
+        add(ClimateTranslations.zoneKey(ClimateZone.TROPICAL), "Zone tropicale");
+        add(ClimateTranslations.zoneKey(ClimateZone.SAVANNA), "Zone de savane");
+        add(ClimateTranslations.zoneKey(ClimateZone.ARID), "Zone aride");
+        add(ClimateTranslations.zoneKey(ClimateZone.OCEAN), "Océan et côte");
+        add(ClimateTranslations.zoneKey(ClimateZone.NO_SEASONS), "Sans saisons");
     }
 }

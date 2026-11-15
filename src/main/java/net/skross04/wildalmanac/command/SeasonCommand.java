@@ -6,7 +6,13 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.skross04.wildalmanac.climate.ClimateTranslations;
+import net.skross04.wildalmanac.climate.WorldClimate;
+import net.skross04.wildalmanac.ecology.climate.ClimateState;
+import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.season.Season;
 import net.skross04.wildalmanac.ecology.season.SeasonDate;
 import net.skross04.wildalmanac.season.SeasonSavedData;
@@ -15,6 +21,7 @@ import net.skross04.wildalmanac.season.WorldSeasons;
 
 /**
  * {@code /season} – shows the season (anyone can use it)
+ * {@code /season climate} – shows the climate zone, temperature, rainfall and daylight where you stand (anyone)
  * {@code /season set <spring|summer|autumn|winter>} – jumps to day 1 of that season (operators only)
  * {@code /season set day <1-100>} – jumps to a day of the year (operators only)
  * <p>
@@ -40,7 +47,19 @@ public class SeasonCommand {
         dispatcher.register(Commands.literal("season")
                 .executes(context -> query(context.getSource()))
                 .then(Commands.literal("query").executes(context -> query(context.getSource())))
+                .then(Commands.literal("climate").executes(context -> climate(context.getSource())))
                 .then(set));
+    }
+
+    /** Shows the climate zone, temperature, rainfall and daylight where the command is run. */
+    private static int climate(CommandSourceStack source) {
+        ServerLevel level = source.getLevel();
+        BlockPos pos = BlockPos.containing(source.getPosition());
+        ClimateZone zone = WorldClimate.zoneOf(level.getBiome(pos));
+        ClimateState climate = WorldClimate.climateAt(level, pos);
+        source.sendSuccess(() -> ClimateTranslations.describe(zone, climate), false);
+        // Rounded temperature as the result, so /execute store can use it (e.g. -3 for -3.2 °C).
+        return (int) Math.round(climate.temperature());
     }
 
     private static int query(CommandSourceStack source) {

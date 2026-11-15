@@ -67,6 +67,15 @@ public final class SeasonCalendar {
         return Math.floorDiv(elapsedTicks, TICKS_PER_DAY);
     }
 
+    /**
+     * How far through the year we are, from 0 (start of spring) to just under 1 (end of winter).
+     * Includes the time of day, so the climate curve moves smoothly instead of once per day.
+     */
+    public double yearPosition(int yearLength) {
+        long yearTicks = yearLength * TICKS_PER_DAY;
+        return (double) Math.floorMod(elapsedTicks, yearTicks) / yearTicks;
+    }
+
     public SeasonDate date(int yearLength) {
         return SeasonDate.fromDay(dayIndex(), yearLength);
     }

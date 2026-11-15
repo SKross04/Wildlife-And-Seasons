@@ -1,4 +1,13 @@
 {
+  "climate_zone.wildalmanac.arid": "Droge zone",
+  "climate_zone.wildalmanac.cold": "Koude zone",
+  "climate_zone.wildalmanac.no_seasons": "Geen seizoenen",
+  "climate_zone.wildalmanac.ocean": "Zee & kust",
+  "climate_zone.wildalmanac.savanna": "Savannezone",
+  "climate_zone.wildalmanac.temperate": "Gematigde zone",
+  "climate_zone.wildalmanac.tropical": "Tropische zone",
+  "commands.wildalmanac.season.climate": "%1$s – %2$s °C, neerslag %3$s%%, daglicht %4$s%%",
+  "commands.wildalmanac.season.climate.no_seasons": "Hier zijn geen seizoenen",
   "commands.wildalmanac.season.set": "Seizoen ingesteld: %s",
   "creativetab.wildalmanac.wild_almanac": "Wild Almanac",
   "item.wildalmanac.season_calendar": "Seizoenskalender",

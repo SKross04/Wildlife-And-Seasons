@@ -1,4 +1,13 @@
 {
+  "climate_zone.wildalmanac.arid": "Torr zon",
+  "climate_zone.wildalmanac.cold": "Kall zon",
+  "climate_zone.wildalmanac.no_seasons": "Inga årstider",
+  "climate_zone.wildalmanac.ocean": "Hav & kust",
+  "climate_zone.wildalmanac.savanna": "Savannzon",
+  "climate_zone.wildalmanac.temperate": "Tempererad zon",
+  "climate_zone.wildalmanac.tropical": "Tropisk zon",
+  "commands.wildalmanac.season.climate": "%1$s – %2$s °C, nederbörd %3$s %%, dagsljus %4$s %%",
+  "commands.wildalmanac.season.climate.no_seasons": "Här finns inga årstider",
   "commands.wildalmanac.season.set": "Årstid ändrad: %s",
   "creativetab.wildalmanac.wild_almanac": "Wild Almanac",
   "item.wildalmanac.season_calendar": "Årstidskalender",

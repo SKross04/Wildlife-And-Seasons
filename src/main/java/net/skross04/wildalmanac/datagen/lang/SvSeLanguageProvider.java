@@ -1,6 +1,8 @@
 package net.skross04.wildalmanac.datagen.lang;
 
 import net.minecraft.data.PackOutput;
+import net.skross04.wildalmanac.climate.ClimateTranslations;
+import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.season.Season;
 import net.skross04.wildalmanac.item.ModCreativeModeTabs;
 import net.skross04.wildalmanac.item.ModItems;
@@ -25,5 +27,15 @@ public class SvSeLanguageProvider extends ModLanguageProvider {
         addSeason(Season.SUMMER, "Tidig sommar", "Mitten av sommaren", "Sen sommar");
         addSeason(Season.AUTUMN, "Tidig höst", "Mitten av hösten", "Sen höst");
         addSeason(Season.WINTER, "Tidig vinter", "Mitten av vintern", "Sen vinter");
+
+        add(ClimateTranslations.COMMAND_CLIMATE, "%1$s – %2$s °C, nederbörd %3$s %%, dagsljus %4$s %%");
+        add(ClimateTranslations.COMMAND_NO_SEASONS, "Här finns inga årstider");
+        add(ClimateTranslations.zoneKey(ClimateZone.TEMPERATE), "Tempererad zon");
+        add(ClimateTranslations.zoneKey(ClimateZone.COLD), "Kall zon");
+        add(ClimateTranslations.zoneKey(ClimateZone.TROPICAL), "Tropisk zon");
+        add(ClimateTranslations.zoneKey(ClimateZone.SAVANNA), "Savannzon");
+        add(ClimateTranslations.zoneKey(ClimateZone.ARID), "Torr zon");
+        add(ClimateTranslations.zoneKey(ClimateZone.OCEAN), "Hav & kust");
+        add(ClimateTranslations.zoneKey(ClimateZone.NO_SEASONS), "Inga årstider");
     }
 }

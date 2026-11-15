@@ -1,4 +1,13 @@
 {
+  "climate_zone.wildalmanac.arid": "Arid zone",
+  "climate_zone.wildalmanac.cold": "Cold zone",
+  "climate_zone.wildalmanac.no_seasons": "No seasons",
+  "climate_zone.wildalmanac.ocean": "Ocean & coast",
+  "climate_zone.wildalmanac.savanna": "Savanna zone",
+  "climate_zone.wildalmanac.temperate": "Temperate zone",
+  "climate_zone.wildalmanac.tropical": "Tropical zone",
+  "commands.wildalmanac.season.climate": "%1$s – %2$s °C, rainfall %3$s%%, daylight %4$s%%",
+  "commands.wildalmanac.season.climate.no_seasons": "There are no seasons here",
   "commands.wildalmanac.season.set": "Season set: %s",
   "creativetab.wildalmanac.wild_almanac": "Wild Almanac",
   "item.wildalmanac.season_calendar": "Season Calendar",

@@ -1,4 +1,13 @@
 {
+  "climate_zone.wildalmanac.arid": "Zona árida",
+  "climate_zone.wildalmanac.cold": "Zona fría",
+  "climate_zone.wildalmanac.no_seasons": "Sin estaciones",
+  "climate_zone.wildalmanac.ocean": "Océano y costa",
+  "climate_zone.wildalmanac.savanna": "Zona de sabana",
+  "climate_zone.wildalmanac.temperate": "Zona templada",
+  "climate_zone.wildalmanac.tropical": "Zona tropical",
+  "commands.wildalmanac.season.climate": "%1$s – %2$s °C, lluvia %3$s %%, luz del día %4$s %%",
+  "commands.wildalmanac.season.climate.no_seasons": "Aquí no hay estaciones",
   "commands.wildalmanac.season.set": "Estación cambiada: %s",
   "creativetab.wildalmanac.wild_almanac": "Wild Almanac",
   "item.wildalmanac.season_calendar": "Calendario de estaciones",

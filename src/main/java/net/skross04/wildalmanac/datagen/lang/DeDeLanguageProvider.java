@@ -1,6 +1,8 @@
 package net.skross04.wildalmanac.datagen.lang;
 
 import net.minecraft.data.PackOutput;
+import net.skross04.wildalmanac.climate.ClimateTranslations;
+import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.season.Season;
 import net.skross04.wildalmanac.item.ModCreativeModeTabs;
 import net.skross04.wildalmanac.item.ModItems;
@@ -25,5 +27,15 @@ public class DeDeLanguageProvider extends ModLanguageProvider {
         addSeason(Season.SUMMER, "Sommeranfang", "Sommermitte", "Sommerende");
         addSeason(Season.AUTUMN, "Herbstanfang", "Herbstmitte", "Herbstende");
         addSeason(Season.WINTER, "Winteranfang", "Wintermitte", "Winterende");
+
+        add(ClimateTranslations.COMMAND_CLIMATE, "%1$s – %2$s °C, Niederschlag %3$s %%, Tageslicht %4$s %%");
+        add(ClimateTranslations.COMMAND_NO_SEASONS, "Hier gibt es keine Jahreszeiten");
+        add(ClimateTranslations.zoneKey(ClimateZone.TEMPERATE), "Gemäßigte Zone");
+        add(ClimateTranslations.zoneKey(ClimateZone.COLD), "Kalte Zone");
+        add(ClimateTranslations.zoneKey(ClimateZone.TROPICAL), "Tropische Zone");
+        add(ClimateTranslations.zoneKey(ClimateZone.SAVANNA), "Savannenzone");
+        add(ClimateTranslations.zoneKey(ClimateZone.ARID), "Trockenzone");
+        add(ClimateTranslations.zoneKey(ClimateZone.OCEAN), "Meer & Küste");
+        add(ClimateTranslations.zoneKey(ClimateZone.NO_SEASONS), "Keine Jahreszeiten");
     }
 }
