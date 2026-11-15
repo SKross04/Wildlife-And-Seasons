@@ -1,4 +1,4 @@
-# Wild Almanac
+# Wildlife & Seasons
 
 A NeoForge mod for Minecraft 26.3 that adds seasons and wild animals that hunt, nest, burrow and raise their young.
 

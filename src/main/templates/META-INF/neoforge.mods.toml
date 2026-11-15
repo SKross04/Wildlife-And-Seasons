@@ -21,7 +21,7 @@ version="${mod_version}" #mandatory
 displayName="${mod_name}" #mandatory
 
 # The square mod icon shown in the mod list (file in src/main/resources)
-iconFile="wildalmanac.png" #optional
+iconFile="wildlifeandseasons.png" #optional
 
 # The authors of the mod, displayed in the mod UI (optional)
 authors="Skross04"
@@ -68,11 +68,11 @@ config="${mod_id}.mixins.json"
     ordering="NONE"
     side="BOTH"
 
-# Wild Almanac has its own seasons, so it can't run together with Serene Seasons
+# Wildlife & Seasons has its own seasons, so it can't run together with Serene Seasons
 [[dependencies.${mod_id}]]
     modId="sereneseasons"
     type="incompatible"
-    reason="Wild Almanac has its own season system."
+    reason="Wildlife & Seasons has its own season system."
     versionRange="[0,)"
     ordering="NONE"
     side="BOTH"

@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.skross04.wildlifeandseasons.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BiomeAccessor",
+    "BiomeWeatherMixin",
+    "IceBlockMixin",
+    "SnowLayerBlockMixin",
+    "SpreadingSnowyBlockMixin"
+  ],
+  "client": [
+    "BiomeColorMixin",
+    "FallingLeavesMixin",
+    "WindInTreesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
