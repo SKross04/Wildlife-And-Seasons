@@ -94,6 +94,20 @@ public final class WorldClimate {
         return SeasonalWeather.hasRain(climate.zone(), rainfall);
     }
 
+    /** Today's average temperature for code without a world (client effects). NaN when unknown or without seasons. */
+    public static double dailyMeanNow(Biome biome, BlockPos pos) {
+        ClimateSnapshot.Moment moment = ClimateSnapshot.current();
+        if (moment == null) {
+            return Double.NaN;
+        }
+        BiomeZones.BiomeClimate climate = BiomeZones.of(biome);
+        if (!climate.zone().hasSeasons()) {
+            return Double.NaN;
+        }
+        return ClimateModel.dailyMeanTemperature(climate.zone(), climate.biomeTemperature(), climate.extraOffset(),
+                pos.getY(), moment.yearPosition());
+    }
+
     /** The average temperature of today at a position (server side), or NaN where there are no seasons. */
     public static double dailyMeanAt(ServerLevel level, BlockPos pos) {
         BiomeZones.BiomeClimate climate = BiomeZones.of(level.getBiome(pos).value());

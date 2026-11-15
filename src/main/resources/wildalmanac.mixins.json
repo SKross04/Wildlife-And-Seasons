@@ -12,7 +12,8 @@
   ],
   "client": [
     "BiomeColorMixin",
-    "FallingLeavesMixin"
+    "FallingLeavesMixin",
+    "WindInTreesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

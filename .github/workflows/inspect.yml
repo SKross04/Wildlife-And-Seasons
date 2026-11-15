@@ -66,6 +66,11 @@ jobs:
             fi
           done
           echo "Classes jar: $CLASSES"
+          # NeoForge's own classes (events, data providers) are in other jars: add them to the classpath
+          CLASSPATH_ALL="$CLASSES"
+          for jar in $(find build .gradle ~/.gradle -name '*.jar' -path '*neoforge*' 2>/dev/null); do
+            CLASSPATH_ALL="$CLASSPATH_ALL:$jar"
+          done
           for f in $FILES; do
             echo "===== $f ====="
             NOT_FOUND=""
@@ -80,7 +85,7 @@ jobs:
               OUT=$(unzip -p "$SOURCES" "$f" 2>/dev/null)
             else
               CLASS=$(echo "$f" | sed 's/\.java$//; s#/#.#g')
-              if ! OUT=$(javap ${JAVAP_FLAGS:--p} -classpath "$CLASSES" "$CLASS" 2>&1); then
+              if ! OUT=$(javap ${JAVAP_FLAGS:--p} -classpath "$CLASSPATH_ALL" "$CLASS" 2>&1); then
                 # Not found (renamed or moved?): list classes with a similar name instead
                 NAME=$(basename "$f" .java)
                 SIMILAR=$(unzip -l "$CLASSES" | grep -o "net/minecraft/[^ ]*$NAME[^ ]*\.class" | head -20)

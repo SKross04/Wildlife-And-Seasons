@@ -2,14 +2,19 @@ package net.skross04.wildalmanac.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FallingParticlesLeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.skross04.wildalmanac.ClientConfig;
+import net.skross04.wildalmanac.client.Atmosphere;
 import net.skross04.wildalmanac.client.SeasonalColorState;
 
 /**
@@ -30,5 +35,11 @@ public abstract class FallingLeavesMixin {
             return chance;
         }
         return chance * SeasonalColorState.fallingLeavesFactor(level.getBiome(pos).value(), level.getBlockState(pos));
+    }
+
+    /** Snow clumps falling from snowy trees (when it thaws, or in a storm). */
+    @Inject(method = "animateTick", at = @At("HEAD"))
+    private void wildalmanac$snowClumps(BlockState state, Level level, BlockPos pos, RandomSource random, CallbackInfo ci) {
+        Atmosphere.snowClumps(level, pos, random);
     }
 }

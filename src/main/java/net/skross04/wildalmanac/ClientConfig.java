@@ -22,6 +22,18 @@ public class ClientConfig {
             .comment("Many falling leaves in autumn and few the rest of the year (off = vanilla amount all year).")
             .define("seasonalFallingLeaves", true);
 
+    public static final ModConfigSpec.BooleanValue BREATH_IN_COLD = BUILDER
+            .comment("Players, animals and villagers breathe out little clouds when it's cold.")
+            .define("breathInCold", true);
+
+    public static final ModConfigSpec.BooleanValue SNOW_FALLING_FROM_TREES = BUILDER
+            .comment("Clumps of snow fall from snowy trees when it thaws or during storms.")
+            .define("snowFallingFromTrees", true);
+
+    public static final ModConfigSpec.BooleanValue WIND_IN_TREES = BUILDER
+            .comment("Leaves rustle more on windy autumn days and in storms.")
+            .define("windInTrees", true);
+
     static {
         BUILDER.pop();
     }
@@ -34,5 +46,17 @@ public class ClientConfig {
 
     public static boolean seasonalFallingLeaves() {
         return SPEC.isLoaded() ? SEASONAL_FALLING_LEAVES.get() : SEASONAL_FALLING_LEAVES.getDefault();
+    }
+
+    public static boolean breathInCold() {
+        return SPEC.isLoaded() ? BREATH_IN_COLD.get() : BREATH_IN_COLD.getDefault();
+    }
+
+    public static boolean snowFallingFromTrees() {
+        return SPEC.isLoaded() ? SNOW_FALLING_FROM_TREES.get() : SNOW_FALLING_FROM_TREES.getDefault();
+    }
+
+    public static boolean windInTrees() {
+        return SPEC.isLoaded() ? WIND_IN_TREES.get() : WIND_IN_TREES.getDefault();
     }
 }
