@@ -7,6 +7,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.color.block.BlockTintSource;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Blocks;
@@ -38,30 +39,51 @@ public class SeasonalColorEvents {
         });
     }
 
-    /** Like the biome's foliage colour, but starting from birch green (and turning golden in autumn). */
+    /** Vanilla leaves (oak, dark oak, acacia, jungle, vines): seasonal, with red/orange/yellow patches in autumn. */
+    public static final ColorResolver LEAVES_RESOLVER =
+            (biome, x, z) -> SeasonalColorState.leaves(biome, Mth.floor(x), Mth.floor(z));
+
+    /** Birch leaves start from birch green and turn golden in autumn. */
     public static final ColorResolver BIRCH_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.birch(biome, FoliageColor.FOLIAGE_BIRCH);
+            (biome, x, z) -> SeasonalColorState.birch(biome, FoliageColor.FOLIAGE_BIRCH, Mth.floor(x), Mth.floor(z));
+
+    /** Spruce needles: evergreen, but snowy in winter. */
+    public static final ColorResolver EVERGREEN_RESOLVER =
+            (biome, x, z) -> SeasonalColorState.evergreen(biome, FoliageColor.FOLIAGE_EVERGREEN);
 
     /** Custom colour resolvers must be registered, so Minecraft gives them a colour cache. */
     @SubscribeEvent
     public static void registerColorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
+        event.register(LEAVES_RESOLVER);
         event.register(BIRCH_RESOLVER);
+        event.register(EVERGREEN_RESOLVER);
     }
 
-    /** Replace birch leaves' fixed colour with our seasonal one. */
+    /**
+     * Give vanilla leaves our colours. This event runs after vanilla registered its own colours, so ours replace them.
+     * Falling-leaf particles take their colour from here too.
+     */
     @SubscribeEvent
     public static void registerBlockTints(RegisterColorHandlersEvent.BlockTintSources event) {
-        event.register(List.of(new BlockTintSource() {
+        event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_DEFAULT, LEAVES_RESOLVER)),
+                Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.ACACIA_LEAVES, Blocks.JUNGLE_LEAVES, Blocks.VINE);
+        event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_BIRCH, BIRCH_RESOLVER)), Blocks.BIRCH_LEAVES);
+        event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_EVERGREEN, EVERGREEN_RESOLVER)), Blocks.SPRUCE_LEAVES);
+    }
+
+    /** In the inventory: the normal colour. In the world: the colour from our resolver. */
+    private static BlockTintSource seasonalTint(int inventoryColor, ColorResolver resolver) {
+        return new BlockTintSource() {
             @Override
             public int color(BlockState state) {
-                return FoliageColor.FOLIAGE_BIRCH; // in the inventory: normal birch green
+                return inventoryColor;
             }
 
             @Override
             public int colorInWorld(BlockState state, BlockAndTintGetter level, BlockPos pos) {
-                return level.getBlockTint(pos, BIRCH_RESOLVER);
+                return level.getBlockTint(pos, resolver);
             }
-        }), Blocks.BIRCH_LEAVES);
+        };
     }
 
     /**

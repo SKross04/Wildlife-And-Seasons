@@ -4,12 +4,15 @@
   "package": "net.skross04.wildalmanac.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BiomeAccessor",
     "BiomeWeatherMixin",
     "IceBlockMixin",
-    "SnowLayerBlockMixin"
+    "SnowLayerBlockMixin",
+    "SpreadingSnowyBlockMixin"
   ],
   "client": [
-    "BiomeColorMixin"
+    "BiomeColorMixin",
+    "FallingLeavesMixin"
   ],
   "injectors": {
     "defaultRequire": 1

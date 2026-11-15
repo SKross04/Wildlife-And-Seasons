@@ -18,6 +18,10 @@ public class ClientConfig {
                     "When the colours change (about once a day in spring and autumn), the chunks around you are redrawn.")
             .define("seasonalColors", true);
 
+    public static final ModConfigSpec.BooleanValue SEASONAL_FALLING_LEAVES = BUILDER
+            .comment("Many falling leaves in autumn and few the rest of the year (off = vanilla amount all year).")
+            .define("seasonalFallingLeaves", true);
+
     static {
         BUILDER.pop();
     }
@@ -26,5 +30,9 @@ public class ClientConfig {
 
     public static boolean seasonalColors() {
         return SPEC.isLoaded() ? SEASONAL_COLORS.get() : SEASONAL_COLORS.getDefault();
+    }
+
+    public static boolean seasonalFallingLeaves() {
+        return SPEC.isLoaded() ? SEASONAL_FALLING_LEAVES.get() : SEASONAL_FALLING_LEAVES.getDefault();
     }
 }

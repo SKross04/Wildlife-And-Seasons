@@ -29,6 +29,9 @@ public class ModTags {
         /** Roof blocks that make a greenhouse: all glass blocks and panes by default. */
         public static final TagKey<Block> GREENHOUSE_GLASS = createTag("greenhouse_glass");
 
+        /** Leaves that turn colour and drop in autumn (falling leaves, leaf litter). */
+        public static final TagKey<Block> DROPS_LEAF_LITTER = createTag("drops_leaf_litter");
+
         /** Vanilla's crop tag. Crops from other mods that are in it, but in no season tag, get spring–autumn. */
         public static final TagKey<Block> VANILLA_CROPS =
                 TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("crops"));
@@ -54,6 +57,9 @@ public class ModTags {
                 CLIMATE_ZONES.put(zone, createTag("climate_zone/" + zone.id()));
             }
         }
+
+        /** Biomes where leaf litter gathers in autumn (forests by default). */
+        public static final TagKey<Biome> HAS_LEAF_LITTER = createTag("has_leaf_litter");
 
         public static TagKey<Biome> climateZone(ClimateZone zone) {
             return CLIMATE_ZONES.get(zone);

@@ -29,6 +29,15 @@ public class Config {
 
     static {
         BUILDER.pop();
+        BUILDER.comment("Nature around you").push("ambience");
+    }
+
+    public static final ModConfigSpec.BooleanValue LEAF_LITTER = BUILDER
+            .comment("In autumn, fallen leaves slowly gather on forest floors under trees; they rot away in spring.")
+            .define("leafLitter", true);
+
+    static {
+        BUILDER.pop();
     }
 
     public static final ModConfigSpec SPEC = BUILDER.build();
@@ -45,5 +54,9 @@ public class Config {
 
     public static int greenhouseMaxHeight() {
         return SPEC.isLoaded() ? GREENHOUSE_MAX_HEIGHT.get() : GREENHOUSE_MAX_HEIGHT.getDefault();
+    }
+
+    public static boolean leafLitter() {
+        return SPEC.isLoaded() ? LEAF_LITTER.get() : LEAF_LITTER.getDefault();
     }
 }

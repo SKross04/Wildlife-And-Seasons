@@ -46,6 +46,12 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         // Empty on purpose: for datapacks that want a crop to ignore seasons.
         tag(ModTags.Blocks.GROWS_ALL_YEAR);
 
+        // Leaves that drop in autumn. Evergreens (spruce) and tropical leaves aren't in it.
+        var deciduous = tag(ModTags.Blocks.DROPS_LEAF_LITTER);
+        for (Block leaves : new Block[]{Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.BIRCH_LEAVES}) {
+            deciduous.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(leaves)));
+        }
+
         tag(ModTags.Blocks.GREENHOUSE_GLASS)
                 .addTag(Tags.BlockItems.GLASS_BLOCKS.block())
                 .addTag(Tags.BlockItems.GLASS_PANES.block());

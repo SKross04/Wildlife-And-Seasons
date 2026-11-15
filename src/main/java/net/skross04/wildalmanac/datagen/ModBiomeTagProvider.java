@@ -45,5 +45,8 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
 
         tag(ModTags.Biomes.climateZone(ClimateZone.COLD))
                 .addTag(Tags.Biomes.IS_COLD_OVERWORLD);
+
+        tag(ModTags.Biomes.HAS_LEAF_LITTER)
+                .addTag(Tags.Biomes.IS_FOREST);
     }
 }
