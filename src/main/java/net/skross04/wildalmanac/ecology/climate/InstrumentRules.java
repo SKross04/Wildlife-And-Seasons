@@ -1,21 +1,11 @@
 package net.skross04.wildalmanac.ecology.climate;
 
-/** The numbers behind the thermometer and the rain gauge. */
+/** The numbers behind the rain gauge. */
 public final class InstrumentRules {
-    /** The thermometer's comparator scale: -20 °C gives signal 0, +40 °C gives 15 (4 °C per step). */
-    public static final double SIGNAL_MIN_TEMPERATURE = -20.0;
-    public static final double DEGREES_PER_SIGNAL = 4.0;
-
     /** The rain gauge holds 15 steps of water (comparator 0–15). */
     public static final int GAUGE_MAX = 15;
 
     private InstrumentRules() {
-    }
-
-    /** Comparator signal (0–15) for a temperature. */
-    public static int thermometerSignal(double temperature) {
-        long signal = Math.round((temperature - SIGNAL_MIN_TEMPERATURE) / DEGREES_PER_SIGNAL);
-        return (int) Math.max(0, Math.min(15, signal));
     }
 
     /** How much water a check adds while it rains on the gauge: more in a thunderstorm. */

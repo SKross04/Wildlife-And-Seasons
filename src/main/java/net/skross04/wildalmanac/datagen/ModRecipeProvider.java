@@ -29,7 +29,7 @@ public class ModRecipeProvider extends RecipeProvider {
                 .save(output, recipeKey("season_calendar"));
 
         // A glass tube with red "mercury" (redstone) on a stick.
-        shaped(RecipeCategory.REDSTONE, ModItems.THERMOMETER.get())
+        shaped(RecipeCategory.TOOLS, ModItems.THERMOMETER.get())
                 .pattern("G")
                 .pattern("R")
                 .pattern("S")

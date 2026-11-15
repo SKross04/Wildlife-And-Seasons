@@ -22,7 +22,8 @@ public class EsEsLanguageProvider extends ModLanguageProvider {
 
         addBlock(ModBlocks.DORMANT_FLOWER, "Flor latente");
         addBlock(ModBlocks.ICICLE, "Carámbano");
-        addBlock(ModBlocks.THERMOMETER, "Termómetro");
+        addItem(ModItems.THERMOMETER, "Termómetro");
+        add(Instruments.THERMOMETER_TOOLTIP, "Clic derecho para leer la temperatura aquí");
         addBlock(ModBlocks.RAIN_GAUGE, "Pluviómetro");
         add(Instruments.THERMOMETER_READING, "Termómetro: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Pluviómetro: lleno al %1$s%% · %2$s%% de lluvia esta estación");

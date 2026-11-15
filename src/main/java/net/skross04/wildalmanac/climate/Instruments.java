@@ -14,6 +14,8 @@ import net.skross04.wildalmanac.ecology.climate.InstrumentRules;
 public final class Instruments {
     /** "Thermometer: %s °C" */
     public static final String THERMOMETER_READING = "message." + WildAlmanac.MODID + ".thermometer";
+    /** "Right-click to read the temperature here" */
+    public static final String THERMOMETER_TOOLTIP = "item." + WildAlmanac.MODID + ".thermometer.tooltip";
     /** "Rain gauge: %1$s%% full · %2$s%% rainfall this season" */
     public static final String RAIN_GAUGE_READING = "message." + WildAlmanac.MODID + ".rain_gauge";
 
@@ -23,10 +25,6 @@ public final class Instruments {
     public static Component thermometerReading(ServerLevel level, BlockPos pos) {
         double temperature = WorldClimate.climateAt(level, pos).temperature();
         return Component.translatable(THERMOMETER_READING, String.format(Locale.ROOT, "%.1f", temperature));
-    }
-
-    public static int thermometerSignal(ServerLevel level, BlockPos pos) {
-        return InstrumentRules.thermometerSignal(WorldClimate.climateAt(level, pos).temperature());
     }
 
     public static Component rainGaugeReading(ServerLevel level, BlockPos pos, int fill) {

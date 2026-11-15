@@ -22,7 +22,8 @@ public class EnUsLanguageProvider extends ModLanguageProvider {
 
         addBlock(ModBlocks.DORMANT_FLOWER, "Dormant Flower");
         addBlock(ModBlocks.ICICLE, "Icicle");
-        addBlock(ModBlocks.THERMOMETER, "Thermometer");
+        addItem(ModItems.THERMOMETER, "Thermometer");
+        add(Instruments.THERMOMETER_TOOLTIP, "Right-click to read the temperature here");
         addBlock(ModBlocks.RAIN_GAUGE, "Rain Gauge");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Rain gauge: %1$s%% full · %2$s%% rainfall this season");

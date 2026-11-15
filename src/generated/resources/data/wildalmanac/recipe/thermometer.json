@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "redstone",
+  "category": "equipment",
   "key": {
     "G": "minecraft:glass_pane",
     "R": "minecraft:redstone",

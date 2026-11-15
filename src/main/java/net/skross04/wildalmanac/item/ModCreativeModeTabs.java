@@ -24,6 +24,7 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.SEASON_CALENDAR.get());
                         output.accept(ModItems.THERMOMETER.get());
                         output.accept(ModItems.RAIN_GAUGE.get());
+                        output.accept(ModItems.ICICLE.get());
                     })
                     .build());
 

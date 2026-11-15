@@ -22,7 +22,8 @@ public class FrFrLanguageProvider extends ModLanguageProvider {
 
         addBlock(ModBlocks.DORMANT_FLOWER, "Fleur en dormance");
         addBlock(ModBlocks.ICICLE, "Stalactite de glace");
-        addBlock(ModBlocks.THERMOMETER, "Thermomètre");
+        addItem(ModItems.THERMOMETER, "Thermomètre");
+        add(Instruments.THERMOMETER_TOOLTIP, "Clic droit pour lire la température ici");
         addBlock(ModBlocks.RAIN_GAUGE, "Pluviomètre");
         add(Instruments.THERMOMETER_READING, "Thermomètre : %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Pluviomètre : rempli à %1$s %% · %2$s %% de précipitations cette saison");

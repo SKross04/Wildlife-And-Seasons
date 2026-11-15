@@ -17,6 +17,7 @@ import net.skross04.wildalmanac.ecology.climate.IcicleRules;
 /**
  * Icicles: they start under snowy roof edges in winter (snow above, open air below), grow up to three blocks
  * long, drip when the sun warms them and melt in spring or next to a torch, like ice.
+ * Icicles a player placed are left alone (see {@code IcicleBlock#PERSISTENT}).
  */
 public final class Icicles {
     private Icicles() {

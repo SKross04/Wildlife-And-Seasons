@@ -22,7 +22,8 @@ public class SvSeLanguageProvider extends ModLanguageProvider {
 
         addBlock(ModBlocks.DORMANT_FLOWER, "Vilande blomma");
         addBlock(ModBlocks.ICICLE, "Istapp");
-        addBlock(ModBlocks.THERMOMETER, "Termometer");
+        addItem(ModItems.THERMOMETER, "Termometer");
+        add(Instruments.THERMOMETER_TOOLTIP, "Högerklicka för att läsa av temperaturen här");
         addBlock(ModBlocks.RAIN_GAUGE, "Regnmätare");
         add(Instruments.THERMOMETER_READING, "Termometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regnmätare: %1$s%% full · %2$s%% nederbörd denna årstid");

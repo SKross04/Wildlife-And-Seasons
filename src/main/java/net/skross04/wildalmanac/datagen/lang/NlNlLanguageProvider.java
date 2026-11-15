@@ -22,7 +22,8 @@ public class NlNlLanguageProvider extends ModLanguageProvider {
 
         addBlock(ModBlocks.DORMANT_FLOWER, "Slapende bloem");
         addBlock(ModBlocks.ICICLE, "IJspegel");
-        addBlock(ModBlocks.THERMOMETER, "Thermometer");
+        addItem(ModItems.THERMOMETER, "Thermometer");
+        add(Instruments.THERMOMETER_TOOLTIP, "Rechtsklik om hier de temperatuur af te lezen");
         addBlock(ModBlocks.RAIN_GAUGE, "Regenmeter");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regenmeter: %1$s%% vol · %2$s%% neerslag dit seizoen");

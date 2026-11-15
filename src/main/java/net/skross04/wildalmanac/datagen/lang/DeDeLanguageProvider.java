@@ -22,7 +22,8 @@ public class DeDeLanguageProvider extends ModLanguageProvider {
 
         addBlock(ModBlocks.DORMANT_FLOWER, "Ruhende Blume");
         addBlock(ModBlocks.ICICLE, "Eiszapfen");
-        addBlock(ModBlocks.THERMOMETER, "Thermometer");
+        addItem(ModItems.THERMOMETER, "Thermometer");
+        add(Instruments.THERMOMETER_TOOLTIP, "Rechtsklick, um die Temperatur hier abzulesen");
         addBlock(ModBlocks.RAIN_GAUGE, "Regenmesser");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regenmesser: %1$s%% voll · %2$s%% Niederschlag in dieser Jahreszeit");

@@ -1,0 +1,331 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "wildalmanac:block/rain_gauge",
+    "gauge": "wildalmanac:block/rain_gauge"
+  },
+  "elements": [
+    {
+      "from": [
+        7,
+        0,
+        7
+      ],
+      "to": [
+        9,
+        3,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            13,
+            12,
+            15,
+            15
+          ],
+          "texture": "#gauge"
+        },
+        "south": {
+          "uv": [
+            13,
+            12,
+            15,
+            15
+          ],
+          "texture": "#gauge"
+        },
+        "east": {
+          "uv": [
+            13,
+            12,
+            15,
+            15
+          ],
+          "texture": "#gauge"
+        },
+        "west": {
+          "uv": [
+            13,
+            12,
+            15,
+            15
+          ],
+          "texture": "#gauge"
+        },
+        "up": {
+          "uv": [
+            13,
+            12,
+            15,
+            14
+          ],
+          "texture": "#gauge"
+        },
+        "down": {
+          "uv": [
+            13,
+            12,
+            15,
+            14
+          ],
+          "texture": "#gauge"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        3,
+        5.5
+      ],
+      "to": [
+        10.5,
+        4,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            12,
+            9,
+            13
+          ],
+          "texture": "#gauge"
+        },
+        "south": {
+          "uv": [
+            4,
+            12,
+            9,
+            13
+          ],
+          "texture": "#gauge"
+        },
+        "east": {
+          "uv": [
+            4,
+            12,
+            9,
+            13
+          ],
+          "texture": "#gauge"
+        },
+        "west": {
+          "uv": [
+            4,
+            12,
+            9,
+            13
+          ],
+          "texture": "#gauge"
+        },
+        "up": {
+          "uv": [
+            4,
+            12,
+            9,
+            15
+          ],
+          "texture": "#gauge"
+        },
+        "down": {
+          "uv": [
+            4,
+            12,
+            9,
+            15
+          ],
+          "texture": "#gauge"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        4,
+        6
+      ],
+      "to": [
+        10,
+        14,
+        10
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            4,
+            10
+          ],
+          "texture": "#gauge"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            4,
+            10
+          ],
+          "texture": "#gauge"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            4,
+            10
+          ],
+          "texture": "#gauge"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            4,
+            10
+          ],
+          "texture": "#gauge"
+        },
+        "down": {
+          "uv": [
+            0,
+            12,
+            4,
+            15
+          ],
+          "texture": "#gauge"
+        }
+      }
+    },
+    {
+      "from": [
+        5.5,
+        14,
+        5.5
+      ],
+      "to": [
+        10.5,
+        15,
+        10.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            4,
+            5,
+            9,
+            6
+          ],
+          "texture": "#gauge"
+        },
+        "south": {
+          "uv": [
+            4,
+            5,
+            9,
+            6
+          ],
+          "texture": "#gauge"
+        },
+        "east": {
+          "uv": [
+            4,
+            5,
+            9,
+            6
+          ],
+          "texture": "#gauge"
+        },
+        "west": {
+          "uv": [
+            4,
+            5,
+            9,
+            6
+          ],
+          "texture": "#gauge"
+        },
+        "up": {
+          "uv": [
+            4,
+            0,
+            9,
+            5
+          ],
+          "texture": "#gauge"
+        },
+        "down": {
+          "uv": [
+            4,
+            0,
+            9,
+            5
+          ],
+          "texture": "#gauge"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        4.5,
+        6.5
+      ],
+      "to": [
+        9.5,
+        13,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            9,
+            0,
+            12,
+            8.5
+          ],
+          "texture": "#gauge"
+        },
+        "south": {
+          "uv": [
+            9,
+            0,
+            12,
+            8.5
+          ],
+          "texture": "#gauge"
+        },
+        "east": {
+          "uv": [
+            9,
+            0,
+            12,
+            8.5
+          ],
+          "texture": "#gauge"
+        },
+        "west": {
+          "uv": [
+            9,
+            0,
+            12,
+            8.5
+          ],
+          "texture": "#gauge"
+        },
+        "up": {
+          "uv": [
+            12,
+            0,
+            15,
+            3
+          ],
+          "texture": "#gauge"
+        }
+      }
+    }
+  ]
+}

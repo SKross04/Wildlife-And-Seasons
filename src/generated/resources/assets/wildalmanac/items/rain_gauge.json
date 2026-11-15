@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "wildalmanac:block/rain_gauge"
+    "model": "wildalmanac:block/rain_gauge_empty"
   }
 }
