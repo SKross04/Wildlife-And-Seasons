@@ -7,11 +7,16 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.level.SleepFinishedTimeEvent;
+import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import net.skross04.wildalmanac.WildAlmanac;
+import net.skross04.wildalmanac.climate.BiomeZones;
+import net.skross04.wildalmanac.climate.ClimateSnapshot;
 import net.skross04.wildalmanac.command.SeasonCommand;
+import net.skross04.wildalmanac.ecology.season.SeasonDate;
 import net.skross04.wildalmanac.network.ModNetworking;
 
 /**
@@ -26,6 +31,9 @@ public class SeasonEvents {
         MinecraftServer server = event.getServer();
         SeasonSavedData data = SeasonSavedData.get(server);
         data.tick(WorldSeasons.overworldClockTicks(server));
+        // For code without a world at hand (the Biome mixin): where we are in the year and the day.
+        ClimateSnapshot.updateServer(data.calendar().yearPosition(SeasonDate.DEFAULT_YEAR_LENGTH),
+                ClimateSnapshot.dayPosition(server.overworld()));
         if (data.needsSync()) {
             ModNetworking.syncSeasonToAll(server); // once per day, players learn the new date
         }
@@ -48,6 +56,18 @@ public class SeasonEvents {
         if (event.getEntity() instanceof ServerPlayer player) {
             ModNetworking.syncSeason(player);
         }
+    }
+
+    @SubscribeEvent
+    public static void onServerStopped(ServerStoppedEvent event) {
+        ClimateSnapshot.clearServer();
+        BiomeZones.clear();
+    }
+
+    /** Datapacks can move biomes between climate zones, so forget the cached zones when tags reload. */
+    @SubscribeEvent
+    public static void onTagsUpdated(TagsUpdatedEvent event) {
+        BiomeZones.clear();
     }
 
     @SubscribeEvent

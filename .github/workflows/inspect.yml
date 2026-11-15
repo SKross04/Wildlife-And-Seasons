@@ -13,6 +13,10 @@ on:
         description: 'Optional: instead of whole files, only show lines matching this pattern (grep -n -E)'
         required: false
         default: ''
+      javap_flags:
+        description: 'javap options, e.g. "-p" (methods) or "-p -c" (with bytecode, to see what a method does)'
+        required: false
+        default: '-p'
 
 jobs:
   inspect:
@@ -42,6 +46,7 @@ jobs:
         env:
           FILES: ${{ github.event.inputs.files }}
           PATTERN: ${{ github.event.inputs.grep }}
+          JAVAP_FLAGS: ${{ github.event.inputs.javap_flags }}
         run: |
           # The decompiled Minecraft sources are the sources jar that contains net/minecraft/
           SOURCES=""
@@ -63,13 +68,20 @@ jobs:
           echo "Classes jar: $CLASSES"
           for f in $FILES; do
             echo "===== $f ====="
+            NOT_FOUND=""
             if [ -n "$SOURCES" ]; then
               OUT=$(unzip -p "$SOURCES" "$f" 2>/dev/null)
             else
               CLASS=$(echo "$f" | sed 's/\.java$//; s#/#.#g')
-              OUT=$(javap -p -classpath "$CLASSES" "$CLASS" 2>&1)
+              if ! OUT=$(javap ${JAVAP_FLAGS:--p} -classpath "$CLASSES" "$CLASS" 2>&1); then
+                # Not found (renamed or moved?): list classes with a similar name instead
+                NAME=$(basename "$f" .java)
+                SIMILAR=$(unzip -l "$CLASSES" | grep -o "net/minecraft/[^ ]*$NAME[^ ]*\.class" | head -20)
+                OUT=$(printf '(class not found) Classes with %s in the name:\n%s' "$NAME" "$SIMILAR")
+                NOT_FOUND=1
+              fi
             fi
-            if [ -n "$PATTERN" ]; then
+            if [ -n "$PATTERN" ] && [ -z "$NOT_FOUND" ]; then
               echo "$OUT" | grep -n -E "$PATTERN" || echo "(no matches)"
             else
               echo "$OUT"

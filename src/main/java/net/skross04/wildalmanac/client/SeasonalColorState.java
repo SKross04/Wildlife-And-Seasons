@@ -1,15 +1,9 @@
 package net.skross04.wildalmanac.client;
 
-import java.util.Map;
 import java.util.OptionalDouble;
-import java.util.concurrent.ConcurrentHashMap;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.biome.Biome;
-import net.skross04.wildalmanac.climate.WorldClimate;
+import net.skross04.wildalmanac.climate.BiomeZones;
 import net.skross04.wildalmanac.ecology.climate.ClimateZone;
 import net.skross04.wildalmanac.ecology.climate.SeasonalColors;
 
@@ -17,11 +11,9 @@ import net.skross04.wildalmanac.ecology.climate.SeasonalColors;
  * The seasonal colours currently shown on this client.
  * <p>
  * Chunks are drawn on several threads at once, so everything here is thread-safe:
- * a concurrent map for the zone cache and a volatile array for the current tints.
+ * the zone cache lives in {@link BiomeZones}, and the current tints are a volatile array.
  */
 public final class SeasonalColorState {
-    /** Climate zone per biome, so tags aren't checked again for every grass block. */
-    private static final Map<Biome, ClimateZone> ZONES = new ConcurrentHashMap<>();
     /** Current tint per climate zone (index = zone ordinal); null = no seasonal colours (off, or season unknown). */
     private static volatile SeasonalColors.Tint[] tints;
 
@@ -67,7 +59,6 @@ public final class SeasonalColorState {
 
     /** Forget everything when leaving a world (another world can have other biomes and tags). */
     public static void reset() {
-        ZONES.clear();
         tints = null;
     }
 
@@ -84,17 +75,6 @@ public final class SeasonalColorState {
     }
 
     private static ClimateZone zoneOf(Biome biome) {
-        ClimateZone cached = ZONES.get(biome);
-        if (cached != null) {
-            return cached;
-        }
-        ClientLevel level = Minecraft.getInstance().level;
-        if (level == null) {
-            return ClimateZone.TEMPERATE; // no world loaded: don't cache a guess
-        }
-        Holder<Biome> holder = level.registryAccess().lookupOrThrow(Registries.BIOME).wrapAsHolder(biome);
-        ClimateZone zone = WorldClimate.zoneOf(holder);
-        ZONES.put(biome, zone);
-        return zone;
+        return BiomeZones.of(biome).zone();
     }
 }

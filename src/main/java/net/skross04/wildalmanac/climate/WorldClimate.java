@@ -60,7 +60,35 @@ public final class WorldClimate {
                 extraOffset(zone, biome), pos.getY(), yearPosition, dayPosition);
     }
 
-    private static double extraOffset(ClimateZone zone, Holder<Biome> biome) {
+    /**
+     * The temperature right now at a position, for code without a world (the Biome mixin).
+     * NaN when it isn't known (season not loaded yet, or a place without seasons): then vanilla decides.
+     */
+    public static double temperatureNow(Biome biome, BlockPos pos) {
+        ClimateSnapshot.Moment moment = ClimateSnapshot.current();
+        if (moment == null) {
+            return Double.NaN;
+        }
+        BiomeZones.BiomeClimate climate = BiomeZones.of(biome);
+        if (!climate.zone().hasSeasons()) {
+            return Double.NaN;
+        }
+        return ClimateModel.sample(climate.zone(), climate.biomeTemperature(), climate.extraOffset(), pos.getY(),
+                moment.yearPosition(), moment.dayPosition()).temperature();
+    }
+
+    /** The average temperature of today at a position (server side), or NaN where there are no seasons. */
+    public static double dailyMeanAt(ServerLevel level, BlockPos pos) {
+        BiomeZones.BiomeClimate climate = BiomeZones.of(level.getBiome(pos).value());
+        if (!climate.zone().hasSeasons()) {
+            return Double.NaN;
+        }
+        double yearPosition = SeasonSavedData.get(level.getServer()).calendar().yearPosition(SeasonDate.DEFAULT_YEAR_LENGTH);
+        return ClimateModel.dailyMeanTemperature(climate.zone(), climate.biomeTemperature(), climate.extraOffset(),
+                pos.getY(), yearPosition);
+    }
+
+    public static double extraOffset(ClimateZone zone, Holder<Biome> biome) {
         if (zone == ClimateZone.OCEAN) {
             if (biome.is(Tags.Biomes.IS_COLD_OVERWORLD)) {
                 return -OCEAN_TAG_OFFSET;

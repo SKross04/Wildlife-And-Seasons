@@ -10,8 +10,8 @@ import java.util.Locale;
  */
 public enum ClimateZone {
     //            winter summer skew  day/night  rain: mean  amp   peak   daylight  ref. biome temp
-    /** Plains, forests, meadows: the classic four seasons. Wettest in late autumn, driest in early summer. */
-    TEMPERATE(     2.0,  20.0, 1.0,   4.0,             0.50, 0.15, 0.750, 0.10,     0.8),
+    /** Plains, forests, meadows: the classic four seasons, with frost and snow in mid-winter. Wettest in late autumn, driest in early summer. */
+    TEMPERATE(    -4.0,  20.0, 1.0,   3.0,             0.50, 0.15, 0.750, 0.10,     0.8),
     /** Taigas, snowy biomes, high mountains: long winter, short intense summer. */
     COLD(        -15.0,  14.0, 2.0,   4.0,             0.40, 0.10, 0.875, 0.15,     0.2),
     /** Jungles, mangroves: always warm, a wet season (around summer) and a dry season (around winter). */

@@ -58,6 +58,12 @@ public final class ClimateModel {
         return new ClimateState(temperature, rainfall, daylight);
     }
 
+    /** Like {@link #sample}, but the average over the whole day (no day/night difference). Used for slow things like thawing. */
+    public static double dailyMeanTemperature(ClimateZone zone, double biomeTemperature, double extraOffset, int y, double yearPosition) {
+        // A quarter day after the warmest moment, the day/night wave is exactly 0.
+        return sample(zone, biomeTemperature, extraOffset, y, yearPosition, WARMEST_TIME_OF_DAY + 0.25).temperature();
+    }
+
     private static double clamp(double value, double min, double max) {
         return Math.max(min, Math.min(max, value));
     }
