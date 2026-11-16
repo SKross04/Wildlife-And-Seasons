@@ -5,6 +5,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Queue;
+import java.util.function.BiFunction;
+import java.util.function.ToIntFunction;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,16 +19,21 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.AttachedStemBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.LeafLitterBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SegmentableBlock;
+import net.minecraft.world.level.block.StemBlock;
+import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -70,7 +77,8 @@ import net.skross04.wildlifeandseasons.util.ModTags;
  *     jumped ahead): they're queued and catch up a few per tick.</li>
  * </ul>
  * Catching up, column by column: warm → snow and lake ice melt, natural icicles melt; flowers wilt or bloom;
- * forest floors get the leaf litter they'd have by now; crops grow for the days they were in season;
+ * forest floors get the leaf litter they'd have by now; crops, stems (with their melons and pumpkins), sweet berries
+ * and cocoa grow for the days they were in season;
  * cold and snowy → snow lies on the ground, still water freezes, icicles hang under snowy roof edges.
  * Brand-new chunks don't need it: world generation already follows the season.
  */
@@ -504,7 +512,7 @@ public final class ChunkCatchUp {
             LevelChunkSection section = sections[index];
             // maybeHas checks the section's block palette: most sections have neither, so they're skipped at once.
             boolean icicles = section.maybeHas(state -> state.is(ModBlocks.ICICLE.get()));
-            boolean crops = section.maybeHas(state -> state.getBlock() instanceof CropBlock);
+            boolean crops = section.maybeHas(state -> growthOf(state) != null);
             if (!icicles && !crops) {
                 continue;
             }
@@ -516,8 +524,8 @@ public final class ChunkCatchUp {
                         BlockPos pos = new BlockPos(chunk.getPos().getBlockX(x), baseY + y, chunk.getPos().getBlockZ(z));
                         if (icicles && state.is(ModBlocks.ICICLE.get())) {
                             meltIcicle(level, blocks, pos, state);
-                        } else if (crops && state.getBlock() instanceof CropBlock crop) {
-                            growCrop(blocks, pos, state, crop, missed, today, random);
+                        } else if (crops && growthOf(state) instanceof Growth growth) {
+                            growCrop(blocks, pos, state, growth, missed, today, random);
                         }
                     }
                 }
@@ -535,10 +543,43 @@ public final class ChunkCatchUp {
         }
     }
 
-    /** A crop grows for every missed day it was in season (out of season only as fast as the config allows). */
-    private static void growCrop(ChunkBlocks blocks, BlockPos pos, BlockState state, CropBlock crop, long missed, long today,
+    /** How a plant grows: how old it is, the same plant at another age, and the age where it's fully grown. */
+    private record Growth(ToIntFunction<BlockState> ageOf, BiFunction<BlockState, Integer, BlockState> withAge, int maxAge) {
+        static Growth of(IntegerProperty age, int maxAge) {
+            return new Growth(state -> state.getValue(age), (state, value) -> state.setValue(age, value), maxAge);
+        }
+    }
+
+    /**
+     * Crops (wheat, carrots, modded crops…), melon and pumpkin stems, sweet berry bushes and cocoa pods.
+     * In vanilla they all grow about as fast (roughly 1 in 5 random ticks on a normal farm), so they share
+     * {@link CropSeasonRules#catchUpStages}. Null for anything else.
+     */
+    private static Growth growthOf(BlockState state) {
+        Block block = state.getBlock();
+        if (block instanceof CropBlock crop) {
+            return new Growth(crop::getAge, (state1, value) -> crop.getStateForAge(value), crop.getMaxAge());
+        }
+        if (block instanceof StemBlock) {
+            return Growth.of(StemBlock.AGE, StemBlock.MAX_AGE);
+        }
+        if (block instanceof SweetBerryBushBlock) {
+            return Growth.of(SweetBerryBushBlock.AGE, SweetBerryBushBlock.MAX_AGE);
+        }
+        if (block instanceof CocoaBlock) {
+            return Growth.of(CocoaBlock.AGE, CocoaBlock.MAX_AGE);
+        }
+        return null;
+    }
+
+    /**
+     * A crop grows for every missed day it was in season (out of season only as fast as the config allows).
+     * A full-grown melon or pumpkin stem uses the growth that's left to grow its fruit next to it.
+     */
+    private static void growCrop(ChunkBlocks blocks, BlockPos pos, BlockState state, Growth growth, long missed, long today,
                                  RandomSource random) {
-        if (crop.isMaxAge(state)) {
+        int age = growth.ageOf().applyAsInt(state);
+        if (age >= growth.maxAge() && !(state.getBlock() instanceof StemBlock)) {
             return;
         }
         EnumSet<Season> seasons = CropSeasons.seasonsFor(state);
@@ -551,8 +592,42 @@ public final class ChunkCatchUp {
             growingDays += inSeason ? 1.0 : Config.outOfSeasonGrowth();
         }
         int stages = CropSeasonRules.catchUpStages(growingDays, random.nextDouble());
-        if (stages > 0) {
-            blocks.set(pos, crop.getStateForAge(Math.min(crop.getMaxAge(), crop.getAge(state) + stages)));
+        if (stages <= 0) {
+            return;
+        }
+        if (age < growth.maxAge()) {
+            blocks.set(pos, growth.withAge().apply(state, Math.min(growth.maxAge(), age + stages)));
+        }
+        int leftOver = age + stages - growth.maxAge();
+        if (leftOver > 0 && state.getBlock() instanceof StemBlock) {
+            growFruit(blocks, pos, state.getBlock(), leftOver, random);
+        }
+    }
+
+    /**
+     * Vanilla: every growth chance a full-grown stem gets, it picks a random side and puts its fruit there if that
+     * spot is empty with dirt or farmland under it. Only sides inside this chunk (a loading chunk can't touch its
+     * neighbours). Melon and pumpkin only: we know which fruit and attached stem belong to them.
+     */
+    private static void growFruit(ChunkBlocks blocks, BlockPos stemPos, Block stem, int tries, RandomSource random) {
+        Block fruit = stem == Blocks.MELON_STEM ? Blocks.MELON : stem == Blocks.PUMPKIN_STEM ? Blocks.PUMPKIN : null;
+        Block attached = stem == Blocks.MELON_STEM ? Blocks.ATTACHED_MELON_STEM : Blocks.ATTACHED_PUMPKIN_STEM;
+        if (fruit == null) {
+            return;
+        }
+        ChunkPos chunkPos = blocks.chunk().getPos();
+        for (int i = 0; i < Math.min(tries, 4); i++) {
+            Direction side = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+            BlockPos fruitPos = stemPos.relative(side);
+            if ((fruitPos.getX() >> 4) != chunkPos.x() || (fruitPos.getZ() >> 4) != chunkPos.z()) {
+                continue;
+            }
+            BlockState below = blocks.get(fruitPos.below());
+            if (blocks.get(fruitPos).isAir() && (below.is(BlockTags.DIRT) || below.is(Blocks.FARMLAND))) {
+                blocks.set(fruitPos, fruit.defaultBlockState());
+                blocks.set(stemPos, attached.defaultBlockState().setValue(AttachedStemBlock.FACING, side));
+                return;
+            }
         }
     }
 }
