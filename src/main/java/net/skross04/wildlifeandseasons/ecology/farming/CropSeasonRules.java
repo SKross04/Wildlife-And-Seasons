@@ -59,4 +59,17 @@ public final class CropSeasonRules {
     public static int catchUpStages(double growingDays, double random) {
         return (int) Math.floor(growingDays * STAGES_PER_DAY * (0.75 + 0.5 * random));
     }
+
+    /** Random ticks one block gets per in-game day at the default random tick speed (3 per 16×16×16 section per tick). */
+    public static final double RANDOM_TICKS_PER_DAY = 3.0 * 24000 / 4096;
+
+    /**
+     * How many random ticks a plant that grows tick by tick (sugar cane, cactus, bamboo) catches up on.
+     *
+     * @param growingDays days it could grow (see {@link #catchUpStages})
+     * @param random      0–1, so neighbouring plants don't all end up the same
+     */
+    public static int catchUpTicks(double growingDays, double random) {
+        return (int) Math.floor(growingDays * RANDOM_TICKS_PER_DAY * (0.75 + 0.5 * random));
+    }
 }

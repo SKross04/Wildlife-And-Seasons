@@ -15,22 +15,28 @@ import net.minecraft.core.QuartPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.AttachedStemBlock;
+import net.minecraft.world.level.block.BambooStalkBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.CocoaBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.LeafLitterBlock;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.NetherWartBlock;
 import net.minecraft.world.level.block.SegmentableBlock;
 import net.minecraft.world.level.block.StemBlock;
+import net.minecraft.world.level.block.SugarCaneBlock;
 import net.minecraft.world.level.block.SweetBerryBushBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BambooLeaves;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -77,8 +83,8 @@ import net.skross04.wildlifeandseasons.util.ModTags;
  *     jumped ahead): they're queued and catch up a few per tick.</li>
  * </ul>
  * Catching up, column by column: warm → snow and lake ice melt, natural icicles melt; flowers wilt or bloom;
- * forest floors get the leaf litter they'd have by now; crops, stems (with their melons and pumpkins), sweet berries
- * and cocoa grow for the days they were in season;
+ * forest floors get the leaf litter they'd have by now; crops, stems (with their melons and pumpkins), sweet berries,
+ * cocoa, nether wart, sugar cane, cactus (with its flowers) and bamboo grow for the days they were in season;
  * cold and snowy → snow lies on the ground, still water freezes, icicles hang under snowy roof edges.
  * Brand-new chunks don't need it: world generation already follows the season.
  */
@@ -211,6 +217,12 @@ public final class ChunkCatchUp {
 
         default BlockState get(BlockPos pos) {
             return chunk().getBlockState(pos);
+        }
+
+        /** A block that may be in a neighbouring chunk: null if it's outside this chunk (a loading chunk can't look). */
+        default BlockState near(BlockPos pos) {
+            ChunkPos chunkPos = chunk().getPos();
+            return (pos.getX() >> 4) == chunkPos.x() && (pos.getZ() >> 4) == chunkPos.z() ? get(pos) : null;
         }
     }
 
@@ -512,7 +524,7 @@ public final class ChunkCatchUp {
             LevelChunkSection section = sections[index];
             // maybeHas checks the section's block palette: most sections have neither, so they're skipped at once.
             boolean icicles = section.maybeHas(state -> state.is(ModBlocks.ICICLE.get()));
-            boolean crops = section.maybeHas(state -> growthOf(state) != null);
+            boolean crops = section.maybeHas(state -> growthOf(state) != null || isTallPlant(state));
             if (!icicles && !crops) {
                 continue;
             }
@@ -526,6 +538,8 @@ public final class ChunkCatchUp {
                             meltIcicle(level, blocks, pos, state);
                         } else if (crops && growthOf(state) instanceof Growth growth) {
                             growCrop(blocks, pos, state, growth, missed, today, random);
+                        } else if (crops && isTallPlant(state) && !blocks.get(pos.below()).is(state.getBlock())) {
+                            growTallPlant(blocks, pos, state, missed, today, random); // found from its bottom block
                         }
                     }
                 }
@@ -543,22 +557,30 @@ public final class ChunkCatchUp {
         }
     }
 
-    /** How a plant grows: how old it is, the same plant at another age, and the age where it's fully grown. */
-    private record Growth(ToIntFunction<BlockState> ageOf, BiFunction<BlockState, Integer, BlockState> withAge, int maxAge) {
+    /**
+     * How a plant grows: how old it is, the same plant at another age, the age where it's fully grown,
+     * and how fast it grows compared to a crop.
+     */
+    private record Growth(ToIntFunction<BlockState> ageOf, BiFunction<BlockState, Integer, BlockState> withAge, int maxAge,
+                          double speed) {
         static Growth of(IntegerProperty age, int maxAge) {
-            return new Growth(state -> state.getValue(age), (state, value) -> state.setValue(age, value), maxAge);
+            return of(age, maxAge, 1.0);
+        }
+
+        static Growth of(IntegerProperty age, int maxAge, double speed) {
+            return new Growth(state -> state.getValue(age), (state, value) -> state.setValue(age, value), maxAge, speed);
         }
     }
 
     /**
-     * Crops (wheat, carrots, modded crops…), melon and pumpkin stems, sweet berry bushes and cocoa pods.
-     * In vanilla they all grow about as fast (roughly 1 in 5 random ticks on a normal farm), so they share
-     * {@link CropSeasonRules#catchUpStages}. Null for anything else.
+     * Crops (wheat, carrots, modded crops…), melon and pumpkin stems, sweet berry bushes, cocoa pods and nether wart.
+     * In vanilla the first ones all grow about as fast (roughly 1 in 5 random ticks on a normal farm), so they share
+     * {@link CropSeasonRules#catchUpStages}; nether wart grows half as fast. Null for anything else.
      */
     private static Growth growthOf(BlockState state) {
         Block block = state.getBlock();
         if (block instanceof CropBlock crop) {
-            return new Growth(crop::getAge, (state1, value) -> crop.getStateForAge(value), crop.getMaxAge());
+            return new Growth(crop::getAge, (state1, value) -> crop.getStateForAge(value), crop.getMaxAge(), 1.0);
         }
         if (block instanceof StemBlock) {
             return Growth.of(StemBlock.AGE, StemBlock.MAX_AGE);
@@ -568,6 +590,9 @@ public final class ChunkCatchUp {
         }
         if (block instanceof CocoaBlock) {
             return Growth.of(CocoaBlock.AGE, CocoaBlock.MAX_AGE);
+        }
+        if (block instanceof NetherWartBlock) {
+            return Growth.of(NetherWartBlock.AGE, NetherWartBlock.MAX_AGE, 0.5); // 1 in 10 random ticks: half as fast
         }
         return null;
     }
@@ -582,15 +607,7 @@ public final class ChunkCatchUp {
         if (age >= growth.maxAge() && !(state.getBlock() instanceof StemBlock)) {
             return;
         }
-        EnumSet<Season> seasons = CropSeasons.seasonsFor(state);
-        ClimateZone zone = BiomeZones.of(biomeAt(blocks.chunk(), pos).value()).zone();
-        boolean greenhouse = seasons != null && CropSeasons.isGreenhouse(blocks.chunk(), pos);
-        double growingDays = 0;
-        for (long day = today - missed; day < today; day++) {
-            Season season = SeasonDate.fromDay(day, SeasonDate.DEFAULT_YEAR_LENGTH).season();
-            boolean inSeason = seasons == null || CropSeasonRules.isInSeason(seasons, season, zone, () -> greenhouse);
-            growingDays += inSeason ? 1.0 : Config.outOfSeasonGrowth();
-        }
+        double growingDays = growingDays(blocks, pos, state, missed, today) * growth.speed();
         int stages = CropSeasonRules.catchUpStages(growingDays, random.nextDouble());
         if (stages <= 0) {
             return;
@@ -602,6 +619,20 @@ public final class ChunkCatchUp {
         if (leftOver > 0 && state.getBlock() instanceof StemBlock) {
             growFruit(blocks, pos, state.getBlock(), leftOver, random);
         }
+    }
+
+    /** The missed days a plant could grow: in-season days count fully, out-of-season ones as the config allows. */
+    private static double growingDays(ChunkBlocks blocks, BlockPos pos, BlockState state, long missed, long today) {
+        EnumSet<Season> seasons = CropSeasons.seasonsFor(state);
+        ClimateZone zone = BiomeZones.of(biomeAt(blocks.chunk(), pos).value()).zone();
+        boolean greenhouse = seasons != null && CropSeasons.isGreenhouse(blocks.chunk(), pos);
+        double growingDays = 0;
+        for (long day = today - missed; day < today; day++) {
+            Season season = SeasonDate.fromDay(day, SeasonDate.DEFAULT_YEAR_LENGTH).season();
+            boolean inSeason = seasons == null || CropSeasonRules.isInSeason(seasons, season, zone, () -> greenhouse);
+            growingDays += inSeason ? 1.0 : Config.outOfSeasonGrowth();
+        }
+        return growingDays;
     }
 
     /**
@@ -628,6 +659,129 @@ public final class ChunkCatchUp {
                 blocks.set(stemPos, attached.defaultBlockState().setValue(AttachedStemBlock.FACING, side));
                 return;
             }
+        }
+    }
+
+    // --- Plants that grow upwards: sugar cane, cactus, bamboo -------------------------------------------------
+
+    private static boolean isTallPlant(BlockState state) {
+        Block block = state.getBlock();
+        return block instanceof SugarCaneBlock || block instanceof CactusBlock || block instanceof BambooStalkBlock;
+    }
+
+    /**
+     * Grows a sugar cane, cactus or bamboo plant (found by its bottom block) for the random ticks its top block
+     * would have had, with vanilla's own rules.
+     */
+    private static void growTallPlant(ChunkBlocks blocks, BlockPos bottom, BlockState state, long missed, long today,
+                                      RandomSource random) {
+        Block block = state.getBlock();
+        BlockPos top = bottom;
+        int height = 1;
+        while (height < 32 && blocks.get(top.above()).is(block)) {
+            top = top.above();
+            height++;
+        }
+        int ticks = CropSeasonRules.catchUpTicks(growingDays(blocks, bottom, state, missed, today), random.nextDouble());
+        if (ticks <= 0) {
+            return;
+        }
+        if (block instanceof BambooStalkBlock) {
+            growBamboo(blocks, top, height, ticks, random);
+        } else {
+            growCaneOrCactus(blocks, top, height, ticks, block instanceof CactusBlock, random);
+        }
+    }
+
+    /**
+     * Vanilla: each random tick the top block ages by 1 (0–15). At 15 a new block grows on top (up to 3 tall) and the
+     * old top goes back to 0. A cactus that passes age 8 may grow a cactus flower instead (10 %, 25 % when 3 tall),
+     * which ends its growth.
+     */
+    private static void growCaneOrCactus(ChunkBlocks blocks, BlockPos top, int height, int ticks, boolean cactus,
+                                         RandomSource random) {
+        IntegerProperty ageProperty = cactus ? CactusBlock.AGE : SugarCaneBlock.AGE;
+        BlockState topState = blocks.get(top);
+        int age = topState.getValue(ageProperty);
+        int startAge = age;
+        for (int tick = 0; tick < ticks; tick++) {
+            BlockPos above = top.above();
+            if (blocks.chunk().isOutsideBuildHeight(above) || !blocks.get(above).isAir() || !cactus && height >= 3) {
+                break;
+            }
+            if (cactus && age == 8 && cactusFits(blocks, above)) {
+                if (random.nextDouble() <= (height >= 3 ? 0.25 : 0.1)) {
+                    blocks.set(above, Blocks.CACTUS_FLOWER.defaultBlockState());
+                    age++;
+                    break;
+                }
+            } else if (age == 15 && height < 3) {
+                if (cactus && !cactusFits(blocks, above)) {
+                    break;
+                }
+                blocks.set(top, topState.setValue(ageProperty, 0));
+                top = above;
+                topState = topState.getBlock().defaultBlockState();
+                blocks.set(top, topState);
+                height++;
+                age = 0;
+                startAge = 0;
+                continue;
+            }
+            if (age < 15) {
+                age++;
+            } else if (height >= 3) {
+                break; // full grown
+            }
+        }
+        if (age != startAge) {
+            blocks.set(top, topState.setValue(ageProperty, age));
+        }
+    }
+
+    /** A cactus block can stand here: nothing solid and no lava beside it (sides in other chunks count as free). */
+    private static boolean cactusFits(ChunkBlocks blocks, BlockPos pos) {
+        for (Direction side : Direction.Plane.HORIZONTAL) {
+            BlockState next = blocks.near(pos.relative(side));
+            if (next != null && (next.isSolid() || next.getFluidState().is(FluidTags.LAVA))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Vanilla: a growing bamboo top grows one block on 1 in 3 random ticks, up to 16 tall; from 11 tall each new top
+     * has a 1 in 4 chance to be the last. The leaves move up with the top (two large, one small, then none).
+     */
+    private static void growBamboo(ChunkBlocks blocks, BlockPos top, int height, int ticks, RandomSource random) {
+        int growths = ticks / 3 + (random.nextInt(3) < ticks % 3 ? 1 : 0);
+        for (int i = 0; i < growths; i++) {
+            BlockState topState = blocks.get(top);
+            BlockPos above = top.above();
+            if (!topState.is(Blocks.BAMBOO) || topState.getValue(BambooStalkBlock.STAGE) != 0 || height >= 16
+                    || blocks.chunk().isOutsideBuildHeight(above) || !blocks.get(above).isAir()) {
+                return;
+            }
+            BlockState below = blocks.get(top.below());
+            BlockPos below2Pos = top.below(2);
+            BlockState below2 = blocks.get(below2Pos);
+            BambooLeaves leaves;
+            if (!below.is(Blocks.BAMBOO) || below.getValue(BambooStalkBlock.LEAVES) == BambooLeaves.NONE) {
+                leaves = BambooLeaves.SMALL;
+            } else {
+                leaves = BambooLeaves.LARGE;
+                if (below2.is(Blocks.BAMBOO)) {
+                    blocks.set(top.below(), below.setValue(BambooStalkBlock.LEAVES, BambooLeaves.SMALL));
+                    blocks.set(below2Pos, below2.setValue(BambooStalkBlock.LEAVES, BambooLeaves.NONE));
+                }
+            }
+            int age = topState.getValue(BambooStalkBlock.AGE) != 1 && !below2.is(Blocks.BAMBOO) ? 0 : 1;
+            int stage = (height < 11 || random.nextFloat() >= 0.25F) && height != 15 ? 0 : 1;
+            blocks.set(above, Blocks.BAMBOO.defaultBlockState().setValue(BambooStalkBlock.AGE, age)
+                    .setValue(BambooStalkBlock.LEAVES, leaves).setValue(BambooStalkBlock.STAGE, stage));
+            top = above;
+            height++;
         }
     }
 }
