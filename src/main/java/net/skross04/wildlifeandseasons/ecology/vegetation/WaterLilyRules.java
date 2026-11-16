@@ -83,7 +83,7 @@ public final class WaterLilyRules {
     }
 
     /** A random number 0..1 that's always the same for this block (and salt). */
-    static double hash(int x, int z, int salt) {
+    public static double hash(int x, int z, int salt) {
         long h = x * 0x9E3779B97F4A7C15L ^ z * 0xC2B2AE3D27D4EB4FL ^ (salt + 1) * 0x165667B19E3779F9L;
         h ^= h >>> 33;
         h *= 0xFF51AFD7ED558CCDL;

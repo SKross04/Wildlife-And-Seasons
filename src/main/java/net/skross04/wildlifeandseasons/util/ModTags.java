@@ -44,6 +44,12 @@ public class ModTags {
         /** Exceptions: flowers in the seasonal tag that should stay as they are (e.g. wither rose). */
         public static final TagKey<Block> NOT_SEASONAL_FLOWERS = createTag("not_seasonal_flowers");
 
+        /** The desert bloom's flowers (they follow desert rain, not the normal flower seasons). */
+        public static final TagKey<Block> DESERT_FLOWERS = createTag("desert_flowers");
+
+        /** What desert flowers grow on: sand, red sand, dirt and terracotta. */
+        public static final TagKey<Block> DESERT_FLOWER_SOIL = createTag("desert_flower_soil");
+
         /** Flowers that bloom in late winter, before spring (snowdrops), and wilt by early spring. */
         public static final TagKey<Block> BLOOMS_LATE_WINTER = createTag("blooms_late_winter");
 
@@ -84,6 +90,9 @@ public class ModTags {
 
         /** Biomes where mushrooms come up on the forest floor in autumn (forests and taigas by default). */
         public static final TagKey<Biome> HAS_AUTUMN_MUSHROOMS = createTag("has_autumn_mushrooms");
+
+        /** Biomes where the desert bloom happens after rain (deserts and badlands by default; arid climate needed). */
+        public static final TagKey<Biome> HAS_DESERT_BLOOM = createTag("has_desert_bloom");
 
         /** Biomes where snowdrops grow (woods by default). */
         public static final TagKey<Biome> HAS_SNOWDROPS = createTag("has_snowdrops");

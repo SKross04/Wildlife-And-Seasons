@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "wildlifeandseasons:block/desert_sunflower"
+  }
+}

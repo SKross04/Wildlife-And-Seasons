@@ -27,6 +27,9 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.ICICLE.get());
                         output.accept(ModItems.SNOWDROP.get());
                         output.accept(ModItems.CROCUS.get());
+                        output.accept(ModItems.DESERT_SUNFLOWER.get());
+                        output.accept(ModItems.SAND_VERBENA.get());
+                        output.accept(ModItems.DUNE_PRIMROSE.get());
                     })
                     .build());
 

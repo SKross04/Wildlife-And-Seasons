@@ -30,6 +30,12 @@ public class EnUsLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.CROCUS, "Crocus");
         addBlock(ModBlocks.POTTED_SNOWDROP, "Potted Snowdrop");
         addBlock(ModBlocks.POTTED_CROCUS, "Potted Crocus");
+        addBlock(ModBlocks.DESERT_SUNFLOWER, "Desert Sunflower");
+        addBlock(ModBlocks.SAND_VERBENA, "Sand Verbena");
+        addBlock(ModBlocks.DUNE_PRIMROSE, "Dune Primrose");
+        addBlock(ModBlocks.POTTED_DESERT_SUNFLOWER, "Potted Desert Sunflower");
+        addBlock(ModBlocks.POTTED_SAND_VERBENA, "Potted Sand Verbena");
+        addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Potted Dune Primrose");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Rain gauge: %1$s%% full · %2$s%% rainfall this season");
         add(CompatTranslations.JEI_CALENDAR, "Right-click to read today's date and season. In jungles and savannas it also tells you whether it's the wet or the dry season.");

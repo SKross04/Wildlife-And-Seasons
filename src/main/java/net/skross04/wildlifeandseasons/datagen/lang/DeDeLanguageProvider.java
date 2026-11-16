@@ -30,6 +30,12 @@ public class DeDeLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.CROCUS, "Krokus");
         addBlock(ModBlocks.POTTED_SNOWDROP, "Eingetopftes Schneeglöckchen");
         addBlock(ModBlocks.POTTED_CROCUS, "Eingetopfter Krokus");
+        addBlock(ModBlocks.DESERT_SUNFLOWER, "Wüstensonnenblume");
+        addBlock(ModBlocks.SAND_VERBENA, "Sandverbene");
+        addBlock(ModBlocks.DUNE_PRIMROSE, "Dünen-Nachtkerze");
+        addBlock(ModBlocks.POTTED_DESERT_SUNFLOWER, "Eingetopfte Wüstensonnenblume");
+        addBlock(ModBlocks.POTTED_SAND_VERBENA, "Eingetopfte Sandverbene");
+        addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Eingetopfte Dünen-Nachtkerze");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regenmesser: %1$s%% voll · %2$s%% Niederschlag in dieser Jahreszeit");
         add(CompatTranslations.JEI_CALENDAR, "Rechtsklick zeigt das heutige Datum und die Jahreszeit. In Dschungeln und Savannen zeigt er auch, ob Regenzeit oder Trockenzeit ist.");

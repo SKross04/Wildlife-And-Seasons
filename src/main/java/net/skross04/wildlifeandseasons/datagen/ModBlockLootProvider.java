@@ -21,6 +21,12 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.CROCUS.get());
         dropPottedContents(ModBlocks.POTTED_SNOWDROP.get());
         dropPottedContents(ModBlocks.POTTED_CROCUS.get());
+        dropSelf(ModBlocks.DESERT_SUNFLOWER.get());
+        dropSelf(ModBlocks.SAND_VERBENA.get());
+        dropSelf(ModBlocks.DUNE_PRIMROSE.get());
+        dropPottedContents(ModBlocks.POTTED_DESERT_SUNFLOWER.get());
+        dropPottedContents(ModBlocks.POTTED_SAND_VERBENA.get());
+        dropPottedContents(ModBlocks.POTTED_DUNE_PRIMROSE.get());
         add(ModBlocks.ICICLE.get(), createSilkTouchOnlyTable(ModBlocks.ICICLE.get())); // shatters, unless silk touch
         add(ModBlocks.DORMANT_FLOWER.get(), noDrop());  // drops its flower through DormantFlowerBlock#getDrops
     }

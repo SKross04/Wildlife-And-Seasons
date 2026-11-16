@@ -53,6 +53,10 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
                 .addTag(Tags.Biomes.IS_FOREST);
 
         // Snowdrops: woods (also by streams); crocuses: meadows and grassland (alpine meadows after the snow melts).
+        // Desert bloom: deserts and badlands (the bloom also needs the arid climate zone, where rain is rare).
+        tag(ModTags.Biomes.HAS_DESERT_BLOOM)
+                .addTags(Tags.Biomes.IS_DESERT, Tags.Biomes.IS_BADLANDS);
+
         tag(ModTags.Biomes.HAS_SNOWDROPS)
                 .addTag(BiomeTags.IS_FOREST);
         tag(ModTags.Biomes.HAS_CROCUSES)

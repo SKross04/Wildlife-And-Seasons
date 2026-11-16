@@ -12,6 +12,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.skross04.wildlifeandseasons.WildlifeAndSeasons;
+import net.skross04.wildlifeandseasons.block.custom.DesertFlowerBlock;
 import net.skross04.wildlifeandseasons.block.custom.DormantFlowerBlock;
 import net.skross04.wildlifeandseasons.block.custom.IcicleBlock;
 import net.skross04.wildlifeandseasons.block.custom.RainGaugeBlock;
@@ -70,6 +71,32 @@ public class ModBlocks {
             ModBlocks::pottedProperties);
     public static final DeferredBlock<FlowerPotBlock> POTTED_CROCUS = BLOCKS.registerBlock("potted_crocus",
             properties -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, CROCUS, properties),
+            ModBlocks::pottedProperties);
+
+    /*
+     * The desert bloom (real example: Anza-Borrego, California): wildflowers that come up on the sand after the
+     * rare desert rains. Wild ones die off again; placed ones stay (see DesertFlowerBlock).
+     */
+    /** Desert sunflower (Geraea canescens, "desert gold"): yellow daisies on hairy grey-green stems. */
+    public static final DeferredBlock<DesertFlowerBlock> DESERT_SUNFLOWER = BLOCKS.registerBlock("desert_sunflower",
+            properties -> new DesertFlowerBlock(MobEffects.FIRE_RESISTANCE, 4, properties), ModBlocks::flowerProperties);
+
+    /** Desert sand verbena (Abronia villosa): low, sprawling, with round magenta-pink clusters. */
+    public static final DeferredBlock<DesertFlowerBlock> SAND_VERBENA = BLOCKS.registerBlock("sand_verbena",
+            properties -> new DesertFlowerBlock(MobEffects.REGENERATION, 8, properties), ModBlocks::flowerProperties);
+
+    /** Dune evening primrose (Oenothera deltoides): big white flowers that open in the evening (night vision). */
+    public static final DeferredBlock<DesertFlowerBlock> DUNE_PRIMROSE = BLOCKS.registerBlock("dune_primrose",
+            properties -> new DesertFlowerBlock(MobEffects.NIGHT_VISION, 5, properties), ModBlocks::flowerProperties);
+
+    public static final DeferredBlock<FlowerPotBlock> POTTED_DESERT_SUNFLOWER = BLOCKS.registerBlock("potted_desert_sunflower",
+            properties -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, DESERT_SUNFLOWER, properties),
+            ModBlocks::pottedProperties);
+    public static final DeferredBlock<FlowerPotBlock> POTTED_SAND_VERBENA = BLOCKS.registerBlock("potted_sand_verbena",
+            properties -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, SAND_VERBENA, properties),
+            ModBlocks::pottedProperties);
+    public static final DeferredBlock<FlowerPotBlock> POTTED_DUNE_PRIMROSE = BLOCKS.registerBlock("potted_dune_primrose",
+            properties -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, DUNE_PRIMROSE, properties),
             ModBlocks::pottedProperties);
 
     /** Like vanilla small flowers. */

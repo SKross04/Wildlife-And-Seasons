@@ -84,9 +84,18 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.FLOWER_POTS).add(TagEntry.element(ModBlocks.POTTED_SNOWDROP.getId()))
                 .add(TagEntry.element(ModBlocks.POTTED_CROCUS.getId()));
         tag(ModTags.Blocks.BLOOMS_LATE_WINTER).add(TagEntry.element(ModBlocks.SNOWDROP.getId()));
+        // Desert bloom flowers: small flowers (bees, pots), but they follow desert rain, not the flower seasons.
+        tag(ModTags.Blocks.DESERT_FLOWERS).add(TagEntry.element(ModBlocks.DESERT_SUNFLOWER.getId()))
+                .add(TagEntry.element(ModBlocks.SAND_VERBENA.getId())).add(TagEntry.element(ModBlocks.DUNE_PRIMROSE.getId()));
+        tag(BlockTags.SMALL_FLOWERS).addTag(ModTags.Blocks.DESERT_FLOWERS);
+        tag(BlockTags.FLOWER_POTS).add(TagEntry.element(ModBlocks.POTTED_DESERT_SUNFLOWER.getId()))
+                .add(TagEntry.element(ModBlocks.POTTED_SAND_VERBENA.getId()))
+                .add(TagEntry.element(ModBlocks.POTTED_DUNE_PRIMROSE.getId()));
+        tag(ModTags.Blocks.DESERT_FLOWER_SOIL).addTag(BlockTags.SAND).addTag(BlockTags.DIRT).addTag(BlockTags.TERRACOTTA);
         tag(ModTags.Blocks.BLOOMS_EARLY_SPRING).add(TagEntry.element(ModBlocks.CROCUS.getId()));
 
         var notSeasonal = tag(ModTags.Blocks.NOT_SEASONAL_FLOWERS);
+        notSeasonal.addTag(ModTags.Blocks.DESERT_FLOWERS);
         for (Block block : new Block[]{Blocks.WITHER_ROSE, Blocks.OPEN_EYEBLOSSOM, Blocks.CLOSED_EYEBLOSSOM, Blocks.TORCHFLOWER,
                 Blocks.PITCHER_PLANT}) {
             notSeasonal.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(block)));

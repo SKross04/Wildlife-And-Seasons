@@ -55,6 +55,11 @@ public class Config {
                     "tree trunks; frost makes them disappear again. Mushrooms from world generation or players stay.")
             .define("autumnMushrooms", true);
 
+    public static final ModConfigSpec.BooleanValue DESERT_BLOOM = BUILDER
+            .comment("After the rare spring rains in deserts and badlands, wildflowers (desert sunflowers, sand verbena,",
+                    "dune primroses) come up on the sand and die off again a couple of weeks later. Placed ones stay.")
+            .define("desertBloom", true);
+
     public static final ModConfigSpec.BooleanValue SEASONAL_BERRIES = BUILDER
             .comment("Sweet berry bushes follow the seasons like real lingonberries: white-pink flowers in early summer,",
                     "berries ripen in late summer and stay through winter, leaves turn purple-red in autumn.",
@@ -95,6 +100,10 @@ public class Config {
 
     public static boolean seasonalDayLength() {
         return SPEC.isLoaded() ? SEASONAL_DAY_LENGTH.get() : SEASONAL_DAY_LENGTH.getDefault();
+    }
+
+    public static boolean desertBloom() {
+        return SPEC.isLoaded() ? DESERT_BLOOM.get() : DESERT_BLOOM.getDefault();
     }
 
     public static boolean autumnMushrooms() {

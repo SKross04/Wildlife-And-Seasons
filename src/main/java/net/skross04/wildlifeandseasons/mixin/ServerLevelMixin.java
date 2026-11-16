@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.skross04.wildlifeandseasons.nature.ChunkCatchUp;
+import net.skross04.wildlifeandseasons.nature.DesertBloom;
 import net.skross04.wildlifeandseasons.nature.SnowCover;
 
 /**
@@ -29,6 +30,7 @@ public abstract class ServerLevelMixin {
     private void wildlifeandseasons$keepUpWithTheSeason(LevelChunk chunk, int randomTickSpeed, CallbackInfo ci) {
         if (randomTickSpeed > 0) {
             ChunkCatchUp.onChunkTicked((ServerLevel) (Object) this, chunk);
+            DesertBloom.onChunkTick((ServerLevel) (Object) this, chunk, randomTickSpeed);
         }
     }
 }

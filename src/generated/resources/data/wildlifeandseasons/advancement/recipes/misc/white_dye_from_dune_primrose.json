@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dune_primrose": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildlifeandseasons:dune_primrose"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "wildlifeandseasons:white_dye_from_dune_primrose"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_dune_primrose"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildlifeandseasons:white_dye_from_dune_primrose"
+    ]
+  }
+}

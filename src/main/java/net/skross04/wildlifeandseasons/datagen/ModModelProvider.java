@@ -34,6 +34,12 @@ public class ModModelProvider extends ModelProvider {
                 BlockModelGenerators.PlantType.NOT_TINTED);
         blockModels.createPlantWithDefaultItem(ModBlocks.CROCUS.get(), ModBlocks.POTTED_CROCUS.get(),
                 BlockModelGenerators.PlantType.NOT_TINTED);
+        blockModels.createPlantWithDefaultItem(ModBlocks.DESERT_SUNFLOWER.get(), ModBlocks.POTTED_DESERT_SUNFLOWER.get(),
+                BlockModelGenerators.PlantType.NOT_TINTED);
+        blockModels.createPlantWithDefaultItem(ModBlocks.SAND_VERBENA.get(), ModBlocks.POTTED_SAND_VERBENA.get(),
+                BlockModelGenerators.PlantType.NOT_TINTED);
+        blockModels.createPlantWithDefaultItem(ModBlocks.DUNE_PRIMROSE.get(), ModBlocks.POTTED_DUNE_PRIMROSE.get(),
+                BlockModelGenerators.PlantType.NOT_TINTED);
 
         // The rain gauge has hand-made 3D models (models/block/rain_gauge_*.json in src/main/resources):
         // one per water level, so you see the water rise behind the glass. The item shows the empty one.

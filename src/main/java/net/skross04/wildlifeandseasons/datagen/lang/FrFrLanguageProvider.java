@@ -30,6 +30,12 @@ public class FrFrLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.CROCUS, "Crocus");
         addBlock(ModBlocks.POTTED_SNOWDROP, "Perce-neige en pot");
         addBlock(ModBlocks.POTTED_CROCUS, "Crocus en pot");
+        addBlock(ModBlocks.DESERT_SUNFLOWER, "Tournesol du désert");
+        addBlock(ModBlocks.SAND_VERBENA, "Abronie des sables");
+        addBlock(ModBlocks.DUNE_PRIMROSE, "Onagre des dunes");
+        addBlock(ModBlocks.POTTED_DESERT_SUNFLOWER, "Tournesol du désert en pot");
+        addBlock(ModBlocks.POTTED_SAND_VERBENA, "Abronie des sables en pot");
+        addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Onagre des dunes en pot");
         add(Instruments.THERMOMETER_READING, "Thermomètre : %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Pluviomètre : rempli à %1$s %% · %2$s %% de précipitations cette saison");
         add(CompatTranslations.JEI_CALENDAR, "Clic droit pour lire la date et la saison du jour. Dans les jungles et les savanes, il indique aussi s'il s'agit de la saison des pluies ou de la saison sèche.");

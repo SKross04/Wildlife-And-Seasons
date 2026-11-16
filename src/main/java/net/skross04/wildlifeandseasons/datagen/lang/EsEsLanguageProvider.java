@@ -30,6 +30,12 @@ public class EsEsLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.CROCUS, "Azafrán de primavera");
         addBlock(ModBlocks.POTTED_SNOWDROP, "Campanilla de invierno en maceta");
         addBlock(ModBlocks.POTTED_CROCUS, "Azafrán de primavera en maceta");
+        addBlock(ModBlocks.DESERT_SUNFLOWER, "Girasol del desierto");
+        addBlock(ModBlocks.SAND_VERBENA, "Verbena de arena");
+        addBlock(ModBlocks.DUNE_PRIMROSE, "Onagra de las dunas");
+        addBlock(ModBlocks.POTTED_DESERT_SUNFLOWER, "Girasol del desierto en maceta");
+        addBlock(ModBlocks.POTTED_SAND_VERBENA, "Verbena de arena en maceta");
+        addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Onagra de las dunas en maceta");
         add(Instruments.THERMOMETER_READING, "Termómetro: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Pluviómetro: lleno al %1$s%% · %2$s%% de lluvia esta estación");
         add(CompatTranslations.JEI_CALENDAR, "Clic derecho para ver la fecha y la estación de hoy. En selvas y sabanas también indica si es la estación lluviosa o la seca.");

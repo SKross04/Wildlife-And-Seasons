@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_desert_sunflower": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildlifeandseasons:desert_sunflower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipes": "wildlifeandseasons:yellow_dye_from_desert_sunflower"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_desert_sunflower"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "wildlifeandseasons:yellow_dye_from_desert_sunflower"
+    ]
+  }
+}

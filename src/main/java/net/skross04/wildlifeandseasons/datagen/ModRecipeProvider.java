@@ -3,6 +3,7 @@ package net.skross04.wildlifeandseasons.datagen;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
@@ -52,6 +53,11 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_crocus", has(ModItems.CROCUS.get()))
                 .save(output, recipeKey("purple_dye_from_crocus"));
 
+        // Dyes from the desert flowers: yellow, magenta (sand verbena's pink-purple) and white.
+        flowerDye(output, ModItems.DESERT_SUNFLOWER.get(), DyeColor.YELLOW, "has_desert_sunflower", "yellow_dye_from_desert_sunflower");
+        flowerDye(output, ModItems.SAND_VERBENA.get(), DyeColor.MAGENTA, "has_sand_verbena", "magenta_dye_from_sand_verbena");
+        flowerDye(output, ModItems.DUNE_PRIMROSE.get(), DyeColor.WHITE, "has_dune_primrose", "white_dye_from_dune_primrose");
+
         // An open glass cup on a stick.
         shaped(RecipeCategory.REDSTONE, ModItems.RAIN_GAUGE.get())
                 .pattern("G G")
@@ -65,5 +71,14 @@ public class ModRecipeProvider extends RecipeProvider {
 
     private static ResourceKey<Recipe<?>> recipeKey(String path) {
         return ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(WildlifeAndSeasons.MODID, path));
+    }
+
+    /** One flower → one dye, grouped with vanilla's dye recipes. */
+    private void flowerDye(RecipeOutput output, net.minecraft.world.item.Item flower, DyeColor color, String unlock, String name) {
+        shapeless(RecipeCategory.MISC, Items.DYE.pick(color))
+                .requires(flower)
+                .group(color.getSerializedName() + "_dye")
+                .unlockedBy(unlock, has(flower))
+                .save(output, recipeKey(name));
     }
 }
