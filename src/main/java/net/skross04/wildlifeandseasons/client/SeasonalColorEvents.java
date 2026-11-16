@@ -60,11 +60,11 @@ public class SeasonalColorEvents {
     public static final ColorResolver CHERRY_RESOLVER =
             (biome, x, z) -> SeasonalColorState.cherry(biome, Mth.floor(x), Mth.floor(z));
 
-    /** Mangrove leaves: evergreen (tropical), snowy if it ever gets that cold. */
+    /** Mangrove leaves: evergreen (tropical), a little less green late in the dry season, snowy if it ever gets that cold. */
     public static final ColorResolver MANGROVE_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.evergreen(biome, FoliageColor.FOLIAGE_MANGROVE);
+            (biome, x, z) -> SeasonalColorState.mangrove(biome, FoliageColor.FOLIAGE_MANGROVE);
 
-    /** Azalea leaves (own grey texture): evergreen, snowy in winter. */
+    /** Azalea leaves (own grey texture): evergreen, purple-bronze in the cold months, snowy in winter. */
     public static final ColorResolver AZALEA_RESOLVER = (biome, x, z) -> SeasonalColorState.azalea(biome);
 
     /** The flowers of flowering azalea (second layer): pink in spring, leaf-coloured the rest of the year. */

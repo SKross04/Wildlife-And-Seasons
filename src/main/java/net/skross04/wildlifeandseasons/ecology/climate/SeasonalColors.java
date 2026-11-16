@@ -14,7 +14,9 @@ package net.skross04.wildlifeandseasons.ecology.climate;
  * </ol>
  * Neighbouring trees (8×8-block patches) turn at slightly different times and get different autumn colours, so a
  * forest looks mixed. Cold-zone forests (taigas) don't turn colour. Savannas yellow in the dry season. In the tropics
- * some trees grow red young leaves when the rains start.
+ * some trees grow red young leaves when the rains start, and mangroves look a little less green at the end of the
+ * dry season. Savanna trees are fresh green in the rainy season. Evergreen azaleas turn purple-bronze in the cold
+ * months and flower in mid to late spring, after the cherries.
  * <p>
  * Colours are 0xRRGGBB; the alpha of the original colour is kept.
  */
@@ -88,10 +90,23 @@ public final class SeasonalColors {
      * the other trees (whose grey texture is darker).
      */
     private static final int AZALEA_LEAVES = 0x7A9C3C, AZALEA_SNOW = 0xB6BABC;
+    /** Evergreen azaleas: leaves turn purple-bronze from late autumn to spring (anthocyanins against the cold). */
+    private static final int AZALEA_BRONZE = 0x7A4A3A;
+    private static final double AZALEA_BRONZE_AMOUNT = 0.55;
     private static final int AZALEA_FLOWERS = 0xF58AE3;
+    /** Azaleas flower from mid spring into early summer (about April to early June), later than cherries. */
+    private static final double AZALEA_BLOOM_CENTER = 0.20, AZALEA_BLOOM_HALF_WIDTH = 0.12;
     /** The flower layer's texture is brighter than the leaf layer's: this darkens a leaf colour to match it. */
     private static final double AZALEA_FLOWER_TO_LEAF = 0.84;
     private static final int PALE_OAK_LEAVES = 0x979D94, PALE_OAK_SNOW = 0xAEB1B3;
+
+    /** Mangroves are evergreen, but the forest is less green at the end of the dry season, when most leaves fall. */
+    private static final int MANGROVE_DRY = 0x8A8848;
+    private static final double MANGROVE_DRY_AMOUNT = 0.40;
+
+    /** Savanna trees (acacia) leaf out fresh green in the rainy season; the dry season turns them dull yellow. */
+    private static final int SAVANNA_WET_LEAVES = 0x7FA83A;
+    private static final double SAVANNA_WET_AMOUNT = 0.55;
 
     /** Snow lying on leaves. */
     private static final int SNOW = 0xEEF3F6;
@@ -116,21 +131,25 @@ public final class SeasonalColors {
      *                     leaves, leaf litter and wind
      * @param winter       faded winter colours (grass; leaves in cold zones)
      * @param dry          savanna dry season
+     * @param wet          savanna rainy season (fresh green trees)
      * @param snow         snow lying on leaves (while the day's average stays below freezing)
      * @param flush        tropical red young leaves
+     * @param tropicalDry  end of the tropical dry season (mangroves less green)
      * @param yearPosition the point in the year, for deciduous trees (each patch of trees turns at its own time)
      * @param deciduous    true where trees go through the full deciduous year (temperate places)
      */
-    public record Tint(double spring, double autumn, double leafAutumn, double winter, double dry, double snow,
-                       double flush, double yearPosition, boolean deciduous) {
-        public static final Tint NONE = new Tint(0, 0, 0, 0, 0, 0, 0, 0, false);
+    public record Tint(double spring, double autumn, double leafAutumn, double winter, double dry, double wet, double snow,
+                       double flush, double tropicalDry, double yearPosition, boolean deciduous) {
+        public static final Tint NONE = new Tint(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false);
 
         /** True if this tint differs noticeably from another (used to decide whether to redraw chunks). */
         public boolean differsFrom(Tint other) {
             return Math.abs(spring - other.spring) > 0.005 || Math.abs(autumn - other.autumn) > 0.005
                     || Math.abs(leafAutumn - other.leafAutumn) > 0.005 || Math.abs(winter - other.winter) > 0.005
-                    || Math.abs(dry - other.dry) > 0.005 || Math.abs(snow - other.snow) > 0.005
-                    || Math.abs(flush - other.flush) > 0.005 || deciduous != other.deciduous
+                    || Math.abs(dry - other.dry) > 0.005 || Math.abs(wet - other.wet) > 0.005
+                    || Math.abs(snow - other.snow) > 0.005
+                    || Math.abs(flush - other.flush) > 0.005 || Math.abs(tropicalDry - other.tropicalDry) > 0.005
+                    || deciduous != other.deciduous
                     || deciduous && Math.abs(yearPosition - other.yearPosition) > 0.003;
         }
     }
@@ -146,16 +165,22 @@ public final class SeasonalColors {
                         grassAutumn,
                         bump(yearPosition, 0.65, 0.10),             // leaves fall from early to late autumn
                         bump(yearPosition, 0.88, 0.14),             // around mid-winter
-                        0, snow, 0, yearPosition, true);
+                        0, 0, snow, 0, 0, yearPosition, true);
             }
             case COLD -> new Tint(
                     bump(yearPosition, 0.20, 0.12),                 // spring comes late
                     0.5 * bump(yearPosition, 0.56, 0.13),           // grass browns a little in a short, early autumn
                     0,                                              // taiga trees stay green
                     bump(yearPosition, 0.86, 0.22),                 // long winter
-                    0, snow, 0, 0, false);
-            case SAVANNA -> new Tint(0, 0, 0, 0, bump(yearPosition, 0.85, 0.28), 0, 0, 0, false); // dry season
-            case TROPICAL -> new Tint(0, 0, 0, 0, 0, 0, bump(yearPosition, 0.10, 0.07), 0, false); // start of the rains
+                    0, 0, snow, 0, 0, 0, false);
+            case SAVANNA -> new Tint(0, 0, 0, 0,
+                    bump(yearPosition, 0.85, 0.28),                 // dry season
+                    bump(yearPosition, 0.35, 0.22),                 // rainy season (rain peaks mid-summer)
+                    0, 0, 0, 0, false);
+            case TROPICAL -> new Tint(0, 0, 0, 0, 0, 0, 0,
+                    bump(yearPosition, 0.10, 0.07),                 // red young leaves when the rains start
+                    bump(yearPosition, 0.96, 0.12),                 // end of the dry season
+                    0, false);
             case ARID, NO_SEASONS -> Tint.NONE;
         };
     }
@@ -232,6 +257,7 @@ public final class SeasonalColors {
         } else {
             c = blend(base, SPRING_LEAVES, SPRING_LEAVES_AMOUNT * t.spring());
             c = blend(c, WINTER_LEAVES, WINTER_LEAVES_AMOUNT * t.winter());
+            c = blend(c, SAVANNA_WET_LEAVES, SAVANNA_WET_AMOUNT * t.wet());
             c = blend(c, DRY_LEAVES, DRY_LEAVES_AMOUNT * t.dry());
             if (flushes) {
                 c = blend(c, TROPICAL_FLUSH, TROPICAL_FLUSH_AMOUNT * t.flush());
@@ -272,9 +298,11 @@ public final class SeasonalColors {
         return CHERRY_PINK;
     }
 
-    /** Azalea leaves: evergreen, snowy in winter. */
+    /** Azalea leaves: evergreen, purple-bronze in the cold months (back to green with the new leaves), snowy in winter. */
     public static int azalea(Tint t) {
-        return blend(AZALEA_LEAVES, AZALEA_SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
+        double cold = t.deciduous() ? leafStage(t.yearPosition()).brown() : t.winter();
+        int c = blend(AZALEA_LEAVES, AZALEA_BRONZE, AZALEA_BRONZE_AMOUNT * cold);
+        return blend(c, AZALEA_SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
     }
 
     /**
@@ -283,7 +311,8 @@ public final class SeasonalColors {
      */
     public static int azaleaFlowers(Tint t) {
         int leafColoured = darken(azalea(t), AZALEA_FLOWER_TO_LEAF);
-        return blend(leafColoured, AZALEA_FLOWERS, Math.min(1.0, CHERRY_BLOSSOM_STRENGTH * t.spring()) * (1 - t.snow()));
+        double bloom = t.deciduous() ? bump(t.yearPosition(), AZALEA_BLOOM_CENTER, AZALEA_BLOOM_HALF_WIDTH) : t.spring();
+        return blend(leafColoured, AZALEA_FLOWERS, Math.min(1.0, CHERRY_BLOSSOM_STRENGTH * bloom) * (1 - t.snow()));
     }
 
     /** Pale oak leaves: always pale, snowy in winter. */
@@ -302,6 +331,12 @@ public final class SeasonalColors {
 
     public static int paleOakLeaves() {
         return PALE_OAK_LEAVES;
+    }
+
+    /** Mangrove leaves: evergreen; a little less green at the end of the tropical dry season; snowy if it gets that cold. */
+    public static int mangrove(int base, Tint t) {
+        int c = blend(base, MANGROVE_DRY, MANGROVE_DRY_AMOUNT * t.tropicalDry());
+        return blend(c, SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
     }
 
     /** Evergreen needles (spruce): real spruce stays green all year (it keeps its needles for years); snowy in winter. */

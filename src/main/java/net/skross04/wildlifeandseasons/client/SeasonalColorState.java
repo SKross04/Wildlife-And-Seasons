@@ -85,6 +85,11 @@ public final class SeasonalColorState {
         return tint == null ? SeasonalColors.paleOakLeaves() : SeasonalColors.paleOak(tint);
     }
 
+    public static int mangrove(Biome biome, int base) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        return tint == null ? base : SeasonalColors.mangrove(base, tint);
+    }
+
     /** Spruce needles: green all year, snowy in winter. */
     public static int evergreen(Biome biome, int base) {
         SeasonalColors.Tint tint = tintFor(biome);
