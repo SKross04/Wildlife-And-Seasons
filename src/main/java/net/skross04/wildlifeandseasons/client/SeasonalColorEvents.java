@@ -85,6 +85,12 @@ public class SeasonalColorEvents {
     public static final ColorResolver BERRY_LEAVES_RESOLVER = (biome, x, z) -> SeasonalColorState.berryLeaves(biome);
     public static final ColorResolver BERRY_FLOWERS_RESOLVER = (biome, x, z) -> SeasonalColorState.berryFlowers(biome);
 
+    /** Lily pads (own grey texture): leaf colour through the year. */
+    public static final ColorResolver LILY_PAD_RESOLVER = (biome, x, z) -> SeasonalColorState.lilyPad(biome);
+
+    /** How much water lilies flower (0..255 in the lowest byte, not a real colour). */
+    public static final ColorResolver LILY_BLOOM_RESOLVER = (biome, x, z) -> SeasonalColorState.lilyBloom(biome);
+
     /** Custom colour resolvers must be registered, so Minecraft gives them a colour cache. */
     @SubscribeEvent
     public static void registerColorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
@@ -102,6 +108,8 @@ public class SeasonalColorEvents {
         event.register(YELLOW_POPLAR_RESOLVER);
         event.register(BERRY_LEAVES_RESOLVER);
         event.register(BERRY_FLOWERS_RESOLVER);
+        event.register(LILY_PAD_RESOLVER);
+        event.register(LILY_BLOOM_RESOLVER);
     }
 
     /**
@@ -134,6 +142,29 @@ public class SeasonalColorEvents {
         // Sweet berry bushes (stages 1–3 use our grey leaves): tint 0 = leaves, tint 1 = flowers (stage 1 only).
         event.register(List.of(seasonalTint(SeasonalColors.berryLeavesPlain(), BERRY_LEAVES_RESOLVER),
                 seasonalTint(SeasonalColors.berryFlowersHidden(), BERRY_FLOWERS_RESOLVER)), Blocks.SWEET_BERRY_BUSH);
+        // Lily pads (our model): tint 0 = pad, 1 = light petals, 2 = shaded petals, 3 = flower centre.
+        event.register(List.of(seasonalTint(SeasonalColors.lilyPadPlain(), LILY_PAD_RESOLVER),
+                lilyFlowerTint(0), lilyFlowerTint(1), lilyFlowerTint(2)), Blocks.LILY_PAD);
+    }
+
+    /**
+     * One flower layer of a lily pad. Each pad decides for itself whether it has a flower, when it opens and whether
+     * it's pink (from its position), so this can't be a plain biome colour.
+     */
+    private static BlockTintSource lilyFlowerTint(int layer) {
+        return new BlockTintSource() {
+            @Override
+            public int color(BlockState state) {
+                return SeasonalColors.lilyFlowerHidden(layer);
+            }
+
+            @Override
+            public int colorInWorld(BlockState state, BlockAndTintGetter level, BlockPos pos) {
+                int pad = level.getBlockTint(pos, LILY_PAD_RESOLVER);
+                double flowering = (level.getBlockTint(pos, LILY_BLOOM_RESOLVER) & 0xFF) / 255.0;
+                return SeasonalColors.lilyFlower(pad, flowering, layer, pos.getX(), pos.getZ());
+            }
+        };
     }
 
     /** In the inventory: the normal colour. In the world: the colour from our resolver. */
@@ -163,7 +194,7 @@ public class SeasonalColorEvents {
         }
         ClimateSnapshot.updateClient(SeasonAccess.clientYearPosition(), ClimateSnapshot.dayPosition(minecraft.level));
         if (SeasonalColorState.update(SeasonAccess.clientYearPosition(), ClientConfig.seasonalColors(),
-                ClientConfig.seasonalPoplars())) {
+                ClientConfig.seasonalPoplars(), ClientConfig.seasonalWaterLilies())) {
             minecraft.level.clearTintCaches();
             minecraft.levelExtractor.allChanged();
         }

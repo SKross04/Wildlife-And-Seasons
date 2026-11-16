@@ -23,6 +23,11 @@ public class ClientConfig {
                     "red, orange or yellow in autumn, snowy in winter. Off = Mojang's look (autumn colours all year).")
             .define("seasonalPoplars", true);
 
+    public static final ModConfigSpec.BooleanValue SEASONAL_WATER_LILIES = BUILDER
+            .comment("Lily pads follow the seasons: white and pink water lilies in summer, yellow and brown leaves",
+                    "in autumn and winter, bronze new leaves in spring. Off = Mojang's green pads all year.")
+            .define("seasonalWaterLilies", true);
+
     public static final ModConfigSpec.BooleanValue SEASONAL_FALLING_LEAVES = BUILDER
             .comment("Many falling leaves in autumn and few the rest of the year (off = vanilla amount all year).")
             .define("seasonalFallingLeaves", true);
@@ -51,6 +56,10 @@ public class ClientConfig {
 
     public static boolean seasonalPoplars() {
         return SPEC.isLoaded() ? SEASONAL_POPLARS.get() : SEASONAL_POPLARS.getDefault();
+    }
+
+    public static boolean seasonalWaterLilies() {
+        return SPEC.isLoaded() ? SEASONAL_WATER_LILIES.get() : SEASONAL_WATER_LILIES.getDefault();
     }
 
     public static boolean seasonalFallingLeaves() {

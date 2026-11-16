@@ -1,6 +1,7 @@
 package net.skross04.wildlifeandseasons.ecology.climate;
 
 import net.skross04.wildlifeandseasons.ecology.vegetation.BerryRules;
+import net.skross04.wildlifeandseasons.ecology.vegetation.WaterLilyRules;
 
 /**
  * Seasonal colours for grass and leaves, based on how real trees change through the year.
@@ -147,6 +148,18 @@ public final class SeasonalColors {
     private static final int BERRY_LEAVES = 0x52A167, BERRY_WINTER_LEAVES = 0x8A404A, BERRY_FLOWERS = 0xFFE4EA;
     /** Grey of the leaf pixels under the flowers ÷ grey of the flower pixels (from the textures: 0xC8 / 0xF4). */
     private static final double BERRY_FLOWER_TO_LEAF = 0xC8 / (double) 0xF4;
+
+    /**
+     * Lily pads (our own grey pad texture, see the lily_pad model): Mojang's green in summer, bronze when new in spring,
+     * yellow then brown in autumn, dead brown in winter. The flower lies on the pad in three layers (light petals,
+     * shaded petals, centre); out of flowering each layer takes exactly the colour of the pad under it.
+     */
+    private static final int LILY_PAD = 0x208030, LILY_YOUNG = 0x7A4A2E, LILY_YELLOW = 0xA8983A, LILY_DEAD = 0x5C4628;
+    private static final int LILY_WHITE = 0xFFFFFF, LILY_PINK = 0xF6A6C4, LILY_CENTRE = 0xF4C030;
+    /** Grey of the pad under the flower ÷ grey of each flower layer (from the textures: 0xA0 / 0xF8, 0xD0, 0xE8). */
+    public static final double LILY_PETALS_TO_PAD = 0xA0 / (double) 0xF8;
+    public static final double LILY_SHADE_TO_PAD = 0xA0 / (double) 0xD0;
+    public static final double LILY_CENTRE_TO_PAD = 0xA0 / (double) 0xE8;
 
     /** Mangroves are evergreen, but the forest is less green at the end of the dry season, when most leaves fall. */
     private static final int MANGROVE_DRY = 0x8A8848;
@@ -397,6 +410,41 @@ public final class SeasonalColors {
         int g = (int) Math.min(255, Math.round(((color >> 8) & 0xFF) * factor));
         int b = (int) Math.min(255, Math.round((color & 0xFF) * factor));
         return (color & 0xFF000000) | (r << 16) | (g << 8) | b;
+    }
+
+    /** Lily pad colour through the year. */
+    public static int lilyPad(Tint t) {
+        WaterLilyRules.PadStage stage = WaterLilyRules.padStage(t.zone(), t.yearPosition());
+        int c = blend(LILY_PAD, LILY_YOUNG, stage.young());
+        c = blend(c, LILY_YELLOW, stage.yellow());
+        return blend(c, LILY_DEAD, stage.dead());
+    }
+
+    /** Mojang's lily pad colour (inventory, or seasonal water lilies off). */
+    public static int lilyPadPlain() {
+        return LILY_PAD;
+    }
+
+    /**
+     * One flower layer of the pad at x/z: hidden in the pad colour, or white/pink petals (yellow centre) as far as
+     * this pad's flower is open.
+     *
+     * @param layer 0 = light petals, 1 = shaded petals, 2 = centre
+     */
+    public static int lilyFlower(int padColor, double flowering, int layer, int x, int z) {
+        double toPad = layer == 0 ? LILY_PETALS_TO_PAD : layer == 1 ? LILY_SHADE_TO_PAD : LILY_CENTRE_TO_PAD;
+        int hidden = darken(padColor, toPad);
+        double open = WaterLilyRules.flowerOpen(flowering, x, z);
+        if (open <= 0) {
+            return hidden;
+        }
+        int flower = layer == 2 ? LILY_CENTRE : WaterLilyRules.pink(x, z) ? LILY_PINK : LILY_WHITE;
+        return blend(hidden, flower, open);
+    }
+
+    /** A flower layer hidden in Mojang's pad colour (inventory). */
+    public static int lilyFlowerHidden(int layer) {
+        return lilyFlower(LILY_PAD, 0, layer, 0, 0);
     }
 
     /** Sweet berry bush leaves: green, purple-red from mid-autumn until the new growth in late spring. */

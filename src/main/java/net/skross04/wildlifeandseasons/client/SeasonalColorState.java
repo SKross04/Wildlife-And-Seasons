@@ -12,6 +12,7 @@ import net.skross04.wildlifeandseasons.Config;
 import net.skross04.wildlifeandseasons.climate.BiomeZones;
 import net.skross04.wildlifeandseasons.ecology.climate.ClimateZone;
 import net.skross04.wildlifeandseasons.ecology.climate.SeasonalColors;
+import net.skross04.wildlifeandseasons.ecology.vegetation.WaterLilyRules;
 import net.skross04.wildlifeandseasons.mixin.BiomeAccessor;
 import net.skross04.wildlifeandseasons.util.ModTags;
 
@@ -26,6 +27,8 @@ public final class SeasonalColorState {
     private static volatile SeasonalColors.Tint[] tints;
     /** Seasonal poplars and Dappled Forest grass (client setting {@code seasonalPoplars}). */
     private static volatile boolean poplars = true;
+    /** Seasonal lily pads and water lily flowers (client setting {@code seasonalWaterLilies}). */
+    private static volatile boolean lilies = true;
 
     private SeasonalColorState() {
     }
@@ -67,6 +70,22 @@ public final class SeasonalColorState {
     public static int berryFlowers(Biome biome) {
         SeasonalColors.Tint tint = tintFor(biome);
         return tint == null || !Config.seasonalBerries() ? SeasonalColors.berryFlowersHidden() : SeasonalColors.berryFlowers(tint);
+    }
+
+    /** Lily pads: green in summer, bronze in spring, yellow and brown in autumn and winter (Mojang's green when off). */
+    public static int lilyPad(Biome biome) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        return tint == null || !lilies ? SeasonalColors.lilyPadPlain() : SeasonalColors.lilyPad(tint);
+    }
+
+    /**
+     * How much water lilies flower in this biome (0..255, in the lowest byte). Packed like a colour so Minecraft can
+     * blend it between biomes and cache it; the flowers of each pad are worked out from it in SeasonalColorEvents.
+     */
+    public static int lilyBloom(Biome biome) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        double flowering = tint == null || !lilies ? 0 : WaterLilyRules.flowering(tint.zone(), tint.yearPosition());
+        return (int) Math.round(flowering * 255);
     }
 
     /** Poplar leaves: green until autumn, then their own colour (Mojang's colour all year when switched off). */
@@ -189,9 +208,11 @@ public final class SeasonalColorState {
      *
      * @return true if the colours changed enough that the world should be redrawn
      */
-    public static boolean update(OptionalDouble yearPosition, boolean enabled, boolean seasonalPoplars) {
-        boolean poplarsChanged = poplars != seasonalPoplars;
+    public static boolean update(OptionalDouble yearPosition, boolean enabled, boolean seasonalPoplars,
+                                 boolean seasonalWaterLilies) {
+        boolean poplarsChanged = poplars != seasonalPoplars || lilies != seasonalWaterLilies;
         poplars = seasonalPoplars;
+        lilies = seasonalWaterLilies;
         SeasonalColors.Tint[] next = null;
         if (enabled && yearPosition.isPresent()) {
             ClimateZone[] zones = ClimateZone.values();
