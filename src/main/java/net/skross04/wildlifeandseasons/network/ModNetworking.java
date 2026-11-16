@@ -13,24 +13,29 @@ import net.skross04.wildlifeandseasons.season.SeasonSavedData;
 @EventBusSubscriber(modid = WildlifeAndSeasons.MODID)
 public class ModNetworking {
     /** Bump this when a payload changes, so old and new versions of the mod don't talk past each other. */
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "2";
 
     @SubscribeEvent
     public static void register(RegisterPayloadHandlersEvent event) {
         event.registrar(PROTOCOL_VERSION)
                 .playToClient(SeasonSyncPayload.TYPE, SeasonSyncPayload.STREAM_CODEC,
-                        (payload, context) -> SeasonAccess.setClientElapsedTicks(payload.elapsedTicks()));
+                        (payload, context) -> {
+                            SeasonAccess.setClientElapsedTicks(payload.elapsedTicks());
+                            SeasonAccess.setClientWeatherSeed(payload.weatherSeed());
+                        });
     }
 
     /** Sends the current season to one player (e.g. when they join). */
     public static void syncSeason(ServerPlayer player) {
-        PacketDistributor.sendToPlayer(player, new SeasonSyncPayload(SeasonSavedData.get(player.level().getServer()).calendar().elapsedTicks()));
+        MinecraftServer server = player.level().getServer();
+        PacketDistributor.sendToPlayer(player, new SeasonSyncPayload(SeasonSavedData.get(server).calendar().elapsedTicks(),
+                SeasonAccess.weatherSeed(server)));
     }
 
     /** Sends the current season to everyone (new day, or /season set). */
     public static void syncSeasonToAll(MinecraftServer server) {
         SeasonSavedData data = SeasonSavedData.get(server);
         data.markSynced();
-        PacketDistributor.sendToAllPlayers(new SeasonSyncPayload(data.calendar().elapsedTicks()));
+        PacketDistributor.sendToAllPlayers(new SeasonSyncPayload(data.calendar().elapsedTicks(), SeasonAccess.weatherSeed(server)));
     }
 }

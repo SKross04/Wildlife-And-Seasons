@@ -112,6 +112,6 @@ public final class Atmosphere {
     public static float windFactor(Level level, BlockPos pos) {
         double autumn = SeasonalColorState.leafAutumn(level.getBiome(pos).value());
         double storm = 1.0 + 1.5 * level.getRainLevel(1.0F) + 2.0 * level.getThunderLevel(1.0F);
-        return (float) ((1.0 + 1.5 * autumn) * storm);
+        return (float) ((1.0 + 1.5 * autumn) * storm * (1.0 + 2.5 * DayWeather.windAt(level, pos)));
     }
 }

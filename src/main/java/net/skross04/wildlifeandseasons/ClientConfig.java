@@ -23,6 +23,15 @@ public class ClientConfig {
                     "red, orange or yellow in autumn, snowy in winter. Off = Mojang's look (autumn colours all year).")
             .define("seasonalPoplars", true);
 
+    public static final ModConfigSpec.BooleanValue FOGGY_MORNINGS = BUILDER
+            .comment("Foggy mornings: some mornings (most in late autumn and winter) start in thick fog that burns off",
+                    "after sunrise (around noon in midwinter, sometimes not at all). Off = no extra fog.")
+            .define("foggyMornings", true);
+
+    public static final ModConfigSpec.BooleanValue WINDY_DAYS = BUILDER
+            .comment("Windy days (most in autumn and winter): the trees rustle louder and more leaves fall.")
+            .define("windyDays", true);
+
     public static final ModConfigSpec.BooleanValue SEASONAL_WATER_LILIES = BUILDER
             .comment("Lily pads follow the seasons: white and pink water lilies in summer, yellow and brown leaves",
                     "in autumn and winter, bronze new leaves in spring. Off = Mojang's green pads all year.")
@@ -56,6 +65,14 @@ public class ClientConfig {
 
     public static boolean seasonalPoplars() {
         return SPEC.isLoaded() ? SEASONAL_POPLARS.get() : SEASONAL_POPLARS.getDefault();
+    }
+
+    public static boolean foggyMornings() {
+        return SPEC.isLoaded() ? FOGGY_MORNINGS.get() : FOGGY_MORNINGS.getDefault();
+    }
+
+    public static boolean windyDays() {
+        return SPEC.isLoaded() ? WINDY_DAYS.get() : WINDY_DAYS.getDefault();
     }
 
     public static boolean seasonalWaterLilies() {

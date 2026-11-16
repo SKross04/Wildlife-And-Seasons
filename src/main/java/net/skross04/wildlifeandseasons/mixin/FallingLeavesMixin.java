@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.FallingParticlesLeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.skross04.wildlifeandseasons.ClientConfig;
 import net.skross04.wildlifeandseasons.client.Atmosphere;
+import net.skross04.wildlifeandseasons.client.DayWeather;
 import net.skross04.wildlifeandseasons.client.SeasonalColorState;
 
 /**
@@ -34,7 +35,8 @@ public abstract class FallingLeavesMixin {
         if (!ClientConfig.seasonalFallingLeaves()) {
             return chance;
         }
-        return chance * SeasonalColorState.fallingLeavesFactor(level.getBiome(pos).value(), level.getBlockState(pos));
+        return chance * SeasonalColorState.fallingLeavesFactor(level.getBiome(pos).value(), level.getBlockState(pos))
+                * (float) (1.0 + 2.0 * DayWeather.windAt(level, pos));
     }
 
     /** Snow clumps falling from snowy trees (when it thaws, or in a storm). */
