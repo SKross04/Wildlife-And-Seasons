@@ -60,6 +60,17 @@ public class Config {
                     "dune primroses) come up on the sand and die off again a couple of weeks later. Placed ones stay.")
             .define("desertBloom", true);
 
+    public static final ModConfigSpec.BooleanValue MOSS_AND_LICHEN = BUILDER
+            .comment("Over the years, moss creeps over old cobblestone and stone bricks in generated structures (mostly",
+                    "on shady, damp sides), lichen grows on open natural rock and moss carpets on rocks under trees.",
+                    "Never destroys anything: an axe scrapes mossy blocks clean, lichen and carpets break normally.")
+            .define("mossAndLichen", true);
+
+    public static final ModConfigSpec.BooleanValue MOSS_ON_PLAYER_BUILDS = BUILDER
+            .comment("Let moss also grow on cobblestone and stone bricks outside generated structures (your own builds),",
+                    "for an aged look. Off by default.")
+            .define("mossOnPlayerBuilds", false);
+
     public static final ModConfigSpec.BooleanValue SEASONAL_BERRIES = BUILDER
             .comment("Sweet berry bushes follow the seasons like real lingonberries: white-pink flowers in early summer,",
                     "berries ripen in late summer and stay through winter, leaves turn purple-red in autumn.",
@@ -104,6 +115,14 @@ public class Config {
 
     public static boolean desertBloom() {
         return SPEC.isLoaded() ? DESERT_BLOOM.get() : DESERT_BLOOM.getDefault();
+    }
+
+    public static boolean mossAndLichen() {
+        return SPEC.isLoaded() ? MOSS_AND_LICHEN.get() : MOSS_AND_LICHEN.getDefault();
+    }
+
+    public static boolean mossOnPlayerBuilds() {
+        return SPEC.isLoaded() ? MOSS_ON_PLAYER_BUILDS.get() : MOSS_ON_PLAYER_BUILDS.getDefault();
     }
 
     public static boolean autumnMushrooms() {

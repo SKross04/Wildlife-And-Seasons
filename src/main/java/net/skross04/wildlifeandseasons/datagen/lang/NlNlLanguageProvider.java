@@ -36,6 +36,7 @@ public class NlNlLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.POTTED_DESERT_SUNFLOWER, "Woestijnzonnebloem in pot");
         addBlock(ModBlocks.POTTED_SAND_VERBENA, "Zandverbena in pot");
         addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Duinteunisbloem in pot");
+        addBlock(ModBlocks.LICHEN, "Korstmos");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regenmeter: %1$s%% vol · %2$s%% neerslag dit seizoen");
         add(CompatTranslations.JEI_CALENDAR, "Rechtsklik om de datum en het seizoen van vandaag te lezen. In jungles en savannes zie je ook of het regenseizoen of het droge seizoen is.");

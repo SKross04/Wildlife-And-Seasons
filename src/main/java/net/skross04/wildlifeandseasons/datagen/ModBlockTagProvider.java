@@ -91,6 +91,11 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tag(BlockTags.FLOWER_POTS).add(TagEntry.element(ModBlocks.POTTED_DESERT_SUNFLOWER.getId()))
                 .add(TagEntry.element(ModBlocks.POTTED_SAND_VERBENA.getId()))
                 .add(TagEntry.element(ModBlocks.POTTED_DUNE_PRIMROSE.getId()));
+        // Natural rock for lichen and moss carpets: the overworld's base stones plus sandstone and calcite.
+        tag(ModTags.Blocks.NATURAL_ROCK).addTag(BlockTags.BASE_STONE_OVERWORLD)
+                .add(TagEntry.element(net.minecraft.resources.Identifier.withDefaultNamespace("sandstone")))
+                .add(TagEntry.element(net.minecraft.resources.Identifier.withDefaultNamespace("red_sandstone")))
+                .add(TagEntry.element(net.minecraft.resources.Identifier.withDefaultNamespace("calcite")));
         tag(ModTags.Blocks.DESERT_FLOWER_SOIL).addTag(BlockTags.SAND).addTag(BlockTags.DIRT).addTag(BlockTags.TERRACOTTA);
         tag(ModTags.Blocks.BLOOMS_EARLY_SPRING).add(TagEntry.element(ModBlocks.CROCUS.getId()));
 

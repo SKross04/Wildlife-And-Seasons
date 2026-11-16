@@ -34,6 +34,7 @@ public class ModModelProvider extends ModelProvider {
                 BlockModelGenerators.PlantType.NOT_TINTED);
         blockModels.createPlantWithDefaultItem(ModBlocks.CROCUS.get(), ModBlocks.POTTED_CROCUS.get(),
                 BlockModelGenerators.PlantType.NOT_TINTED);
+        blockModels.createMultiface(ModBlocks.LICHEN.get());
         blockModels.createPlantWithDefaultItem(ModBlocks.DESERT_SUNFLOWER.get(), ModBlocks.POTTED_DESERT_SUNFLOWER.get(),
                 BlockModelGenerators.PlantType.NOT_TINTED);
         blockModels.createPlantWithDefaultItem(ModBlocks.SAND_VERBENA.get(), ModBlocks.POTTED_SAND_VERBENA.get(),

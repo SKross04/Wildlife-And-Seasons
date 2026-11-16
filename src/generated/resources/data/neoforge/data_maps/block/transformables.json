@@ -1,0 +1,240 @@
+{
+  "values": {
+    "minecraft:mossy_cobblestone": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:mossy_cobblestone"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "minecraft:cobblestone"
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "particle": "scrape",
+        "sound": "minecraft:item.axe.scrape"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "minecraft:mossy_cobblestone_slab": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:mossy_cobblestone_slab"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "minecraft:cobblestone_slab",
+                  "properties": {
+                    "type": "bottom",
+                    "waterlogged": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "particle": "scrape",
+        "sound": "minecraft:item.axe.scrape"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "minecraft:mossy_cobblestone_stairs": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:mossy_cobblestone_stairs"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "minecraft:cobblestone_stairs",
+                  "properties": {
+                    "facing": "north",
+                    "half": "bottom",
+                    "shape": "straight",
+                    "waterlogged": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "particle": "scrape",
+        "sound": "minecraft:item.axe.scrape"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "minecraft:mossy_cobblestone_wall": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:mossy_cobblestone_wall"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "minecraft:cobblestone_wall",
+                  "properties": {
+                    "east": "none",
+                    "north": "none",
+                    "south": "none",
+                    "up": "true",
+                    "waterlogged": "false",
+                    "west": "none"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "particle": "scrape",
+        "sound": "minecraft:item.axe.scrape"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "minecraft:mossy_stone_brick_slab": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:mossy_stone_brick_slab"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "minecraft:stone_brick_slab",
+                  "properties": {
+                    "type": "bottom",
+                    "waterlogged": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "particle": "scrape",
+        "sound": "minecraft:item.axe.scrape"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "minecraft:mossy_stone_brick_stairs": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:mossy_stone_brick_stairs"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "minecraft:stone_brick_stairs",
+                  "properties": {
+                    "facing": "north",
+                    "half": "bottom",
+                    "shape": "straight",
+                    "waterlogged": "false"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "particle": "scrape",
+        "sound": "minecraft:item.axe.scrape"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "minecraft:mossy_stone_brick_wall": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:mossy_stone_brick_wall"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "minecraft:stone_brick_wall",
+                  "properties": {
+                    "east": "none",
+                    "north": "none",
+                    "south": "none",
+                    "up": "true",
+                    "waterlogged": "false",
+                    "west": "none"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "particle": "scrape",
+        "sound": "minecraft:item.axe.scrape"
+      },
+      "transformer": "minecraft:axe"
+    },
+    "minecraft:mossy_stone_bricks": {
+      "transform_data": {
+        "block_state_provider": {
+          "type": "minecraft:rule_based",
+          "rules": [
+            {
+              "if_true": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "minecraft:mossy_stone_bricks"
+              },
+              "then": {
+                "type": "minecraft:copy_properties",
+                "source": {
+                  "id": "minecraft:stone_bricks"
+                }
+              }
+            }
+          ]
+        },
+        "item_damage_per_use": 1,
+        "particle": "scrape",
+        "sound": "minecraft:item.axe.scrape"
+      },
+      "transformer": "minecraft:axe"
+    }
+  }
+}

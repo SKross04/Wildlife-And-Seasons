@@ -21,6 +21,8 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
         dropSelf(ModBlocks.CROCUS.get());
         dropPottedContents(ModBlocks.POTTED_SNOWDROP.get());
         dropPottedContents(ModBlocks.POTTED_CROCUS.get());
+        // Lichen: like glow lichen, only shears keep it (one item per face).
+        add(ModBlocks.LICHEN.get(), createMultifaceBlockDrops(ModBlocks.LICHEN.get(), hasShears()));
         dropSelf(ModBlocks.DESERT_SUNFLOWER.get());
         dropSelf(ModBlocks.SAND_VERBENA.get());
         dropSelf(ModBlocks.DUNE_PRIMROSE.get());

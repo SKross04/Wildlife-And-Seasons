@@ -25,6 +25,7 @@ public class DataGenerators {
     @SubscribeEvent
     public static void gatherClientData(GatherDataEvent.Client event) {
         event.createProvider(ModModelProvider::new);
+        event.createProvider(ModDataMapProvider::new);
         // Biomes live in the "world" registries, so the tag provider needs that lookup.
         event.addProvider(new ModBiomeTagProvider(event.getGenerator().getPackOutput(), event.getWorldLookupProvider()));
         event.addProvider(new ModBlockTagProvider(event.getGenerator().getPackOutput(), event.getReloadableLookupProvider()));

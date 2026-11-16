@@ -36,6 +36,7 @@ public class SvSeLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.POTTED_DESERT_SUNFLOWER, "Krukad ökensolros");
         addBlock(ModBlocks.POTTED_SAND_VERBENA, "Krukad sandverbena");
         addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Krukat dynnattljus");
+        addBlock(ModBlocks.LICHEN, "Lav");
         add(Instruments.THERMOMETER_READING, "Termometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regnmätare: %1$s%% full · %2$s%% nederbörd denna årstid");
         add(CompatTranslations.JEI_CALENDAR, "Högerklicka för att se dagens datum och årstid. I djungler och savanner visar den också om det är regnperiod eller torrperiod.");

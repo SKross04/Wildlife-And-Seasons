@@ -44,6 +44,9 @@ public class ModTags {
         /** Exceptions: flowers in the seasonal tag that should stay as they are (e.g. wither rose). */
         public static final TagKey<Block> NOT_SEASONAL_FLOWERS = createTag("not_seasonal_flowers");
 
+        /** Natural rock that lichen (and moss carpets under trees) can grow on. */
+        public static final TagKey<Block> NATURAL_ROCK = createTag("natural_rock");
+
         /** The desert bloom's flowers (they follow desert rain, not the normal flower seasons). */
         public static final TagKey<Block> DESERT_FLOWERS = createTag("desert_flowers");
 

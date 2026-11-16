@@ -4,6 +4,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.MultifaceBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
@@ -98,6 +99,20 @@ public class ModBlocks {
     public static final DeferredBlock<FlowerPotBlock> POTTED_DUNE_PRIMROSE = BLOCKS.registerBlock("potted_dune_primrose",
             properties -> new FlowerPotBlock(() -> (FlowerPotBlock) Blocks.FLOWER_POT, DUNE_PRIMROSE, properties),
             ModBlocks::pottedProperties);
+
+    /**
+     * Lichen: crusty grey-green and yellow-green patches (like real foliose and map lichens) on open natural rock.
+     * Grows slowly over the years (see MossAndLichen); a multiface block like glow lichen, but without light.
+     */
+    public static final DeferredBlock<MultifaceBlock> LICHEN = BLOCKS.registerBlock("lichen", MultifaceBlock::new,
+            properties -> properties
+                    .mapColor(MapColor.GLOW_LICHEN)
+                    .replaceable()
+                    .noCollision()
+                    .strength(0.2F)
+                    .sound(SoundType.GLOW_LICHEN)
+                    .ignitedByLava()
+                    .pushReaction(PushReaction.POPPED));
 
     /** Like vanilla small flowers. */
     private static BlockBehaviour.Properties flowerProperties(BlockBehaviour.Properties properties) {

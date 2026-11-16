@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.skross04.wildlifeandseasons.nature.ChunkCatchUp;
 import net.skross04.wildlifeandseasons.nature.DesertBloom;
+import net.skross04.wildlifeandseasons.nature.MossAndLichen;
 import net.skross04.wildlifeandseasons.nature.SnowCover;
 
 /**
@@ -31,6 +32,7 @@ public abstract class ServerLevelMixin {
         if (randomTickSpeed > 0) {
             ChunkCatchUp.onChunkTicked((ServerLevel) (Object) this, chunk);
             DesertBloom.onChunkTick((ServerLevel) (Object) this, chunk, randomTickSpeed);
+            MossAndLichen.onChunkTick((ServerLevel) (Object) this, chunk, randomTickSpeed);
         }
     }
 }
