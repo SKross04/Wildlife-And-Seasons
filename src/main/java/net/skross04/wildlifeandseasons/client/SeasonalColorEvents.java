@@ -40,11 +40,15 @@ public class SeasonalColorEvents {
         });
     }
 
-    /** Vanilla leaves (oak, dark oak, acacia, jungle, vines): seasonal, with red/orange/yellow patches in autumn. */
+    /** Vanilla leaves (oak, acacia, jungle, vines): seasonal, with yellow/orange/red patches in autumn. */
     public static final ColorResolver LEAVES_RESOLVER =
             (biome, x, z) -> SeasonalColorState.leaves(biome, Mth.floor(x), Mth.floor(z));
 
-    /** Birch leaves start from birch green and turn golden in autumn. */
+    /** Dark oak leaves: russet and brown in autumn, like real oaks. */
+    public static final ColorResolver DARK_OAK_RESOLVER =
+            (biome, x, z) -> SeasonalColorState.darkOak(biome, Mth.floor(x), Mth.floor(z));
+
+    /** Birch leaves start from birch green and turn bright yellow in autumn. */
     public static final ColorResolver BIRCH_RESOLVER =
             (biome, x, z) -> SeasonalColorState.birch(biome, FoliageColor.FOLIAGE_BIRCH, Mth.floor(x), Mth.floor(z));
 
@@ -73,6 +77,7 @@ public class SeasonalColorEvents {
     @SubscribeEvent
     public static void registerColorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
         event.register(LEAVES_RESOLVER);
+        event.register(DARK_OAK_RESOLVER);
         event.register(BIRCH_RESOLVER);
         event.register(EVERGREEN_RESOLVER);
         event.register(CHERRY_RESOLVER);
@@ -89,7 +94,8 @@ public class SeasonalColorEvents {
     @SubscribeEvent
     public static void registerBlockTints(RegisterColorHandlersEvent.BlockTintSources event) {
         event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_DEFAULT, LEAVES_RESOLVER)),
-                Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.ACACIA_LEAVES, Blocks.JUNGLE_LEAVES, Blocks.VINE);
+                Blocks.OAK_LEAVES, Blocks.ACACIA_LEAVES, Blocks.JUNGLE_LEAVES, Blocks.VINE);
+        event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_DEFAULT, DARK_OAK_RESOLVER)), Blocks.DARK_OAK_LEAVES);
         event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_BIRCH, BIRCH_RESOLVER)), Blocks.BIRCH_LEAVES);
         event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_EVERGREEN, EVERGREEN_RESOLVER)), Blocks.SPRUCE_LEAVES);
         // Cherry leaves get our own bright grey texture (models/block/cherry_leaves.json override), so this colour

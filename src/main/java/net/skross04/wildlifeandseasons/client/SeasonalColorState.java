@@ -35,11 +35,17 @@ public final class SeasonalColorState {
         return tint == null ? base : SeasonalColors.foliage(base, tint);
     }
 
-    /** Vanilla leaves at a position: red, orange or yellow autumn patches. */
+    /** Vanilla leaves at a position: each patch of trees gets its own autumn colour and timing. */
     public static int leaves(Biome biome, int x, int z) {
         int base = vanillaFoliage(biome);
         SeasonalColors.Tint tint = tintFor(biome);
         return tint == null ? base : SeasonalColors.foliage(base, tint, x, z);
+    }
+
+    public static int darkOak(Biome biome, int x, int z) {
+        int base = vanillaFoliage(biome);
+        SeasonalColors.Tint tint = tintFor(biome);
+        return tint == null ? base : SeasonalColors.darkOak(base, tint, x, z);
     }
 
     public static int birch(Biome biome, int base, int x, int z) {

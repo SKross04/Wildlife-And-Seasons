@@ -1,36 +1,83 @@
 package net.skross04.wildlifeandseasons.ecology.climate;
 
 /**
- * Seasonal colours for grass and leaves: fresh green in spring, the normal deep green in summer,
- * autumn colours, faded colours in winter, and white snowy leaves while snow lies. Savannas turn yellow
- * in the dry season; tropical, desert and seasonless places keep their colours.
+ * Seasonal colours for grass and leaves, based on how real trees change through the year.
  * <p>
- * Each season "fades in and out" smoothly (a bump curve), so colours change a little every day.
- * In autumn, leaves get patches of red, orange and yellow depending on where they are,
- * so a forest looks mixed instead of one flat colour. Cold-zone forests (taigas) don't turn orange.
+ * Deciduous trees in temperate places go through these stages:
+ * <ol>
+ *     <li>Early spring: still bare (grey-brown twigs; oaks still hold last year's dry brown leaves).</li>
+ *     <li>Leaf-out: light lime green new leaves, which slowly darken.</li>
+ *     <li>Summer: deep green, getting a little darker and duller towards late summer.</li>
+ *     <li>Autumn: colours by tree type. Most broadleaf trees turn yellow, then red, fewer orange; birch bright
+ *     yellow, wild cherry orange to crimson, oaks russet and brown. Then the leaves turn brown and fall.</li>
+ *     <li>Winter: bare, or white while snow lies on the branches.</li>
+ * </ol>
+ * Neighbouring trees (8×8-block patches) turn at slightly different times and get different autumn colours, so a
+ * forest looks mixed. Cold-zone forests (taigas) don't turn colour. Savannas yellow in the dry season. In the tropics
+ * some trees grow red young leaves when the rains start.
+ * <p>
  * Colours are 0xRRGGBB; the alpha of the original colour is kept.
  */
 public final class SeasonalColors {
-    // Target colours that the normal biome colour is blended towards, and how strongly (at the season's peak).
+    // Grass: target colours the normal biome colour is blended towards, and how strongly (at the season's peak).
     private static final int SPRING_GRASS = 0x7FD650, AUTUMN_GRASS = 0xB89A45, WINTER_GRASS = 0x8E9A7E, DRY_GRASS = 0xCDB45A;
     private static final double SPRING_GRASS_AMOUNT = 0.45, AUTUMN_GRASS_AMOUNT = 0.65, WINTER_GRASS_AMOUNT = 0.60, DRY_GRASS_AMOUNT = 0.75;
 
-    private static final int SPRING_LEAVES = 0x92DB4F, WINTER_LEAVES = 0x7A855C, DRY_LEAVES = 0xB5A651;
-    /** Autumn leaf colours: red, orange, yellow. */
-    private static final int[] AUTUMN_LEAVES = {0xC0381F, 0xD86A1E, 0xD9A62B};
-    private static final double SPRING_LEAVES_AMOUNT = 0.45, AUTUMN_LEAVES_AMOUNT = 1.0, WINTER_LEAVES_AMOUNT = 0.50, DRY_LEAVES_AMOUNT = 0.35;
+    /** One kind of deciduous tree: its colours through the year. */
+    private record Tree(int fresh, int summer, int[] autumn, int brown, double brownAmount, int bare, double bareAmount,
+                        double timing) {
+    }
 
-    private static final int SPRING_BIRCH = 0xA8DE62, WINTER_BIRCH = 0x9A9C6A;
-    /** Birch turns golden; some trees more amber. */
-    private static final int[] AUTUMN_BIRCH = {0xE8C23A, 0xE09A2C};
-    private static final double SPRING_BIRCH_AMOUNT = 0.40, AUTUMN_BIRCH_AMOUNT = 1.0, WINTER_BIRCH_AMOUNT = 0.45;
+    /** Fresh spring leaves are light and yellowish (thin, with little chlorophyll yet). */
+    private static final double FRESH_AMOUNT = 0.60;
+    /** Mature leaves get darker and duller during summer. */
+    private static final double SUMMER_AMOUNT = 0.30;
 
-    /** Cherry trees: pink blossom in spring, green in summer. */
+    /**
+     * Most broadleaf trees (Minecraft's oak stands for a mixed forest). The autumn colours follow how often each
+     * colour shows up among temperate trees: about half yellow (incl. yellow-brown), a third red, the rest orange.
+     */
+    private static final Tree BROADLEAF = new Tree(0xA8D23E, 0x3E6B24, new int[]{
+            0xE0B52C, 0xD9AE2A, 0xE6C23A, 0xE0B52C, 0xD9AE2A, 0xE6C23A, // yellow
+            0xB4B035,                                                   // green-yellow
+            0xB98B34, 0xAE8236,                                         // yellow-brown
+            0xDE9426,                                                   // yellow-orange
+            0xD8691E, 0xD1601C,                                         // orange
+            0xC9521F,                                                   // orange-red
+            0xC0381F, 0xB72E22, 0xC73F24, 0xAD2A20,                     // red
+            0x9E4528, 0x96402A,                                         // red-brown
+            0x8E2C38},                                                  // red-purple
+            0x9C6E3E, 0.55, 0x786A5C, 0.80, 0.0);
+
+    /** Dark oak: like real oaks, russet, red-brown and yellow-brown; many keep their dry brown leaves in winter. */
+    private static final Tree DARK_OAK = new Tree(0x9CC63E, 0x36601F, new int[]{
+            0xA54A26, 0xA54A26, 0x8F3D25, 0x8F3D25, 0xB0843A, 0xB0843A, 0xBF6428, 0xA0301F},
+            0x94663A, 0.70, 0x8C6640, 0.85, 0.01);
+
+    /** Birch: very light green leaves, bright yellow in autumn (they fall yellow, browning little); purplish twigs. */
+    private static final Tree BIRCH = new Tree(0xB6DE5C, 0x6A9638, new int[]{
+            0xEBC53A, 0xEBC53A, 0xEBC53A, 0xE8D14C, 0xE3A82E},
+            0xA88A4A, 0.25, 0x7E6A66, 0.80, -0.01);
+
+    /** Wild cherry: bronze young leaves, orange, scarlet and crimson in autumn; reddish-brown twigs. */
+    private static final Tree CHERRY = new Tree(0xA89A4A, 0x4C7A30, new int[]{
+            0xE5702A, 0xD83A26, 0xC02A3C, 0xA8344A, 0xE2A832},
+            0x9A5E3A, 0.35, 0x7A5048, 0.80, 0.0);
+
+    // Cold zones (no autumn colours) and other zones: a simpler look.
+    private static final int SPRING_LEAVES = 0xA6D33C, WINTER_LEAVES = 0x7A855C, DRY_LEAVES = 0xB5A651;
+    private static final double SPRING_LEAVES_AMOUNT = 0.45, WINTER_LEAVES_AMOUNT = 0.50, DRY_LEAVES_AMOUNT = 0.35;
+
+    /** Red young leaves in the tropics, when the rains begin. */
+    private static final int TROPICAL_FLUSH = 0xB8553C;
+    private static final double TROPICAL_FLUSH_AMOUNT = 0.60;
+
+    /** Cherry trees: green leaves, pink blossom in spring. */
     private static final int CHERRY_GREEN = 0x6FA84A, CHERRY_PINK = 0xFFB0D6;
     /**
      * Cherry leaves use our own bright texture (so the blossom can be a vivid pink), about 1.5× brighter than
-     * vanilla's grey oak leaves. Green, autumn and snow colours are darkened by this much so cherry trees look
-     * like the other trees outside spring.
+     * vanilla's grey oak leaves. Leaf colours are darkened by this much so cherry trees look like the other trees
+     * outside spring.
      */
     private static final double CHERRY_TEXTURE_COMPENSATION = 0.66;
     private static final double CHERRY_BLOSSOM_STRENGTH = 1.6;
@@ -54,6 +101,8 @@ public final class SeasonalColors {
 
     /** Size of a colour patch in blocks: roughly one tree, so neighbouring trees can differ. */
     private static final int PATCH_SIZE_SHIFT = 3; // 2^3 = 8 blocks
+    /** Neighbouring trees turn up to this much of a year earlier or later (2 days in a 100-day year). */
+    private static final double TIMING_SPREAD = 0.02;
 
     private SeasonalColors() {
     }
@@ -61,21 +110,28 @@ public final class SeasonalColors {
     /**
      * How strongly each season's look applies right now, each 0–1.
      *
-     * @param spring     fresh spring green
-     * @param autumn     autumn look of grass
-     * @param leafAutumn autumn colours of leaves (0 in cold zones: taigas stay green); also drives falling leaves and leaf litter
-     * @param winter     faded winter colours
-     * @param dry        savanna dry season
-     * @param snow       snow lying on leaves (while the day's average stays below freezing)
+     * @param spring       fresh spring green of grass; also cherry and azalea blossom
+     * @param autumn       autumn look of grass
+     * @param leafAutumn   how strongly leaves are falling (0 in cold zones: taigas stay green); drives falling
+     *                     leaves, leaf litter and wind
+     * @param winter       faded winter colours (grass; leaves in cold zones)
+     * @param dry          savanna dry season
+     * @param snow         snow lying on leaves (while the day's average stays below freezing)
+     * @param flush        tropical red young leaves
+     * @param yearPosition the point in the year, for deciduous trees (each patch of trees turns at its own time)
+     * @param deciduous    true where trees go through the full deciduous year (temperate places)
      */
-    public record Tint(double spring, double autumn, double leafAutumn, double winter, double dry, double snow) {
-        public static final Tint NONE = new Tint(0, 0, 0, 0, 0, 0);
+    public record Tint(double spring, double autumn, double leafAutumn, double winter, double dry, double snow,
+                       double flush, double yearPosition, boolean deciduous) {
+        public static final Tint NONE = new Tint(0, 0, 0, 0, 0, 0, 0, 0, false);
 
         /** True if this tint differs noticeably from another (used to decide whether to redraw chunks). */
         public boolean differsFrom(Tint other) {
             return Math.abs(spring - other.spring) > 0.005 || Math.abs(autumn - other.autumn) > 0.005
                     || Math.abs(leafAutumn - other.leafAutumn) > 0.005 || Math.abs(winter - other.winter) > 0.005
-                    || Math.abs(dry - other.dry) > 0.005 || Math.abs(snow - other.snow) > 0.005;
+                    || Math.abs(dry - other.dry) > 0.005 || Math.abs(snow - other.snow) > 0.005
+                    || Math.abs(flush - other.flush) > 0.005 || deciduous != other.deciduous
+                    || deciduous && Math.abs(yearPosition - other.yearPosition) > 0.003;
         }
     }
 
@@ -84,21 +140,23 @@ public final class SeasonalColors {
         double snow = snowOnLeaves(zone, yearPosition);
         return switch (zone) {
             case TEMPERATE, OCEAN -> {
-                double autumn = bump(yearPosition, 0.64, 0.20); // late summer → early winter, strongest in mid-autumn
+                double grassAutumn = bump(yearPosition, 0.64, 0.20); // late summer → early winter
                 yield new Tint(
-                        bump(yearPosition, 0.10, 0.16),         // around mid-spring
-                        autumn, autumn,
-                        bump(yearPosition, 0.88, 0.14),         // around mid-winter
-                        0, snow);
+                        bump(yearPosition, 0.10, 0.16),             // around mid-spring
+                        grassAutumn,
+                        bump(yearPosition, 0.65, 0.10),             // leaves fall from early to late autumn
+                        bump(yearPosition, 0.88, 0.14),             // around mid-winter
+                        0, snow, 0, yearPosition, true);
             }
             case COLD -> new Tint(
-                    bump(yearPosition, 0.20, 0.12),             // spring comes late
-                    0.5 * bump(yearPosition, 0.56, 0.13),       // grass browns a little in a short, early autumn
-                    0,                                          // taiga trees stay green
-                    bump(yearPosition, 0.86, 0.22),             // long winter
-                    0, snow);
-            case SAVANNA -> new Tint(0, 0, 0, 0, bump(yearPosition, 0.85, 0.28), 0); // dry season
-            case TROPICAL, ARID, NO_SEASONS -> Tint.NONE;
+                    bump(yearPosition, 0.20, 0.12),                 // spring comes late
+                    0.5 * bump(yearPosition, 0.56, 0.13),           // grass browns a little in a short, early autumn
+                    0,                                              // taiga trees stay green
+                    bump(yearPosition, 0.86, 0.22),                 // long winter
+                    0, snow, 0, 0, false);
+            case SAVANNA -> new Tint(0, 0, 0, 0, bump(yearPosition, 0.85, 0.28), 0, 0, 0, false); // dry season
+            case TROPICAL -> new Tint(0, 0, 0, 0, 0, 0, bump(yearPosition, 0.10, 0.07), 0, false); // start of the rains
+            case ARID, NO_SEASONS -> Tint.NONE;
         };
     }
 
@@ -114,6 +172,31 @@ public final class SeasonalColors {
         return Math.max(0, Math.min(1, (SnowAndIce.SNOW_TEMPERATURE - mean) / FULL_SNOW_RANGE));
     }
 
+    /**
+     * Where a deciduous tree is in its year, each 0–1.
+     *
+     * @param fresh  light green new leaves
+     * @param summer darker mature leaves
+     * @param color  autumn colour (also last year's leaves still hanging before leaf-out)
+     * @param brown  dying brown leaves
+     * @param bare   leafless (or only dry leaves left)
+     */
+    record LeafStage(double fresh, double summer, double color, double brown, double bare) {
+    }
+
+    static LeafStage leafStage(double yearPosition) {
+        double p = yearPosition - Math.floor(yearPosition);
+        double summer = bump(p, 0.42, 0.12);
+        if (p < 0.5) {
+            // Bare until the buds open (about mid-spring), then light green leaves that darken by early summer.
+            double bare = 1 - smoothstep(0.05, 0.15, p);
+            double fresh = smoothstep(0.06, 0.16, p) * (1 - smoothstep(0.20, 0.32, p));
+            return new LeafStage(fresh, summer, bare, bare, bare);
+        }
+        // Colours appear from the start of autumn, turn brown after their peak, and the trees are bare by winter.
+        return new LeafStage(0, summer, smoothstep(0.52, 0.60, p), smoothstep(0.62, 0.69, p), smoothstep(0.67, 0.75, p));
+    }
+
     public static int grass(int base, Tint t) {
         int c = blend(base, SPRING_GRASS, SPRING_GRASS_AMOUNT * t.spring());
         c = blend(c, AUTUMN_GRASS, AUTUMN_GRASS_AMOUNT * t.autumn());
@@ -121,41 +204,58 @@ public final class SeasonalColors {
         return blend(c, DRY_GRASS, DRY_GRASS_AMOUNT * t.dry());
     }
 
-    /** Leaves with one autumn colour (orange), for leaves where the position isn't known. */
+    /** Leaves where the position isn't known (modded leaves using the biome colour): one orange autumn colour. */
     public static int foliage(int base, Tint t) {
-        return foliage(base, t, 1);
+        return leaves(base, t, BROADLEAF, 10, 0, false);
     }
 
-    /** Leaves at a position: the autumn colour (red, orange or yellow) depends on the patch they're in. */
+    /** Most leaves (oak, acacia, jungle, vines) at a position: each patch gets its own autumn colour and timing. */
     public static int foliage(int base, Tint t, int x, int z) {
-        return foliage(base, t, patchColor(x, z, AUTUMN_LEAVES.length));
+        return leaves(base, t, BROADLEAF, patchIndex(x, z, BROADLEAF.autumn().length, 0), timingOffset(x, z),
+                patchIndex(x, z, 3, 2) == 0);
     }
 
-    private static int foliage(int base, Tint t, int autumnColor) {
-        int c = blend(base, SPRING_LEAVES, SPRING_LEAVES_AMOUNT * t.spring());
-        c = blend(c, AUTUMN_LEAVES[autumnColor], AUTUMN_LEAVES_AMOUNT * t.leafAutumn());
-        c = blend(c, WINTER_LEAVES, WINTER_LEAVES_AMOUNT * t.winter());
-        c = blend(c, DRY_LEAVES, DRY_LEAVES_AMOUNT * t.dry());
-        return blend(c, SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
+    /** Dark oak leaves: russet and brown in autumn, dry brown leaves in winter. */
+    public static int darkOak(int base, Tint t, int x, int z) {
+        return leaves(base, t, DARK_OAK, patchIndex(x, z, DARK_OAK.autumn().length, 0), timingOffset(x, z), false);
     }
 
-    /** Birch leaves turn golden (some amber) in autumn. */
+    /** Birch leaves: very light green in spring, bright yellow in autumn. */
     public static int birch(int base, Tint t, int x, int z) {
-        int c = blend(base, SPRING_BIRCH, SPRING_BIRCH_AMOUNT * t.spring());
-        c = blend(c, AUTUMN_BIRCH[patchColor(x, z, AUTUMN_BIRCH.length)], AUTUMN_BIRCH_AMOUNT * t.leafAutumn());
-        c = blend(c, WINTER_BIRCH, WINTER_BIRCH_AMOUNT * t.winter());
-        c = blend(c, DRY_LEAVES, DRY_LEAVES_AMOUNT * t.dry());
+        return leaves(base, t, BIRCH, patchIndex(x, z, BIRCH.autumn().length, 0), timingOffset(x, z), false);
+    }
+
+    private static int leaves(int base, Tint t, Tree tree, int autumnColor, double offset, boolean flushes) {
+        int c;
+        if (t.deciduous()) {
+            c = deciduous(base, t, tree, autumnColor, offset);
+        } else {
+            c = blend(base, SPRING_LEAVES, SPRING_LEAVES_AMOUNT * t.spring());
+            c = blend(c, WINTER_LEAVES, WINTER_LEAVES_AMOUNT * t.winter());
+            c = blend(c, DRY_LEAVES, DRY_LEAVES_AMOUNT * t.dry());
+            if (flushes) {
+                c = blend(c, TROPICAL_FLUSH, TROPICAL_FLUSH_AMOUNT * t.flush());
+            }
+        }
         return blend(c, SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
+    }
+
+    private static int deciduous(int base, Tint t, Tree tree, int autumnColor, double offset) {
+        LeafStage stage = leafStage(t.yearPosition() - tree.timing() - offset);
+        int c = blend(base, tree.fresh(), FRESH_AMOUNT * stage.fresh());
+        c = blend(c, tree.summer(), SUMMER_AMOUNT * stage.summer());
+        c = blend(c, tree.autumn()[autumnColor], stage.color());
+        c = blend(c, tree.brown(), tree.brownAmount() * stage.brown());
+        return blend(c, tree.bare(), tree.bareAmount() * stage.bare());
     }
 
     /**
-     * Cherry leaves: pink blossom in spring, green in summer, autumn colours, snowy in winter.
+     * Cherry leaves: pink blossom in spring (on still bare branches), then bronze young leaves, green in summer,
+     * orange to crimson in autumn, bare and snowy in winter.
      * (The leaves use a bright grey texture that this colour paints, see the cherry_leaves model.)
      */
     public static int cherry(Tint t, int x, int z) {
-        int leaves = blend(CHERRY_GREEN, AUTUMN_LEAVES[patchColor(x, z, AUTUMN_LEAVES.length)], AUTUMN_LEAVES_AMOUNT * t.leafAutumn());
-        leaves = blend(leaves, WINTER_LEAVES, WINTER_LEAVES_AMOUNT * t.winter());
-        leaves = blend(leaves, SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
+        int leaves = leaves(CHERRY_GREEN, t, CHERRY, patchIndex(x, z, CHERRY.autumn().length, 0), timingOffset(x, z), false);
         leaves = darken(leaves, CHERRY_TEXTURE_COMPENSATION);
         return blend(leaves, CHERRY_PINK, Math.min(1.0, CHERRY_BLOSSOM_STRENGTH * t.spring()));
     }
@@ -204,17 +304,24 @@ public final class SeasonalColors {
         return PALE_OAK_LEAVES;
     }
 
-    /** Evergreen needles (spruce): stay green all year, but get snowy in winter. */
+    /** Evergreen needles (spruce): real spruce stays green all year (it keeps its needles for years); snowy in winter. */
     public static int evergreen(int base, Tint t) {
         return blend(base, SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
     }
 
+    /** Neighbouring patches of trees turn a little earlier or later (−TIMING_SPREAD … +TIMING_SPREAD). */
+    static double timingOffset(int x, int z) {
+        return (patchIndex(x, z, 5, 1) - 2) * (TIMING_SPREAD / 2);
+    }
+
     /**
-     * Picks one of {@code count} colours for the patch a position is in. Always the same answer for the
-     * same patch (a hash, not random), so a tree keeps its colour all autumn.
+     * Picks one of {@code count} options for the patch a position is in. Always the same answer for the
+     * same patch (a hash, not random), so a tree keeps its colour all autumn. Different {@code salt}s give
+     * independent choices (colour, timing, …).
      */
-    static int patchColor(int x, int z, int count) {
-        long h = (x >> PATCH_SIZE_SHIFT) * 0x9E3779B97F4A7C15L ^ (z >> PATCH_SIZE_SHIFT) * 0xC2B2AE3D27D4EB4FL;
+    static int patchIndex(int x, int z, int count, int salt) {
+        long h = (x >> PATCH_SIZE_SHIFT) * 0x9E3779B97F4A7C15L ^ (z >> PATCH_SIZE_SHIFT) * 0xC2B2AE3D27D4EB4FL
+                ^ salt * 0x94D049BB133111EBL;
         h ^= h >>> 31;
         h *= 0xBF58476D1CE4E5B9L;
         h ^= h >>> 29;
@@ -245,5 +352,11 @@ public final class SeasonalColors {
         }
         double c = Math.cos(Math.PI / 2 * d / halfWidth);
         return c * c;
+    }
+
+    /** 0 before {@code from}, 1 after {@code to}, a smooth S-curve in between. */
+    static double smoothstep(double from, double to, double value) {
+        double t = Math.max(0, Math.min(1, (value - from) / (to - from)));
+        return t * t * (3 - 2 * t);
     }
 }
