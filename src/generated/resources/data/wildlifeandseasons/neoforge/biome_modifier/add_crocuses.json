@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#wildlifeandseasons:has_crocuses",
+  "features": "wildlifeandseasons:crocus_patch",
+  "step": "vegetal_decoration"
+}

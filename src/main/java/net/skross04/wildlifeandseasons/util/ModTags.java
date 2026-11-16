@@ -44,6 +44,12 @@ public class ModTags {
         /** Exceptions: flowers in the seasonal tag that should stay as they are (e.g. wither rose). */
         public static final TagKey<Block> NOT_SEASONAL_FLOWERS = createTag("not_seasonal_flowers");
 
+        /** Flowers that bloom in late winter, before spring (snowdrops), and wilt by early spring. */
+        public static final TagKey<Block> BLOOMS_LATE_WINTER = createTag("blooms_late_winter");
+
+        /** Flowers that bloom at the very start of spring (crocuses), before the other flowers. */
+        public static final TagKey<Block> BLOOMS_EARLY_SPRING = createTag("blooms_early_spring");
+
         /** Vanilla's crop tag. Crops from other mods that are in it, but in no season tag, get spring–autumn. */
         public static final TagKey<Block> VANILLA_CROPS =
                 TagKey.create(Registries.BLOCK, Identifier.withDefaultNamespace("crops"));
@@ -78,6 +84,12 @@ public class ModTags {
 
         /** Biomes where mushrooms come up on the forest floor in autumn (forests and taigas by default). */
         public static final TagKey<Biome> HAS_AUTUMN_MUSHROOMS = createTag("has_autumn_mushrooms");
+
+        /** Biomes where snowdrops grow (woods by default). */
+        public static final TagKey<Biome> HAS_SNOWDROPS = createTag("has_snowdrops");
+
+        /** Biomes where crocuses grow (meadows and plains by default). */
+        public static final TagKey<Biome> HAS_CROCUSES = createTag("has_crocuses");
 
         /** Biomes where leaf litter gathers in autumn (forests by default). */
         public static final TagKey<Biome> HAS_LEAF_LITTER = createTag("has_leaf_litter");

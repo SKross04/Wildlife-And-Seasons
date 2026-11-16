@@ -1,7 +1,11 @@
 {
+  "block.wildlifeandseasons.crocus": "Azafrán de primavera",
   "block.wildlifeandseasons.dormant_flower": "Flor latente",
   "block.wildlifeandseasons.icicle": "Carámbano",
+  "block.wildlifeandseasons.potted_crocus": "Azafrán de primavera en maceta",
+  "block.wildlifeandseasons.potted_snowdrop": "Campanilla de invierno en maceta",
   "block.wildlifeandseasons.rain_gauge": "Pluviómetro",
+  "block.wildlifeandseasons.snowdrop": "Campanilla de invierno",
   "climate_zone.wildlifeandseasons.arid": "Zona árida",
   "climate_zone.wildlifeandseasons.cold": "Zona fría",
   "climate_zone.wildlifeandseasons.no_seasons": "Sin estaciones",

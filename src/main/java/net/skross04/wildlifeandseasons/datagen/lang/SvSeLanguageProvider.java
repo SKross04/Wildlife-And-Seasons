@@ -26,6 +26,10 @@ public class SvSeLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.THERMOMETER, "Termometer");
         add(Instruments.THERMOMETER_TOOLTIP, "Högerklicka för att läsa av temperaturen här");
         addBlock(ModBlocks.RAIN_GAUGE, "Regnmätare");
+        addBlock(ModBlocks.SNOWDROP, "Snödroppe");
+        addBlock(ModBlocks.CROCUS, "Krokus");
+        addBlock(ModBlocks.POTTED_SNOWDROP, "Krukad snödroppe");
+        addBlock(ModBlocks.POTTED_CROCUS, "Krukad krokus");
         add(Instruments.THERMOMETER_READING, "Termometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regnmätare: %1$s%% full · %2$s%% nederbörd denna årstid");
         add(CompatTranslations.JEI_CALENDAR, "Högerklicka för att se dagens datum och årstid. I djungler och savanner visar den också om det är regnperiod eller torrperiod.");

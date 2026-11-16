@@ -17,6 +17,10 @@ public class ModBlockLootProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
         dropSelf(ModBlocks.RAIN_GAUGE.get());
+        dropSelf(ModBlocks.SNOWDROP.get());
+        dropSelf(ModBlocks.CROCUS.get());
+        dropPottedContents(ModBlocks.POTTED_SNOWDROP.get());
+        dropPottedContents(ModBlocks.POTTED_CROCUS.get());
         add(ModBlocks.ICICLE.get(), createSilkTouchOnlyTable(ModBlocks.ICICLE.get())); // shatters, unless silk touch
         add(ModBlocks.DORMANT_FLOWER.get(), noDrop());  // drops its flower through DormantFlowerBlock#getDrops
     }

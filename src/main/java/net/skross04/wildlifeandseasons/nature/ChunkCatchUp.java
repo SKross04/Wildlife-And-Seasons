@@ -387,7 +387,7 @@ public final class ChunkCatchUp {
     }
 
     private static boolean bloomsNow(BlockState flower, ClimateZone zone, double yearPosition) {
-        return isTall(flower) ? FlowerRules.isTallBloomTime(zone, yearPosition) : FlowerRules.isBloomTime(zone, yearPosition);
+        return SeasonalFlowers.bloomsNow(flower, zone, yearPosition);
     }
 
     /** The flower standing on the ground of this column: wilt it (wild) or close it (planted) when its time is over. */
@@ -430,7 +430,10 @@ public final class ChunkCatchUp {
         }
         for (BlockPos pos : memory.wiltedPositions()) {
             BlockState flower = memory.peekWilted(pos);
-            if (flower == null || !blocks.get(pos).isAir() || !blocks.get(pos.below()).is(BlockTags.DIRT)
+            BlockState here = blocks.get(pos);
+            boolean free = flower != null
+                    && (here.isAir() || SeasonalFlowers.isThinSnow(here) && SeasonalFlowers.pushesThroughSnow(flower));
+            if (!free || !blocks.get(pos.below()).is(BlockTags.DIRT)
                     || (isTall(flower) && !blocks.get(pos.above()).isAir())) {
                 continue; // something else is there now, or no room yet
             }

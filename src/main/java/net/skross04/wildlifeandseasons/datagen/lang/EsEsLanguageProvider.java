@@ -26,6 +26,10 @@ public class EsEsLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.THERMOMETER, "Termómetro");
         add(Instruments.THERMOMETER_TOOLTIP, "Clic derecho para leer la temperatura aquí");
         addBlock(ModBlocks.RAIN_GAUGE, "Pluviómetro");
+        addBlock(ModBlocks.SNOWDROP, "Campanilla de invierno");
+        addBlock(ModBlocks.CROCUS, "Azafrán de primavera");
+        addBlock(ModBlocks.POTTED_SNOWDROP, "Campanilla de invierno en maceta");
+        addBlock(ModBlocks.POTTED_CROCUS, "Azafrán de primavera en maceta");
         add(Instruments.THERMOMETER_READING, "Termómetro: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Pluviómetro: lleno al %1$s%% · %2$s%% de lluvia esta estación");
         add(CompatTranslations.JEI_CALENDAR, "Clic derecho para ver la fecha y la estación de hoy. En selvas y sabanas también indica si es la estación lluviosa o la seca.");

@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#wildlifeandseasons:has_snowdrops",
+  "features": "wildlifeandseasons:snowdrop_patch",
+  "step": "vegetal_decoration"
+}

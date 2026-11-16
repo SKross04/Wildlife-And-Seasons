@@ -1,7 +1,11 @@
 {
+  "block.wildlifeandseasons.crocus": "Krokus",
   "block.wildlifeandseasons.dormant_flower": "Slapende bloem",
   "block.wildlifeandseasons.icicle": "IJspegel",
+  "block.wildlifeandseasons.potted_crocus": "Krokus in pot",
+  "block.wildlifeandseasons.potted_snowdrop": "Sneeuwklokje in pot",
   "block.wildlifeandseasons.rain_gauge": "Regenmeter",
+  "block.wildlifeandseasons.snowdrop": "Sneeuwklokje",
   "climate_zone.wildlifeandseasons.arid": "Droge zone",
   "climate_zone.wildlifeandseasons.cold": "Koude zone",
   "climate_zone.wildlifeandseasons.no_seasons": "Geen seizoenen",

@@ -26,6 +26,10 @@ public class DeDeLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.THERMOMETER, "Thermometer");
         add(Instruments.THERMOMETER_TOOLTIP, "Rechtsklick, um die Temperatur hier abzulesen");
         addBlock(ModBlocks.RAIN_GAUGE, "Regenmesser");
+        addBlock(ModBlocks.SNOWDROP, "Schneeglöckchen");
+        addBlock(ModBlocks.CROCUS, "Krokus");
+        addBlock(ModBlocks.POTTED_SNOWDROP, "Eingetopftes Schneeglöckchen");
+        addBlock(ModBlocks.POTTED_CROCUS, "Eingetopfter Krokus");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regenmesser: %1$s%% voll · %2$s%% Niederschlag in dieser Jahreszeit");
         add(CompatTranslations.JEI_CALENDAR, "Rechtsklick zeigt das heutige Datum und die Jahreszeit. In Dschungeln und Savannen zeigt er auch, ob Regenzeit oder Trockenzeit ist.");

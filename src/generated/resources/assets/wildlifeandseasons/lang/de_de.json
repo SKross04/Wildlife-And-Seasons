@@ -1,7 +1,11 @@
 {
+  "block.wildlifeandseasons.crocus": "Krokus",
   "block.wildlifeandseasons.dormant_flower": "Ruhende Blume",
   "block.wildlifeandseasons.icicle": "Eiszapfen",
+  "block.wildlifeandseasons.potted_crocus": "Eingetopfter Krokus",
+  "block.wildlifeandseasons.potted_snowdrop": "Eingetopftes Schneeglöckchen",
   "block.wildlifeandseasons.rain_gauge": "Regenmesser",
+  "block.wildlifeandseasons.snowdrop": "Schneeglöckchen",
   "climate_zone.wildlifeandseasons.arid": "Trockenzone",
   "climate_zone.wildlifeandseasons.cold": "Kalte Zone",
   "climate_zone.wildlifeandseasons.no_seasons": "Keine Jahreszeiten",

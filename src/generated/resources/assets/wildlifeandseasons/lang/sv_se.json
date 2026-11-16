@@ -1,7 +1,11 @@
 {
+  "block.wildlifeandseasons.crocus": "Krokus",
   "block.wildlifeandseasons.dormant_flower": "Vilande blomma",
   "block.wildlifeandseasons.icicle": "Istapp",
+  "block.wildlifeandseasons.potted_crocus": "Krukad krokus",
+  "block.wildlifeandseasons.potted_snowdrop": "Krukad snödroppe",
   "block.wildlifeandseasons.rain_gauge": "Regnmätare",
+  "block.wildlifeandseasons.snowdrop": "Snödroppe",
   "climate_zone.wildlifeandseasons.arid": "Torr zon",
   "climate_zone.wildlifeandseasons.cold": "Kall zon",
   "climate_zone.wildlifeandseasons.no_seasons": "Inga årstider",

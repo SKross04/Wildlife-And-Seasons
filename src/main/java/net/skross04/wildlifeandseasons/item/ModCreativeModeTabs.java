@@ -25,6 +25,8 @@ public class ModCreativeModeTabs {
                         output.accept(ModItems.THERMOMETER.get());
                         output.accept(ModItems.RAIN_GAUGE.get());
                         output.accept(ModItems.ICICLE.get());
+                        output.accept(ModItems.SNOWDROP.get());
+                        output.accept(ModItems.CROCUS.get());
                     })
                     .build());
 

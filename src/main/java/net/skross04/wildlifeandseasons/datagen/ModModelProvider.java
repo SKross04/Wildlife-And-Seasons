@@ -29,6 +29,11 @@ public class ModModelProvider extends ModelProvider {
         blockModels.createCrossBlock(ModBlocks.DORMANT_FLOWER.get(), BlockModelGenerators.PlantType.NOT_TINTED);
         // The icicle item is a flat sprite of the same texture (like saplings and flowers).
         blockModels.createCrossBlockWithDefaultItem(ModBlocks.ICICLE.get(), BlockModelGenerators.PlantType.NOT_TINTED);
+        // Flowers: cross model, flat item sprite, and the potted version.
+        blockModels.createPlantWithDefaultItem(ModBlocks.SNOWDROP.get(), ModBlocks.POTTED_SNOWDROP.get(),
+                BlockModelGenerators.PlantType.NOT_TINTED);
+        blockModels.createPlantWithDefaultItem(ModBlocks.CROCUS.get(), ModBlocks.POTTED_CROCUS.get(),
+                BlockModelGenerators.PlantType.NOT_TINTED);
 
         // The rain gauge has hand-made 3D models (models/block/rain_gauge_*.json in src/main/resources):
         // one per water level, so you see the water rise behind the glass. The item shows the empty one.

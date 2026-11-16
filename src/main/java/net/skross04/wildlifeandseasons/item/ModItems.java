@@ -18,6 +18,8 @@ public class ModItems {
     // Block items: the item you hold and place. Its name comes from the block's translation.
     public static final DeferredItem<BlockItem> ICICLE = ITEMS.registerSimpleBlockItem(ModBlocks.ICICLE);
     public static final DeferredItem<BlockItem> RAIN_GAUGE = ITEMS.registerSimpleBlockItem(ModBlocks.RAIN_GAUGE);
+    public static final DeferredItem<BlockItem> SNOWDROP = ITEMS.registerSimpleBlockItem(ModBlocks.SNOWDROP);
+    public static final DeferredItem<BlockItem> CROCUS = ITEMS.registerSimpleBlockItem(ModBlocks.CROCUS);
 
     public static final DeferredItem<ThermometerItem> THERMOMETER = ITEMS.registerItem("thermometer",
             ThermometerItem::new, properties -> properties.stacksTo(1));

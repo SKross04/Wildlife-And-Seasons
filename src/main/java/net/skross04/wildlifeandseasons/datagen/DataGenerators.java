@@ -6,6 +6,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.data.event.GatherDataRegistryEntriesEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import net.minecraft.core.registries.Registries;
 import net.skross04.wildlifeandseasons.WildlifeAndSeasons;
 import net.skross04.wildlifeandseasons.datagen.lang.DeDeLanguageProvider;
 import net.skross04.wildlifeandseasons.datagen.lang.EnUsLanguageProvider;
@@ -40,5 +42,9 @@ public class DataGenerators {
     public static void gatherRegistryEntries(GatherDataRegistryEntriesEvent event) {
         event.recipe(ModRecipeProvider::new);
         event.lootTable(new LootTableProvider.SubProviderEntry(ModBlockLootProvider::new, LootContextParamSets.BLOCK));
+        // World generation (snowdrop and crocus patches): features, where they're placed, and which biomes get them.
+        event.add(Registries.FEATURE, ModWorldgen::bootstrapFeatures)
+                .add(Registries.PLACED_FEATURE, ModWorldgen::bootstrapPlacedFeatures)
+                .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers);
     }
 }

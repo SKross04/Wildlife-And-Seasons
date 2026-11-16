@@ -26,6 +26,10 @@ public class EnUsLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.THERMOMETER, "Thermometer");
         add(Instruments.THERMOMETER_TOOLTIP, "Right-click to read the temperature here");
         addBlock(ModBlocks.RAIN_GAUGE, "Rain Gauge");
+        addBlock(ModBlocks.SNOWDROP, "Snowdrop");
+        addBlock(ModBlocks.CROCUS, "Crocus");
+        addBlock(ModBlocks.POTTED_SNOWDROP, "Potted Snowdrop");
+        addBlock(ModBlocks.POTTED_CROCUS, "Potted Crocus");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Rain gauge: %1$s%% full · %2$s%% rainfall this season");
         add(CompatTranslations.JEI_CALENDAR, "Right-click to read today's date and season. In jungles and savannas it also tells you whether it's the wet or the dry season.");

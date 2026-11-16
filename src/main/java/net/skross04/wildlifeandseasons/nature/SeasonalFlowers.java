@@ -5,6 +5,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -65,18 +67,16 @@ public final class SeasonalFlowers {
         boolean dormant = state.is(ModBlocks.DORMANT_FLOWER.get());
         LevelChunk chunk = level.getChunkAt(pos);
         ChunkFlowers memory = chunk.getExistingDataOrNull(ModAttachments.CHUNK_FLOWERS.get());
-        boolean wiltedHere = state.isAir() && memory != null && memory.hasWilted(pos);
+        boolean wiltedHere = (state.isAir() || isThinSnow(state)) && memory != null && memory.hasWilted(pos);
         if (!flower && !dormant && !wiltedHere) {
             return; // nothing flowery here: the usual case, so stop as early as possible
         }
 
         double yearPosition = SeasonSavedData.get(level.getServer()).calendar().yearPosition(SeasonDate.DEFAULT_YEAR_LENGTH);
         ClimateZone zone = BiomeZones.of(level.getBiome(pos).value()).zone();
-        boolean bloomTime = FlowerRules.isBloomTime(zone, yearPosition);
-        boolean tallBloomTime = FlowerRules.isTallBloomTime(zone, yearPosition);
 
         if (flower) {
-            if ((isTall(state) ? tallBloomTime : bloomTime) || random.nextDouble() >= wiltChance) {
+            if (bloomsNow(state, zone, yearPosition) || random.nextDouble() >= wiltChance) {
                 return;
             }
             ChunkFlowers data = chunk.getData(ModAttachments.CHUNK_FLOWERS.get());
@@ -93,7 +93,7 @@ public final class SeasonalFlowers {
             chunk.markUnsaved();
         } else if (dormant) {
             if (level.getBlockEntity(pos) instanceof DormantFlowerBlockEntity bud
-                    && (isTall(bud.getFlower()) ? tallBloomTime : bloomTime)
+                    && bloomsNow(bud.getFlower(), zone, yearPosition)
                     && random.nextDouble() < bloomChance) {
                 regrow(level, pos, bud.getFlower());
             }
@@ -101,12 +101,34 @@ public final class SeasonalFlowers {
             BlockState wilted = memory.peekWilted(pos);
             boolean comesBack = wilted != null && (SnowCover.canBury(wilted)
                     ? WorldClimate.dailyMeanAt(level, pos) > SnowAndIce.THAW_TEMPERATURE // grass: once it thaws
-                    : (isTall(wilted) ? tallBloomTime : bloomTime));
+                    : bloomsNow(wilted, zone, yearPosition))
+                    && (!state.is(Blocks.SNOW) || pushesThroughSnow(wilted));
             if (comesBack && regrow(level, pos, wilted)) {
                 memory.takeWilted(pos);
                 chunk.markUnsaved();
             }
         }
+    }
+
+    /** True if this flower blooms now: early flowers, tall flowers and the others each have their own time. */
+    public static boolean bloomsNow(BlockState flower, ClimateZone zone, double yearPosition) {
+        if (flower.is(ModTags.Blocks.BLOOMS_LATE_WINTER)) {
+            return FlowerRules.isLateWinterBloomTime(zone, yearPosition);
+        }
+        if (flower.is(ModTags.Blocks.BLOOMS_EARLY_SPRING)) {
+            return FlowerRules.isEarlySpringBloomTime(zone, yearPosition);
+        }
+        return isTall(flower) ? FlowerRules.isTallBloomTime(zone, yearPosition) : FlowerRules.isBloomTime(zone, yearPosition);
+    }
+
+    /** Early flowers come up through a thin layer of snow (real snowdrops and crocuses often do). */
+    public static boolean pushesThroughSnow(BlockState flower) {
+        return flower.is(ModTags.Blocks.BLOOMS_LATE_WINTER) || flower.is(ModTags.Blocks.BLOOMS_EARLY_SPRING);
+    }
+
+    /** A snow layer of 1 or 2 (early flowers replace it when they come up). */
+    public static boolean isThinSnow(BlockState state) {
+        return state.is(Blocks.SNOW) && state.getValue(SnowLayerBlock.LAYERS) <= 2;
     }
 
     /** Puts a flower back (both halves for a tall one). False when it doesn't fit or can't stand here (yet). */

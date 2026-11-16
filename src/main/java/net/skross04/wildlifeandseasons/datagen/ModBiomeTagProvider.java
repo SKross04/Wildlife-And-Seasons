@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.BiomeTagsProvider;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.world.level.biome.Biomes;
 import net.neoforged.neoforge.common.Tags;
 import net.skross04.wildlifeandseasons.WildlifeAndSeasons;
@@ -50,6 +51,16 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
 
         tag(ModTags.Biomes.HAS_LEAF_LITTER)
                 .addTag(Tags.Biomes.IS_FOREST);
+
+        // Snowdrops: woods (also by streams); crocuses: meadows and grassland (alpine meadows after the snow melts).
+        tag(ModTags.Biomes.HAS_SNOWDROPS)
+                .addTag(BiomeTags.IS_FOREST);
+        tag(ModTags.Biomes.HAS_CROCUSES)
+                .add(Biomes.MEADOW)
+                .add(Biomes.PLAINS)
+                .add(Biomes.SUNFLOWER_PLAINS)
+                .add(Biomes.FLOWER_FOREST)
+                .add(Biomes.CHERRY_GROVE);
 
         tag(ModTags.Biomes.HAS_AUTUMN_MUSHROOMS)
                 .addTag(Tags.Biomes.IS_FOREST)

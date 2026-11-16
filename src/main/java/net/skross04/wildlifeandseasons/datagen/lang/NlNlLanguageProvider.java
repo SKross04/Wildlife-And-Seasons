@@ -26,6 +26,10 @@ public class NlNlLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.THERMOMETER, "Thermometer");
         add(Instruments.THERMOMETER_TOOLTIP, "Rechtsklik om hier de temperatuur af te lezen");
         addBlock(ModBlocks.RAIN_GAUGE, "Regenmeter");
+        addBlock(ModBlocks.SNOWDROP, "Sneeuwklokje");
+        addBlock(ModBlocks.CROCUS, "Krokus");
+        addBlock(ModBlocks.POTTED_SNOWDROP, "Sneeuwklokje in pot");
+        addBlock(ModBlocks.POTTED_CROCUS, "Krokus in pot");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regenmeter: %1$s%% vol · %2$s%% neerslag dit seizoen");
         add(CompatTranslations.JEI_CALENDAR, "Rechtsklik om de datum en het seizoen van vandaag te lezen. In jungles en savannes zie je ook of het regenseizoen of het droge seizoen is.");

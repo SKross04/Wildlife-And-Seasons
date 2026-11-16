@@ -7,6 +7,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.skross04.wildlifeandseasons.WildlifeAndSeasons;
@@ -38,6 +39,18 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('S', Items.STICK)
                 .unlockedBy("has_redstone", has(Items.REDSTONE))
                 .save(output, recipeKey("thermometer"));
+
+        // Dyes from the early flowers, like vanilla flowers: white from snowdrops, purple from crocuses.
+        shapeless(RecipeCategory.MISC, Items.DYE.pick(DyeColor.WHITE))
+                .requires(ModItems.SNOWDROP.get())
+                .group("white_dye")
+                .unlockedBy("has_snowdrop", has(ModItems.SNOWDROP.get()))
+                .save(output, recipeKey("white_dye_from_snowdrop"));
+        shapeless(RecipeCategory.MISC, Items.DYE.pick(DyeColor.PURPLE))
+                .requires(ModItems.CROCUS.get())
+                .group("purple_dye")
+                .unlockedBy("has_crocus", has(ModItems.CROCUS.get()))
+                .save(output, recipeKey("purple_dye_from_crocus"));
 
         // An open glass cup on a stick.
         shaped(RecipeCategory.REDSTONE, ModItems.RAIN_GAUGE.get())

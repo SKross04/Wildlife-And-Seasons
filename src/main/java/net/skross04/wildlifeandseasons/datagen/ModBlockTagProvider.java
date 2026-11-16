@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.skross04.wildlifeandseasons.WildlifeAndSeasons;
+import net.skross04.wildlifeandseasons.block.ModBlocks;
 import net.skross04.wildlifeandseasons.ecology.season.Season;
 import net.skross04.wildlifeandseasons.util.ModTags;
 
@@ -78,6 +79,13 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         tallFlowers.add(TagEntry.optionalTag(Identifier.fromNamespaceAndPath("c", "flowers/tall")));
         // Not seasonal: the wither rose (not a wild flower), eyeblossoms (they open and close every night already)
         // and the torchflower and pitcher plant (ancient plants grown from sniffer seeds).
+        // Our early flowers: vanilla small flowers (bees, flower pots, seasonal flower rules) with their own bloom time.
+        tag(BlockTags.SMALL_FLOWERS).add(TagEntry.element(ModBlocks.SNOWDROP.getId())).add(TagEntry.element(ModBlocks.CROCUS.getId()));
+        tag(BlockTags.FLOWER_POTS).add(TagEntry.element(ModBlocks.POTTED_SNOWDROP.getId()))
+                .add(TagEntry.element(ModBlocks.POTTED_CROCUS.getId()));
+        tag(ModTags.Blocks.BLOOMS_LATE_WINTER).add(TagEntry.element(ModBlocks.SNOWDROP.getId()));
+        tag(ModTags.Blocks.BLOOMS_EARLY_SPRING).add(TagEntry.element(ModBlocks.CROCUS.getId()));
+
         var notSeasonal = tag(ModTags.Blocks.NOT_SEASONAL_FLOWERS);
         for (Block block : new Block[]{Blocks.WITHER_ROSE, Blocks.OPEN_EYEBLOSSOM, Blocks.CLOSED_EYEBLOSSOM, Blocks.TORCHFLOWER,
                 Blocks.PITCHER_PLANT}) {

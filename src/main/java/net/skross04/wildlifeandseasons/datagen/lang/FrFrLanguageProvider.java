@@ -26,6 +26,10 @@ public class FrFrLanguageProvider extends ModLanguageProvider {
         addItem(ModItems.THERMOMETER, "Thermomètre");
         add(Instruments.THERMOMETER_TOOLTIP, "Clic droit pour lire la température ici");
         addBlock(ModBlocks.RAIN_GAUGE, "Pluviomètre");
+        addBlock(ModBlocks.SNOWDROP, "Perce-neige");
+        addBlock(ModBlocks.CROCUS, "Crocus");
+        addBlock(ModBlocks.POTTED_SNOWDROP, "Perce-neige en pot");
+        addBlock(ModBlocks.POTTED_CROCUS, "Crocus en pot");
         add(Instruments.THERMOMETER_READING, "Thermomètre : %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Pluviomètre : rempli à %1$s %% · %2$s %% de précipitations cette saison");
         add(CompatTranslations.JEI_CALENDAR, "Clic droit pour lire la date et la saison du jour. Dans les jungles et les savanes, il indique aussi s'il s'agit de la saison des pluies ou de la saison sèche.");

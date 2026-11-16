@@ -1,7 +1,11 @@
 {
+  "block.wildlifeandseasons.crocus": "Crocus",
   "block.wildlifeandseasons.dormant_flower": "Fleur en dormance",
   "block.wildlifeandseasons.icicle": "Stalactite de glace",
+  "block.wildlifeandseasons.potted_crocus": "Crocus en pot",
+  "block.wildlifeandseasons.potted_snowdrop": "Perce-neige en pot",
   "block.wildlifeandseasons.rain_gauge": "Pluviomètre",
+  "block.wildlifeandseasons.snowdrop": "Perce-neige",
   "climate_zone.wildlifeandseasons.arid": "Zone aride",
   "climate_zone.wildlifeandseasons.cold": "Zone froide",
   "climate_zone.wildlifeandseasons.no_seasons": "Sans saisons",
