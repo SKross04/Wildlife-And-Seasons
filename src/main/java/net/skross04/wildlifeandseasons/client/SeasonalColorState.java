@@ -64,6 +64,21 @@ public final class SeasonalColorState {
         return tint == null ? 0 : tint.snow();
     }
 
+    public static int azalea(Biome biome) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        return tint == null ? SeasonalColors.azaleaLeaves() : SeasonalColors.azalea(tint);
+    }
+
+    public static int azaleaFlowers(Biome biome) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        return tint == null ? SeasonalColors.azaleaFlowerColor() : SeasonalColors.azaleaFlowers(tint);
+    }
+
+    public static int paleOak(Biome biome) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        return tint == null ? SeasonalColors.paleOakLeaves() : SeasonalColors.paleOak(tint);
+    }
+
     /** Spruce needles: green all year, snowy in winter. */
     public static int evergreen(Biome biome, int base) {
         SeasonalColors.Tint tint = tintFor(biome);

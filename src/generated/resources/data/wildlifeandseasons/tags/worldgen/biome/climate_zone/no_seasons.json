@@ -2,6 +2,7 @@
   "values": [
     "#c:is_nether",
     "#c:is_end",
-    "#c:is_void"
+    "#c:is_void",
+    "#c:is_underground"
   ]
 }

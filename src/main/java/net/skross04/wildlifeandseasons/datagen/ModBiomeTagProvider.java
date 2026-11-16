@@ -24,7 +24,9 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider lookupProvider) {
         tag(ModTags.Biomes.climateZone(ClimateZone.NO_SEASONS))
-                .addTags(Tags.Biomes.IS_NETHER, Tags.Biomes.IS_END, Tags.Biomes.IS_VOID);
+                .addTags(Tags.Biomes.IS_NETHER, Tags.Biomes.IS_END, Tags.Biomes.IS_VOID,
+                        // caves (lush caves, dripstone caves, deep dark): no seasons underground
+                        Tags.Biomes.IS_UNDERGROUND);
 
         // Empty on purpose: the file exists so modpack makers can see it and add biomes.
         tag(ModTags.Biomes.climateZone(ClimateZone.TEMPERATE));

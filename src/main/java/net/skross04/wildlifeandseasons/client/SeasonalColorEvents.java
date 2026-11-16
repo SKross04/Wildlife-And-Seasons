@@ -56,6 +56,19 @@ public class SeasonalColorEvents {
     public static final ColorResolver CHERRY_RESOLVER =
             (biome, x, z) -> SeasonalColorState.cherry(biome, Mth.floor(x), Mth.floor(z));
 
+    /** Mangrove leaves: evergreen (tropical), snowy if it ever gets that cold. */
+    public static final ColorResolver MANGROVE_RESOLVER =
+            (biome, x, z) -> SeasonalColorState.evergreen(biome, FoliageColor.FOLIAGE_MANGROVE);
+
+    /** Azalea leaves (own grey texture): evergreen, snowy in winter. */
+    public static final ColorResolver AZALEA_RESOLVER = (biome, x, z) -> SeasonalColorState.azalea(biome);
+
+    /** The flowers of flowering azalea (second layer): pink in spring, leaf-coloured the rest of the year. */
+    public static final ColorResolver AZALEA_FLOWER_RESOLVER = (biome, x, z) -> SeasonalColorState.azaleaFlowers(biome);
+
+    /** Pale oak leaves (own grey texture): pale all year, snowy in winter. */
+    public static final ColorResolver PALE_OAK_RESOLVER = (biome, x, z) -> SeasonalColorState.paleOak(biome);
+
     /** Custom colour resolvers must be registered, so Minecraft gives them a colour cache. */
     @SubscribeEvent
     public static void registerColorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
@@ -63,6 +76,10 @@ public class SeasonalColorEvents {
         event.register(BIRCH_RESOLVER);
         event.register(EVERGREEN_RESOLVER);
         event.register(CHERRY_RESOLVER);
+        event.register(MANGROVE_RESOLVER);
+        event.register(AZALEA_RESOLVER);
+        event.register(AZALEA_FLOWER_RESOLVER);
+        event.register(PALE_OAK_RESOLVER);
     }
 
     /**
@@ -78,6 +95,13 @@ public class SeasonalColorEvents {
         // Cherry leaves get our own bright grey texture (models/block/cherry_leaves.json override), so this colour
         // decides pink or green.
         event.register(List.of(seasonalTint(SeasonalColors.cherryBlossom(), CHERRY_RESOLVER)), Blocks.CHERRY_LEAVES);
+        event.register(List.of(seasonalTint(FoliageColor.FOLIAGE_MANGROVE, MANGROVE_RESOLVER)), Blocks.MANGROVE_LEAVES);
+        // Azalea and pale oak also get our own grey textures (assets/minecraft model overrides).
+        event.register(List.of(seasonalTint(SeasonalColors.azaleaLeaves(), AZALEA_RESOLVER)), Blocks.AZALEA_LEAVES);
+        // Flowering azalea has two layers: tint 0 = leaves, tint 1 = flowers.
+        event.register(List.of(seasonalTint(SeasonalColors.azaleaLeaves(), AZALEA_RESOLVER),
+                seasonalTint(SeasonalColors.azaleaFlowerColor(), AZALEA_FLOWER_RESOLVER)), Blocks.FLOWERING_AZALEA_LEAVES);
+        event.register(List.of(seasonalTint(SeasonalColors.paleOakLeaves(), PALE_OAK_RESOLVER)), Blocks.PALE_OAK_LEAVES);
     }
 
     /** In the inventory: the normal colour. In the world: the colour from our resolver. */

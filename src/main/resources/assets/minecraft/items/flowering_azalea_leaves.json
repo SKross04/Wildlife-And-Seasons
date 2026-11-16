@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "minecraft:block/flowering_azalea_leaves",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -8741828
+      },
+      {
+        "type": "minecraft:constant",
+        "value": -685341
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "minecraft:block/azalea_leaves",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -8741828
+      }
+    ]
+  }
+}

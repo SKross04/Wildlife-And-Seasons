@@ -68,7 +68,7 @@ jobs:
           echo "Classes jar: $CLASSES"
           # NeoForge's own classes (events, data providers) are in other jars: add them to the classpath
           CLASSPATH_ALL="$CLASSES"
-          for jar in $(find build .gradle ~/.gradle -name '*.jar' -path '*neoforge*' 2>/dev/null); do
+          for jar in $(find build .gradle ~/.gradle -name '*.jar' \( -path '*neoforge*' -o -path '*mezz.jei*' -o -path '*maven.modrinth*' \) 2>/dev/null); do
             CLASSPATH_ALL="$CLASSPATH_ALL:$jar"
           done
           for f in $FILES; do

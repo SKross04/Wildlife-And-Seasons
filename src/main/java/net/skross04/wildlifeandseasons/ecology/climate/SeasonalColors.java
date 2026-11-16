@@ -35,6 +35,17 @@ public final class SeasonalColors {
     private static final double CHERRY_TEXTURE_COMPENSATION = 0.66;
     private static final double CHERRY_BLOSSOM_STRENGTH = 1.6;
 
+    /**
+     * Azalea and pale oak leaves have untinted (or too dark) vanilla textures, so they use our own bright grey
+     * textures; these colours paint them back to vanilla's look. The snow colours give the same snowy look as on
+     * the other trees (whose grey texture is darker).
+     */
+    private static final int AZALEA_LEAVES = 0x7A9C3C, AZALEA_SNOW = 0xB6BABC;
+    private static final int AZALEA_FLOWERS = 0xF58AE3;
+    /** The flower layer's texture is brighter than the leaf layer's: this darkens a leaf colour to match it. */
+    private static final double AZALEA_FLOWER_TO_LEAF = 0.84;
+    private static final int PALE_OAK_LEAVES = 0x979D94, PALE_OAK_SNOW = 0xAEB1B3;
+
     /** Snow lying on leaves. */
     private static final int SNOW = 0xEEF3F6;
     private static final double SNOW_ON_LEAVES_AMOUNT = 0.85;
@@ -159,6 +170,38 @@ public final class SeasonalColors {
     /** Cherry pink, for the inventory and when seasonal colours are switched off. */
     public static int cherryBlossom() {
         return CHERRY_PINK;
+    }
+
+    /** Azalea leaves: evergreen, snowy in winter. */
+    public static int azalea(Tint t) {
+        return blend(AZALEA_LEAVES, AZALEA_SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
+    }
+
+    /**
+     * The flower layer of flowering azalea: pink flowers in spring; the rest of the year the flowers take the colour
+     * of the leaves around them, so they disappear into the bush.
+     */
+    public static int azaleaFlowers(Tint t) {
+        int leafColoured = darken(azalea(t), AZALEA_FLOWER_TO_LEAF);
+        return blend(leafColoured, AZALEA_FLOWERS, Math.min(1.0, CHERRY_BLOSSOM_STRENGTH * t.spring()) * (1 - t.snow()));
+    }
+
+    /** Pale oak leaves: always pale, snowy in winter. */
+    public static int paleOak(Tint t) {
+        return blend(PALE_OAK_LEAVES, PALE_OAK_SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
+    }
+
+    /** Colours for the inventory and for places without seasons. */
+    public static int azaleaLeaves() {
+        return AZALEA_LEAVES;
+    }
+
+    public static int azaleaFlowerColor() {
+        return AZALEA_FLOWERS;
+    }
+
+    public static int paleOakLeaves() {
+        return PALE_OAK_LEAVES;
     }
 
     /** Evergreen needles (spruce): stay green all year, but get snowy in winter. */
