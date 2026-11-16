@@ -18,6 +18,11 @@ public class ClientConfig {
                     "When the colours change (about once a day in spring and autumn), the chunks around you are redrawn.")
             .define("seasonalColors", true);
 
+    public static final ModConfigSpec.BooleanValue SEASONAL_POPLARS = BUILDER
+            .comment("Poplar trees and the Dappled Forest's grass follow the seasons: green in spring and summer,",
+                    "red, orange or yellow in autumn, snowy in winter. Off = Mojang's look (autumn colours all year).")
+            .define("seasonalPoplars", true);
+
     public static final ModConfigSpec.BooleanValue SEASONAL_FALLING_LEAVES = BUILDER
             .comment("Many falling leaves in autumn and few the rest of the year (off = vanilla amount all year).")
             .define("seasonalFallingLeaves", true);
@@ -42,6 +47,10 @@ public class ClientConfig {
 
     public static boolean seasonalColors() {
         return SPEC.isLoaded() ? SEASONAL_COLORS.get() : SEASONAL_COLORS.getDefault();
+    }
+
+    public static boolean seasonalPoplars() {
+        return SPEC.isLoaded() ? SEASONAL_POPLARS.get() : SEASONAL_POPLARS.getDefault();
     }
 
     public static boolean seasonalFallingLeaves() {

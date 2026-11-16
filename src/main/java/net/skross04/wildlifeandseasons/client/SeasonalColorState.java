@@ -1,6 +1,9 @@
 package net.skross04.wildlifeandseasons.client;
 
 import java.util.OptionalDouble;
+import java.util.OptionalInt;
+
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -20,19 +23,72 @@ import net.skross04.wildlifeandseasons.util.ModTags;
 public final class SeasonalColorState {
     /** Current tint per climate zone (index = zone ordinal); null = no seasonal colours (off, or season unknown). */
     private static volatile SeasonalColors.Tint[] tints;
+    /** Seasonal poplars and Dappled Forest grass (client setting {@code seasonalPoplars}). */
+    private static volatile boolean poplars = true;
 
     private SeasonalColorState() {
     }
 
     public static int grass(Biome biome, int base) {
         SeasonalColors.Tint tint = tintFor(biome);
-        return tint == null ? base : SeasonalColors.grass(base, tint);
+        if (tint == null) {
+            return base;
+        }
+        if (BiomeZones.of(biome).autumnColored()) {
+            // The biome's own grass colour is its autumn colour: green until autumn (or Mojang's look when switched off).
+            return poplars ? SeasonalColors.autumnBiomeGrass(grassGreen(biome), base, tint) : base;
+        }
+        return SeasonalColors.grass(base, tint);
     }
 
     /** Leaves without a known position (modded leaves using the biome colour): one autumn colour. */
     public static int foliage(Biome biome, int base) {
         SeasonalColors.Tint tint = tintFor(biome);
-        return tint == null ? base : SeasonalColors.foliage(base, tint);
+        if (tint == null) {
+            return base;
+        }
+        if (BiomeZones.of(biome).autumnColored()) {
+            if (!poplars) {
+                return base;
+            }
+            base = ((BiomeAccessor) (Object) biome).wildlifeandseasons$getFoliageColorFromTexture();
+        }
+        return SeasonalColors.foliage(base, tint);
+    }
+
+    /** Poplar leaves: green until autumn, then their own colour (Mojang's colour all year when switched off). */
+    public static int poplar(Biome biome, SeasonalColors.Poplar kind, int x, int z) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        return tint == null || !poplars ? kind.autumnColor() : SeasonalColors.poplar(tint, kind, x, z);
+    }
+
+    /**
+     * The colour for a poplar's falling-leaf particle, or empty to keep Mojang's own red/orange/yellow leaf particle
+     * (while the tree shows its autumn colour, or when seasonal poplars are off).
+     */
+    public static OptionalInt poplarParticleColor(Biome biome, int poplarColor, int x, int z) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        if (tint == null || !poplars || SeasonalColors.poplarInAutumnColor(tint, x, z)) {
+            return OptionalInt.empty();
+        }
+        return OptionalInt.of(SeasonalColors.poplarParticleColor(poplarColor));
+    }
+
+    public static SeasonalColors.@Nullable Poplar poplarKind(BlockState state) {
+        if (state.is(Blocks.RED_POPLAR_LEAVES)) {
+            return SeasonalColors.Poplar.RED;
+        }
+        if (state.is(Blocks.ORANGE_POPLAR_LEAVES)) {
+            return SeasonalColors.Poplar.ORANGE;
+        }
+        if (state.is(Blocks.YELLOW_POPLAR_LEAVES)) {
+            return SeasonalColors.Poplar.YELLOW;
+        }
+        return null;
+    }
+
+    private static int grassGreen(Biome biome) {
+        return ((BiomeAccessor) (Object) biome).wildlifeandseasons$getGrassColorFromTexture();
     }
 
     /** Vanilla leaves at a position: each patch of trees gets its own autumn colour and timing. */
@@ -120,7 +176,9 @@ public final class SeasonalColorState {
      *
      * @return true if the colours changed enough that the world should be redrawn
      */
-    public static boolean update(OptionalDouble yearPosition, boolean enabled) {
+    public static boolean update(OptionalDouble yearPosition, boolean enabled, boolean seasonalPoplars) {
+        boolean poplarsChanged = poplars != seasonalPoplars;
+        poplars = seasonalPoplars;
         SeasonalColors.Tint[] next = null;
         if (enabled && yearPosition.isPresent()) {
             ClimateZone[] zones = ClimateZone.values();
@@ -131,7 +189,7 @@ public final class SeasonalColorState {
         }
         SeasonalColors.Tint[] previous = tints;
         if (!changed(previous, next)) {
-            return false;
+            return poplarsChanged && next != null;
         }
         tints = next;
         return true;
@@ -147,8 +205,14 @@ public final class SeasonalColorState {
         return current == null ? null : current[BiomeZones.of(biome).zone().ordinal()];
     }
 
-    /** The biome's leaf colour before our seasonal change (same logic as vanilla's getFoliageColor). */
+    /**
+     * The biome's leaf colour before our seasonal change (same logic as vanilla's getFoliageColor). In a biome whose
+     * own leaf colour is an autumn colour (Dappled Forest), the normal green instead, so autumn comes with the season.
+     */
     private static int vanillaFoliage(Biome biome) {
+        if (poplars && BiomeZones.of(biome).autumnColored()) {
+            return ((BiomeAccessor) (Object) biome).wildlifeandseasons$getFoliageColorFromTexture();
+        }
         return biome.getModifiedSpecialEffects().foliageColorOverride()
                 .orElseGet(() -> ((BiomeAccessor) (Object) biome).wildlifeandseasons$getFoliageColorFromTexture());
     }

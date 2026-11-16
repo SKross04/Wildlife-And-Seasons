@@ -70,6 +70,12 @@ public class ModTags {
             }
         }
 
+        /**
+         * Biomes whose own grass and leaf colours are autumn colours (the Dappled Forest). With seasonal colours their
+         * grass and leaves are green in spring and summer and only take the biome's own colours in autumn.
+         */
+        public static final TagKey<Biome> AUTUMN_COLORED = createTag("autumn_colored");
+
         /** Biomes where leaf litter gathers in autumn (forests by default). */
         public static final TagKey<Biome> HAS_LEAF_LITTER = createTag("has_leaf_litter");
 

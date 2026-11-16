@@ -49,7 +49,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
 
         // Leaves that drop in autumn. Evergreens (spruce) and tropical leaves aren't in it.
         var deciduous = tag(ModTags.Blocks.DROPS_LEAF_LITTER);
-        for (Block leaves : new Block[]{Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.BIRCH_LEAVES}) {
+        for (Block leaves : new Block[]{Blocks.OAK_LEAVES, Blocks.DARK_OAK_LEAVES, Blocks.BIRCH_LEAVES,
+                Blocks.RED_POPLAR_LEAVES, Blocks.ORANGE_POPLAR_LEAVES, Blocks.YELLOW_POPLAR_LEAVES}) {
             deciduous.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(leaves)));
         }
 
@@ -60,7 +61,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 .add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(Blocks.WILDFLOWERS)));
         // Plants that snow covers in winter (and that come back when it melts). Bush is optional: added in 1.21.5.
         var buriedBySnow = tag(ModTags.Blocks.BURIED_BY_SNOW);
-        for (Block block : new Block[]{Blocks.SHORT_GRASS, Blocks.TALL_GRASS, Blocks.FERN, Blocks.LARGE_FERN}) {
+        // The Dappled Forest's red shrub stays red all year, but snow covers it like the other low plants.
+        for (Block block : new Block[]{Blocks.SHORT_GRASS, Blocks.TALL_GRASS, Blocks.FERN, Blocks.LARGE_FERN, Blocks.RED_SHRUB}) {
             buriedBySnow.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(block)));
         }
         buriedBySnow.add(TagEntry.optionalElement(Identifier.fromNamespaceAndPath("minecraft", "bush")));

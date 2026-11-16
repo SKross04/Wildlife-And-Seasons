@@ -73,6 +73,14 @@ public class SeasonalColorEvents {
     /** Pale oak leaves (own grey texture): pale all year, snowy in winter. */
     public static final ColorResolver PALE_OAK_RESOLVER = (biome, x, z) -> SeasonalColorState.paleOak(biome);
 
+    /** Poplar leaves (own grey texture): green until autumn, then their own red, orange or yellow; snowy in winter. */
+    public static final ColorResolver RED_POPLAR_RESOLVER =
+            (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.RED, Mth.floor(x), Mth.floor(z));
+    public static final ColorResolver ORANGE_POPLAR_RESOLVER =
+            (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.ORANGE, Mth.floor(x), Mth.floor(z));
+    public static final ColorResolver YELLOW_POPLAR_RESOLVER =
+            (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.YELLOW, Mth.floor(x), Mth.floor(z));
+
     /** Custom colour resolvers must be registered, so Minecraft gives them a colour cache. */
     @SubscribeEvent
     public static void registerColorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
@@ -85,6 +93,9 @@ public class SeasonalColorEvents {
         event.register(AZALEA_RESOLVER);
         event.register(AZALEA_FLOWER_RESOLVER);
         event.register(PALE_OAK_RESOLVER);
+        event.register(RED_POPLAR_RESOLVER);
+        event.register(ORANGE_POPLAR_RESOLVER);
+        event.register(YELLOW_POPLAR_RESOLVER);
     }
 
     /**
@@ -108,6 +119,12 @@ public class SeasonalColorEvents {
         event.register(List.of(seasonalTint(SeasonalColors.azaleaLeaves(), AZALEA_RESOLVER),
                 seasonalTint(SeasonalColors.azaleaFlowerColor(), AZALEA_FLOWER_RESOLVER)), Blocks.FLOWERING_AZALEA_LEAVES);
         event.register(List.of(seasonalTint(SeasonalColors.paleOakLeaves(), PALE_OAK_RESOLVER)), Blocks.PALE_OAK_LEAVES);
+        // Poplar leaves (Dappled Forest) get our own grey texture too; in the inventory they keep Mojang's colour.
+        event.register(List.of(seasonalTint(SeasonalColors.Poplar.RED.autumnColor(), RED_POPLAR_RESOLVER)), Blocks.RED_POPLAR_LEAVES);
+        event.register(List.of(seasonalTint(SeasonalColors.Poplar.ORANGE.autumnColor(), ORANGE_POPLAR_RESOLVER)),
+                Blocks.ORANGE_POPLAR_LEAVES);
+        event.register(List.of(seasonalTint(SeasonalColors.Poplar.YELLOW.autumnColor(), YELLOW_POPLAR_RESOLVER)),
+                Blocks.YELLOW_POPLAR_LEAVES);
     }
 
     /** In the inventory: the normal colour. In the world: the colour from our resolver. */
@@ -136,7 +153,8 @@ public class SeasonalColorEvents {
             return;
         }
         ClimateSnapshot.updateClient(SeasonAccess.clientYearPosition(), ClimateSnapshot.dayPosition(minecraft.level));
-        if (SeasonalColorState.update(SeasonAccess.clientYearPosition(), ClientConfig.seasonalColors())) {
+        if (SeasonalColorState.update(SeasonAccess.clientYearPosition(), ClientConfig.seasonalColors(),
+                ClientConfig.seasonalPoplars())) {
             minecraft.level.clearTintCaches();
             minecraft.levelExtractor.allChanged();
         }

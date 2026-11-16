@@ -14,6 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import net.skross04.wildlifeandseasons.ecology.climate.ClimateZone;
+import net.skross04.wildlifeandseasons.util.ModTags;
 
 /**
  * Remembers the climate details of each biome (zone, vanilla temperature, ocean offset),
@@ -21,8 +22,13 @@ import net.skross04.wildlifeandseasons.ecology.climate.ClimateZone;
  * Thread-safe; cleared when tags reload or a world is left.
  */
 public final class BiomeZones {
-    /** @param zone climate zone; @param biomeTemperature vanilla temperature value; @param extraOffset extra °C (warm/icy oceans) */
-    public record BiomeClimate(ClimateZone zone, double biomeTemperature, double extraOffset) {
+    /**
+     * @param zone             climate zone
+     * @param biomeTemperature vanilla temperature value
+     * @param extraOffset      extra °C (warm/icy oceans)
+     * @param autumnColored    the biome's own grass and leaf colours are autumn colours (tag {@code autumn_colored})
+     */
+    public record BiomeClimate(ClimateZone zone, double biomeTemperature, double extraOffset, boolean autumnColored) {
     }
 
     private static final Map<Biome, BiomeClimate> CACHE = new ConcurrentHashMap<>();
@@ -42,12 +48,14 @@ public final class BiomeZones {
         BiomeClimate climate;
         if (holder != null) {
             ClimateZone zone = WorldClimate.zoneOf(holder);
-            climate = new BiomeClimate(zone, biome.getModifiedClimateSettings().temperature(), WorldClimate.extraOffset(zone, holder));
+            climate = new BiomeClimate(zone, biome.getModifiedClimateSettings().temperature(), WorldClimate.extraOffset(zone, holder),
+                    holder.is(ModTags.Biomes.AUTUMN_COLORED));
             CACHE.put(biome, climate);
         } else {
             // Not in a loaded registry (yet): use the vanilla values, but don't cache the guess.
             Biome.ClimateSettings settings = biome.getModifiedClimateSettings();
-            climate = new BiomeClimate(ClimateZone.fromVanillaClimate(settings.temperature(), settings.downfall()), settings.temperature(), 0.0);
+            climate = new BiomeClimate(ClimateZone.fromVanillaClimate(settings.temperature(), settings.downfall()), settings.temperature(),
+                    0.0, false);
         }
         return climate;
     }

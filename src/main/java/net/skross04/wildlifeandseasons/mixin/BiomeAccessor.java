@@ -13,4 +13,8 @@ import net.minecraft.world.level.biome.Biome;
 public interface BiomeAccessor {
     @Invoker("getFoliageColorFromTexture")
     int wildlifeandseasons$getFoliageColorFromTexture();
+
+    /** The normal grass green for the biome's temperature and rainfall (ignores the biome's own grass colour). */
+    @Invoker("getGrassColorFromTexture")
+    int wildlifeandseasons$getGrassColorFromTexture();
 }

@@ -18,6 +18,9 @@ package net.skross04.wildlifeandseasons.ecology.climate;
  * dry season. Savanna trees are fresh green in the rainy season. Evergreen azaleas turn purple-bronze in the cold
  * months and flower in mid to late spring, after the cherries.
  * <p>
+ * Poplars (Dappled Forest) are green in spring and summer and turn their own red, orange or yellow in autumn.
+ * The Dappled Forest's grass is green too, and only takes the biome's own warm colour in autumn.
+ * <p>
  * Colours are 0xRRGGBB; the alpha of the original colour is kept.
  */
 public final class SeasonalColors {
@@ -99,6 +102,40 @@ public final class SeasonalColors {
     /** The flower layer's texture is brighter than the leaf layer's: this darkens a leaf colour to match it. */
     private static final double AZALEA_FLOWER_TO_LEAF = 0.84;
     private static final int PALE_OAK_LEAVES = 0x979D94, PALE_OAK_SNOW = 0xAEB1B3;
+
+    /**
+     * Poplar leaves use our own bright grey texture (so autumn can be as vivid as Mojang's red, orange and yellow
+     * leaves). It's brighter than vanilla's grey oak leaves, so the other colours are darkened by this much.
+     */
+    private static final double POPLAR_TEXTURE_COMPENSATION = 0.78;
+    /** A poplar's own colour shows a little even in summer. */
+    private static final double POPLAR_OWN_COLOR_HINT = 0.12;
+    private static final int POPLAR_GREEN = darken(0x59AE30, POPLAR_TEXTURE_COMPENSATION);
+    private static final int POPLAR_SNOW = darken(0xEEF3F6, POPLAR_TEXTURE_COMPENSATION);
+
+    /** The three poplar leaves. Their autumn colour paints our grey texture like Mojang's leaves look. */
+    public enum Poplar {
+        RED(0xD13C35), ORANGE(0xFF751F), YELLOW(0xFFB537);
+
+        private final int autumn;
+        private final Tree tree;
+
+        Poplar(int autumn) {
+            this.autumn = autumn;
+            double k = POPLAR_TEXTURE_COMPENSATION;
+            // Real poplars and aspens mostly fall while still coloured (little browning).
+            this.tree = new Tree(darken(0xA8D23E, k), darken(0x3E6B24, k), new int[]{autumn}, darken(0x9C6E3E, k), 0.35,
+                    darken(0x786A5C, k), 0.80, 0.0);
+        }
+
+        /** The leaf's own colour: in autumn, in the inventory, and when seasonal poplars are switched off. */
+        public int autumnColor() {
+            return autumn;
+        }
+    }
+
+    /** How much of the Dappled Forest's own autumn grass colour shows at the peak of autumn. */
+    private static final double AUTUMN_BIOME_GRASS_AMOUNT = 0.90;
 
     /** Mangroves are evergreen, but the forest is less green at the end of the dry season, when most leaves fall. */
     private static final int MANGROVE_DRY = 0x8A8848;
@@ -296,6 +333,58 @@ public final class SeasonalColors {
     /** Cherry pink, for the inventory and when seasonal colours are switched off. */
     public static int cherryBlossom() {
         return CHERRY_PINK;
+    }
+
+    /**
+     * Poplar leaves: green in spring and summer (with a hint of their own colour), their own red, orange or yellow
+     * in autumn, then bare and snowy like the other deciduous trees. Each patch of trees turns at its own time.
+     */
+    public static int poplar(Tint t, Poplar kind, int x, int z) {
+        int base = blend(POPLAR_GREEN, kind.autumn, POPLAR_OWN_COLOR_HINT);
+        int c;
+        if (t.deciduous()) {
+            c = deciduous(base, t, kind.tree, 0, timingOffset(x, z));
+        } else {
+            c = blend(base, darken(SPRING_LEAVES, POPLAR_TEXTURE_COMPENSATION), SPRING_LEAVES_AMOUNT * t.spring());
+            c = blend(c, darken(WINTER_LEAVES, POPLAR_TEXTURE_COMPENSATION), WINTER_LEAVES_AMOUNT * t.winter());
+            c = blend(c, darken(DRY_LEAVES, POPLAR_TEXTURE_COMPENSATION), DRY_LEAVES_AMOUNT * t.dry());
+        }
+        return blend(c, POPLAR_SNOW, SNOW_ON_LEAVES_AMOUNT * t.snow());
+    }
+
+    /** True while poplar leaves here show their autumn colour (then Mojang's own red/orange/yellow leaf particles fit). */
+    public static boolean poplarInAutumnColor(Tint t, int x, int z) {
+        if (!t.deciduous()) {
+            return false;
+        }
+        LeafStage stage = leafStage(t.yearPosition() - timingOffset(x, z));
+        return stage.color() >= 0.5 && stage.bare() < 0.5;
+    }
+
+    /** A poplar leaf colour (made for our bright texture) as a colour for the normal grey falling-leaf particle. */
+    public static int poplarParticleColor(int poplarColor) {
+        return brighten(poplarColor, 1 / POPLAR_TEXTURE_COMPENSATION);
+    }
+
+    /**
+     * Grass in a biome whose own grass colour is an autumn colour (the Dappled Forest): normal green in spring and
+     * summer, the biome's own colour in autumn, faded in winter.
+     *
+     * @param green the normal grass green for the biome's temperature and rainfall
+     * @param own   the biome's own (autumn) grass colour
+     */
+    public static int autumnBiomeGrass(int green, int own, Tint t) {
+        int c = blend(green, SPRING_GRASS, SPRING_GRASS_AMOUNT * t.spring());
+        c = blend(c, own, AUTUMN_BIOME_GRASS_AMOUNT * t.autumn());
+        c = blend(c, WINTER_GRASS, WINTER_GRASS_AMOUNT * t.winter());
+        return blend(c, DRY_GRASS, DRY_GRASS_AMOUNT * t.dry());
+    }
+
+    private static int brighten(int color, double factor) {
+        int r = (int) Math.min(255, Math.round(((color >> 16) & 0xFF) * factor));
+        int g = (int) Math.min(255, Math.round(((color >> 8) & 0xFF) * factor));
+        int b = (int) Math.min(255, Math.round((color & 0xFF) * factor));
+        return (color & 0xFF000000) | (r << 16) | (g << 8) | b;
     }
 
     /** Azalea leaves: evergreen, purple-bronze in the cold months (back to green with the new leaves), snowy in winter. */
