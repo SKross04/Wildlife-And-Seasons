@@ -1,0 +1,32 @@
+{
+  "parent": "wildlifeandseasons:seasons/root",
+  "criteria": {
+    "calendar": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildlifeandseasons:season_calendar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.wildlifeandseasons.know_the_season.description"
+    },
+    "icon": {
+      "id": "wildlifeandseasons:season_calendar"
+    },
+    "title": {
+      "translate": "advancements.wildlifeandseasons.know_the_season.title"
+    }
+  },
+  "requirements": [
+    [
+      "calendar"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

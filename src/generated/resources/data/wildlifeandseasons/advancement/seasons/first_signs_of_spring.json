@@ -1,0 +1,43 @@
+{
+  "parent": "wildlifeandseasons:seasons/root",
+  "criteria": {
+    "crocus": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildlifeandseasons:crocus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "snowdrop": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildlifeandseasons:snowdrop"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.wildlifeandseasons.first_signs_of_spring.description"
+    },
+    "icon": {
+      "id": "wildlifeandseasons:snowdrop"
+    },
+    "title": {
+      "translate": "advancements.wildlifeandseasons.first_signs_of_spring.title"
+    }
+  },
+  "requirements": [
+    [
+      "snowdrop",
+      "crocus"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

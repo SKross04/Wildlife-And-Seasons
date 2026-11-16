@@ -1,6 +1,7 @@
 package net.skross04.wildlifeandseasons.datagen.lang;
 
 import net.minecraft.data.PackOutput;
+import net.skross04.wildlifeandseasons.datagen.ModAdvancements;
 import net.skross04.wildlifeandseasons.climate.ClimateTranslations;
 import net.skross04.wildlifeandseasons.climate.Instruments;
 import net.skross04.wildlifeandseasons.compat.CompatTranslations;
@@ -37,6 +38,33 @@ public class SvSeLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.POTTED_SAND_VERBENA, "Krukad sandverbena");
         addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Krukat dynnattljus");
         addBlock(ModBlocks.LICHEN, "Lav");
+        // Advancements
+        add(ModAdvancements.titleKey("root"), "Wildlife & Seasons");
+        add(ModAdvancements.descriptionKey("root"), "Se världen förändras under året");
+        add(ModAdvancements.titleKey("know_the_season"), "Känn årstiden");
+        add(ModAdvancements.descriptionKey("know_the_season"), "Skaffa en årstidskalender");
+        add(ModAdvancements.titleKey("snowed_in"), "Insnöad");
+        add(ModAdvancements.descriptionKey("snowed_in"), "Var ute när det snöar");
+        add(ModAdvancements.titleKey("year_in_the_wild"), "Ett år i det vilda");
+        add(ModAdvancements.descriptionKey("year_in_the_wild"), "Spela ett helt år");
+        add(ModAdvancements.titleKey("leaf_peeper"), "Höstfärger");
+        add(ModAdvancements.descriptionKey("leaf_peeper"), "Besök en skog när höstfärgerna är som vackrast");
+        add(ModAdvancements.titleKey("hanami"), "Hanami");
+        add(ModAdvancements.descriptionKey("hanami"), "Se körsbärsträden i full blom");
+        add(ModAdvancements.titleKey("winter_harvest"), "Vinterskörd");
+        add(ModAdvancements.descriptionKey("winter_harvest"), "Skörda en mogen gröda på vintern");
+        add(ModAdvancements.titleKey("first_signs_of_spring"), "Vårtecken");
+        add(ModAdvancements.descriptionKey("first_signs_of_spring"), "Plocka en snödroppe eller en krokus");
+        add(ModAdvancements.titleKey("superbloom"), "Superblomning");
+        add(ModAdvancements.descriptionKey("superbloom"), "Samla alla tre ökenblommor");
+        add(ModAdvancements.titleKey("mushroom_season"), "Svampsäsong");
+        add(ModAdvancements.descriptionKey("mushroom_season"), "Plocka en svamp som kom upp på hösten");
+        add(ModAdvancements.titleKey("scraped_clean"), "Skrapad ren");
+        add(ModAdvancements.descriptionKey("scraped_clean"), "Skrapa bort mossan från ett block med en yxa");
+        add(ModAdvancements.titleKey("brr"), "Brr!");
+        add(ModAdvancements.descriptionKey("brr"), "Läs av en termometer under noll");
+        add(ModAdvancements.titleKey("rain_check"), "Regnmätare");
+        add(ModAdvancements.descriptionKey("rain_check"), "Placera en regnmätare");
         add(Instruments.THERMOMETER_READING, "Termometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regnmätare: %1$s%% full · %2$s%% nederbörd denna årstid");
         add(CompatTranslations.JEI_CALENDAR, "Högerklicka för att se dagens datum och årstid. I djungler och savanner visar den också om det är regnperiod eller torrperiod.");

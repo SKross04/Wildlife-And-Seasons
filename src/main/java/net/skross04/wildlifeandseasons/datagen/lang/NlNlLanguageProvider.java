@@ -1,6 +1,7 @@
 package net.skross04.wildlifeandseasons.datagen.lang;
 
 import net.minecraft.data.PackOutput;
+import net.skross04.wildlifeandseasons.datagen.ModAdvancements;
 import net.skross04.wildlifeandseasons.climate.ClimateTranslations;
 import net.skross04.wildlifeandseasons.climate.Instruments;
 import net.skross04.wildlifeandseasons.compat.CompatTranslations;
@@ -37,6 +38,33 @@ public class NlNlLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.POTTED_SAND_VERBENA, "Zandverbena in pot");
         addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Duinteunisbloem in pot");
         addBlock(ModBlocks.LICHEN, "Korstmos");
+        // Advancements
+        add(ModAdvancements.titleKey("root"), "Wildlife & Seasons");
+        add(ModAdvancements.descriptionKey("root"), "Zie de wereld veranderen door het jaar heen");
+        add(ModAdvancements.titleKey("know_the_season"), "Ken het seizoen");
+        add(ModAdvancements.descriptionKey("know_the_season"), "Krijg een seizoenskalender");
+        add(ModAdvancements.titleKey("snowed_in"), "Ingesneeuwd");
+        add(ModAdvancements.descriptionKey("snowed_in"), "Sta buiten als het sneeuwt");
+        add(ModAdvancements.titleKey("year_in_the_wild"), "Een jaar in het wild");
+        add(ModAdvancements.descriptionKey("year_in_the_wild"), "Speel een volledig jaar");
+        add(ModAdvancements.titleKey("leaf_peeper"), "Herfstkleuren");
+        add(ModAdvancements.descriptionKey("leaf_peeper"), "Bezoek een bos op het hoogtepunt van zijn herfstkleuren");
+        add(ModAdvancements.titleKey("hanami"), "Hanami");
+        add(ModAdvancements.descriptionKey("hanami"), "Zie de kersenbomen in volle bloei");
+        add(ModAdvancements.titleKey("winter_harvest"), "Winteroogst");
+        add(ModAdvancements.descriptionKey("winter_harvest"), "Oogst in de winter een rijp gewas");
+        add(ModAdvancements.titleKey("first_signs_of_spring"), "Eerste lentetekens");
+        add(ModAdvancements.descriptionKey("first_signs_of_spring"), "Pluk een sneeuwklokje of een krokus");
+        add(ModAdvancements.titleKey("superbloom"), "Superbloei");
+        add(ModAdvancements.descriptionKey("superbloom"), "Verzamel alle drie de woestijnbloemen");
+        add(ModAdvancements.titleKey("mushroom_season"), "Paddenstoelenseizoen");
+        add(ModAdvancements.descriptionKey("mushroom_season"), "Pluk een paddenstoel die in de herfst opkwam");
+        add(ModAdvancements.titleKey("scraped_clean"), "Schoongeschraapt");
+        add(ModAdvancements.descriptionKey("scraped_clean"), "Schraap met een bijl het mos van een blok");
+        add(ModAdvancements.titleKey("brr"), "Brr!");
+        add(ModAdvancements.descriptionKey("brr"), "Lees een thermometer onder nul af");
+        add(ModAdvancements.titleKey("rain_check"), "Regenmeter");
+        add(ModAdvancements.descriptionKey("rain_check"), "Plaats een regenmeter");
         add(Instruments.THERMOMETER_READING, "Thermometer: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Regenmeter: %1$s%% vol · %2$s%% neerslag dit seizoen");
         add(CompatTranslations.JEI_CALENDAR, "Rechtsklik om de datum en het seizoen van vandaag te lezen. In jungles en savannes zie je ook of het regenseizoen of het droge seizoen is.");

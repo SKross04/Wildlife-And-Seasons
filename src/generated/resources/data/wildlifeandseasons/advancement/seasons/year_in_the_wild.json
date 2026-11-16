@@ -1,0 +1,26 @@
+{
+  "parent": "wildlifeandseasons:seasons/snowed_in",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.wildlifeandseasons.year_in_the_wild.description"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "wildlifeandseasons:season_calendar"
+    },
+    "title": {
+      "translate": "advancements.wildlifeandseasons.year_in_the_wild.title"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

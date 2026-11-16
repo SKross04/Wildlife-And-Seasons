@@ -46,6 +46,8 @@ public class DataGenerators {
         // World generation (snowdrop and crocus patches): features, where they're placed, and which biomes get them.
         event.add(Registries.FEATURE, ModWorldgen::bootstrapFeatures)
                 .add(Registries.PLACED_FEATURE, ModWorldgen::bootstrapPlacedFeatures)
-                .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers);
+                .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, ModWorldgen::bootstrapBiomeModifiers)
+                // Advancements (a data registry since 26.3): the "Wildlife & Seasons" tab.
+                .add(Registries.ADVANCEMENT, ModAdvancements::bootstrap);
     }
 }

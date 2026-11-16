@@ -1,0 +1,25 @@
+{
+  "parent": "wildlifeandseasons:seasons/know_the_season",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.wildlifeandseasons.leaf_peeper.description"
+    },
+    "icon": {
+      "id": "minecraft:leaf_litter"
+    },
+    "title": {
+      "translate": "advancements.wildlifeandseasons.leaf_peeper.title"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

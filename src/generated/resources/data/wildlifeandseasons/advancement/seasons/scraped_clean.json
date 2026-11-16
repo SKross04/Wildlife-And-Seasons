@@ -1,0 +1,55 @@
+{
+  "parent": "wildlifeandseasons:seasons/root",
+  "criteria": {
+    "scrape": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:all_of",
+          "terms": [
+            {
+              "type": "minecraft:location_check",
+              "predicate": {
+                "block": {
+                  "blocks": [
+                    "minecraft:mossy_cobblestone",
+                    "minecraft:mossy_cobblestone_stairs",
+                    "minecraft:mossy_cobblestone_slab",
+                    "minecraft:mossy_cobblestone_wall",
+                    "minecraft:mossy_stone_bricks",
+                    "minecraft:mossy_stone_brick_stairs",
+                    "minecraft:mossy_stone_brick_slab",
+                    "minecraft:mossy_stone_brick_wall"
+                  ]
+                }
+              }
+            },
+            {
+              "type": "minecraft:match_tool",
+              "predicate": {
+                "items": "#minecraft:axes"
+              }
+            }
+          ]
+        }
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.wildlifeandseasons.scraped_clean.description"
+    },
+    "icon": {
+      "id": "minecraft:mossy_cobblestone"
+    },
+    "title": {
+      "translate": "advancements.wildlifeandseasons.scraped_clean.title"
+    }
+  },
+  "requirements": [
+    [
+      "scrape"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

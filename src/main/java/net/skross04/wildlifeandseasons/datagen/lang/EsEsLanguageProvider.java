@@ -1,6 +1,7 @@
 package net.skross04.wildlifeandseasons.datagen.lang;
 
 import net.minecraft.data.PackOutput;
+import net.skross04.wildlifeandseasons.datagen.ModAdvancements;
 import net.skross04.wildlifeandseasons.climate.ClimateTranslations;
 import net.skross04.wildlifeandseasons.climate.Instruments;
 import net.skross04.wildlifeandseasons.compat.CompatTranslations;
@@ -37,6 +38,33 @@ public class EsEsLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.POTTED_SAND_VERBENA, "Verbena de arena en maceta");
         addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Onagra de las dunas en maceta");
         addBlock(ModBlocks.LICHEN, "Liquen");
+        // Advancements
+        add(ModAdvancements.titleKey("root"), "Wildlife & Seasons");
+        add(ModAdvancements.descriptionKey("root"), "Mira cómo cambia el mundo a lo largo del año");
+        add(ModAdvancements.titleKey("know_the_season"), "Conoce la estación");
+        add(ModAdvancements.descriptionKey("know_the_season"), "Consigue un calendario de estaciones");
+        add(ModAdvancements.titleKey("snowed_in"), "Nevado");
+        add(ModAdvancements.descriptionKey("snowed_in"), "Estar fuera cuando nieva");
+        add(ModAdvancements.titleKey("year_in_the_wild"), "Un año en la naturaleza");
+        add(ModAdvancements.descriptionKey("year_in_the_wild"), "Juega un año completo");
+        add(ModAdvancements.titleKey("leaf_peeper"), "Colores de otoño");
+        add(ModAdvancements.descriptionKey("leaf_peeper"), "Visita un bosque en pleno colorido otoñal");
+        add(ModAdvancements.titleKey("hanami"), "Hanami");
+        add(ModAdvancements.descriptionKey("hanami"), "Ve los cerezos en plena floración");
+        add(ModAdvancements.titleKey("winter_harvest"), "Cosecha de invierno");
+        add(ModAdvancements.descriptionKey("winter_harvest"), "Cosecha un cultivo maduro en invierno");
+        add(ModAdvancements.titleKey("first_signs_of_spring"), "Primeras señales de la primavera");
+        add(ModAdvancements.descriptionKey("first_signs_of_spring"), "Recoge una campanilla de invierno o un azafrán de primavera");
+        add(ModAdvancements.titleKey("superbloom"), "Superfloración");
+        add(ModAdvancements.descriptionKey("superbloom"), "Reúne las tres flores del desierto");
+        add(ModAdvancements.titleKey("mushroom_season"), "Temporada de setas");
+        add(ModAdvancements.descriptionKey("mushroom_season"), "Recoge una seta que brotó en otoño");
+        add(ModAdvancements.titleKey("scraped_clean"), "Raspado");
+        add(ModAdvancements.descriptionKey("scraped_clean"), "Raspa el musgo de un bloque con un hacha");
+        add(ModAdvancements.titleKey("brr"), "¡Brr!");
+        add(ModAdvancements.descriptionKey("brr"), "Lee un termómetro bajo cero");
+        add(ModAdvancements.titleKey("rain_check"), "Pluviómetro");
+        add(ModAdvancements.descriptionKey("rain_check"), "Coloca un pluviómetro");
         add(Instruments.THERMOMETER_READING, "Termómetro: %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Pluviómetro: lleno al %1$s%% · %2$s%% de lluvia esta estación");
         add(CompatTranslations.JEI_CALENDAR, "Clic derecho para ver la fecha y la estación de hoy. En selvas y sabanas también indica si es la estación lluviosa o la seca.");

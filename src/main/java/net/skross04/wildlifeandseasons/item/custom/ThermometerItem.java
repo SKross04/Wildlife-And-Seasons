@@ -5,6 +5,9 @@ import java.util.function.Consumer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.skross04.wildlifeandseasons.climate.WorldClimate;
+import net.skross04.wildlifeandseasons.advancement.SeasonAdvancements;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -26,6 +29,10 @@ public class ThermometerItem extends Item {
         // Only the server knows the season, so it measures; the client just swings the arm.
         if (level instanceof ServerLevel serverLevel) {
             player.sendOverlayMessage(Instruments.thermometerReading(serverLevel, player.blockPosition()));
+            if (player instanceof ServerPlayer serverPlayer
+                    && WorldClimate.climateAt(serverLevel, player.blockPosition()).temperature() < 0) {
+                SeasonAdvancements.award(serverPlayer, SeasonAdvancements.BRR);
+            }
         }
         return InteractionResult.SUCCESS;
     }

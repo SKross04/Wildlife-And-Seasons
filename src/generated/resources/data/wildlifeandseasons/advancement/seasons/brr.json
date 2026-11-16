@@ -1,0 +1,25 @@
+{
+  "parent": "wildlifeandseasons:seasons/root",
+  "criteria": {
+    "done": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.wildlifeandseasons.brr.description"
+    },
+    "icon": {
+      "id": "wildlifeandseasons:thermometer"
+    },
+    "title": {
+      "translate": "advancements.wildlifeandseasons.brr.title"
+    }
+  },
+  "requirements": [
+    [
+      "done"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

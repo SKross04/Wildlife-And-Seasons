@@ -1,0 +1,59 @@
+{
+  "parent": "wildlifeandseasons:seasons/first_signs_of_spring",
+  "criteria": {
+    "desert_sunflower": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildlifeandseasons:desert_sunflower"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "dune_primrose": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildlifeandseasons:dune_primrose"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "sand_verbena": {
+      "conditions": {
+        "items": [
+          {
+            "items": "wildlifeandseasons:sand_verbena"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.wildlifeandseasons.superbloom.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "id": "wildlifeandseasons:desert_sunflower"
+    },
+    "title": {
+      "translate": "advancements.wildlifeandseasons.superbloom.title"
+    }
+  },
+  "requirements": [
+    [
+      "desert_sunflower"
+    ],
+    [
+      "sand_verbena"
+    ],
+    [
+      "dune_primrose"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,27 @@
+{
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "minecraft:gui/advancements/backgrounds/husbandry",
+    "description": {
+      "translate": "advancements.wildlifeandseasons.root.description"
+    },
+    "icon": {
+      "id": "wildlifeandseasons:season_calendar"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.wildlifeandseasons.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "tick"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

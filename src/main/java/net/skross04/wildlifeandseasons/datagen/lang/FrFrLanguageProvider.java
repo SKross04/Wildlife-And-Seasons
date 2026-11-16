@@ -1,6 +1,7 @@
 package net.skross04.wildlifeandseasons.datagen.lang;
 
 import net.minecraft.data.PackOutput;
+import net.skross04.wildlifeandseasons.datagen.ModAdvancements;
 import net.skross04.wildlifeandseasons.climate.ClimateTranslations;
 import net.skross04.wildlifeandseasons.climate.Instruments;
 import net.skross04.wildlifeandseasons.compat.CompatTranslations;
@@ -37,6 +38,33 @@ public class FrFrLanguageProvider extends ModLanguageProvider {
         addBlock(ModBlocks.POTTED_SAND_VERBENA, "Abronie des sables en pot");
         addBlock(ModBlocks.POTTED_DUNE_PRIMROSE, "Onagre des dunes en pot");
         addBlock(ModBlocks.LICHEN, "Lichen");
+        // Advancements
+        add(ModAdvancements.titleKey("root"), "Wildlife & Seasons");
+        add(ModAdvancements.descriptionKey("root"), "Regardez le monde changer au fil de l'année");
+        add(ModAdvancements.titleKey("know_the_season"), "Connaître la saison");
+        add(ModAdvancements.descriptionKey("know_the_season"), "Obtenir un calendrier des saisons");
+        add(ModAdvancements.titleKey("snowed_in"), "Enneigé");
+        add(ModAdvancements.descriptionKey("snowed_in"), "Être dehors quand il neige");
+        add(ModAdvancements.titleKey("year_in_the_wild"), "Une année dans la nature");
+        add(ModAdvancements.descriptionKey("year_in_the_wild"), "Jouer une année complète");
+        add(ModAdvancements.titleKey("leaf_peeper"), "Couleurs d'automne");
+        add(ModAdvancements.descriptionKey("leaf_peeper"), "Visiter une forêt au sommet de ses couleurs d'automne");
+        add(ModAdvancements.titleKey("hanami"), "Hanami");
+        add(ModAdvancements.descriptionKey("hanami"), "Voir les cerisiers en pleine floraison");
+        add(ModAdvancements.titleKey("winter_harvest"), "Récolte d'hiver");
+        add(ModAdvancements.descriptionKey("winter_harvest"), "Récolter une culture mûre en hiver");
+        add(ModAdvancements.titleKey("first_signs_of_spring"), "Premiers signes du printemps");
+        add(ModAdvancements.descriptionKey("first_signs_of_spring"), "Cueillir un perce-neige ou un crocus");
+        add(ModAdvancements.titleKey("superbloom"), "Superfloraison");
+        add(ModAdvancements.descriptionKey("superbloom"), "Collecter les trois fleurs du désert");
+        add(ModAdvancements.titleKey("mushroom_season"), "La saison des champignons");
+        add(ModAdvancements.descriptionKey("mushroom_season"), "Cueillir un champignon poussé en automne");
+        add(ModAdvancements.titleKey("scraped_clean"), "Gratté");
+        add(ModAdvancements.descriptionKey("scraped_clean"), "Gratter la mousse d'un bloc avec une hache");
+        add(ModAdvancements.titleKey("brr"), "Brr !");
+        add(ModAdvancements.descriptionKey("brr"), "Lire un thermomètre sous zéro");
+        add(ModAdvancements.titleKey("rain_check"), "Pluviomètre");
+        add(ModAdvancements.descriptionKey("rain_check"), "Poser un pluviomètre");
         add(Instruments.THERMOMETER_READING, "Thermomètre : %s °C");
         add(Instruments.RAIN_GAUGE_READING, "Pluviomètre : rempli à %1$s %% · %2$s %% de précipitations cette saison");
         add(CompatTranslations.JEI_CALENDAR, "Clic droit pour lire la date et la saison du jour. Dans les jungles et les savanes, il indique aussi s'il s'agit de la saison des pluies ou de la saison sèche.");

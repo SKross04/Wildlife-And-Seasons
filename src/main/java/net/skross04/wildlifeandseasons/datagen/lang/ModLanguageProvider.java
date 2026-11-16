@@ -1,6 +1,7 @@
 package net.skross04.wildlifeandseasons.datagen.lang;
 
 import net.minecraft.data.PackOutput;
+import net.skross04.wildlifeandseasons.datagen.ModAdvancements;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.skross04.wildlifeandseasons.WildlifeAndSeasons;
 import net.skross04.wildlifeandseasons.ecology.season.Season;

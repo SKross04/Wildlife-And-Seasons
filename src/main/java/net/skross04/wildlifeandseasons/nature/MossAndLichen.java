@@ -38,15 +38,24 @@ import net.skross04.wildlifeandseasons.util.ModTags;
  */
 public final class MossAndLichen {
     /** Clean block → its mossy version (vanilla's mossy cobblestone and stone brick families). */
-    public static final Map<Block, Block> MOSSY = Map.ofEntries(
-            Map.entry(Blocks.COBBLESTONE, Blocks.MOSSY_COBBLESTONE),
-            Map.entry(Blocks.COBBLESTONE_STAIRS, Blocks.MOSSY_COBBLESTONE_STAIRS),
-            Map.entry(Blocks.COBBLESTONE_SLAB, Blocks.MOSSY_COBBLESTONE_SLAB),
-            Map.entry(Blocks.COBBLESTONE_WALL, Blocks.MOSSY_COBBLESTONE_WALL),
-            Map.entry(Blocks.STONE_BRICKS, Blocks.MOSSY_STONE_BRICKS),
-            Map.entry(Blocks.STONE_BRICK_STAIRS, Blocks.MOSSY_STONE_BRICK_STAIRS),
-            Map.entry(Blocks.STONE_BRICK_SLAB, Blocks.MOSSY_STONE_BRICK_SLAB),
-            Map.entry(Blocks.STONE_BRICK_WALL, Blocks.MOSSY_STONE_BRICK_WALL));
+    public static final Map<Block, Block> MOSSY = ordered(
+            Blocks.COBBLESTONE, Blocks.MOSSY_COBBLESTONE,
+            Blocks.COBBLESTONE_STAIRS, Blocks.MOSSY_COBBLESTONE_STAIRS,
+            Blocks.COBBLESTONE_SLAB, Blocks.MOSSY_COBBLESTONE_SLAB,
+            Blocks.COBBLESTONE_WALL, Blocks.MOSSY_COBBLESTONE_WALL,
+            Blocks.STONE_BRICKS, Blocks.MOSSY_STONE_BRICKS,
+            Blocks.STONE_BRICK_STAIRS, Blocks.MOSSY_STONE_BRICK_STAIRS,
+            Blocks.STONE_BRICK_SLAB, Blocks.MOSSY_STONE_BRICK_SLAB,
+            Blocks.STONE_BRICK_WALL, Blocks.MOSSY_STONE_BRICK_WALL);
+
+    /** A map with a fixed order (Map.of has none), so generated data comes out the same every run. */
+    private static Map<Block, Block> ordered(Block... pairs) {
+        Map<Block, Block> map = new java.util.LinkedHashMap<>();
+        for (int i = 0; i < pairs.length; i += 2) {
+            map.put(pairs[i], pairs[i + 1]);
+        }
+        return java.util.Collections.unmodifiableMap(map);
+    }
 
     private static final Direction[] DIRECTIONS = Direction.values();
 
