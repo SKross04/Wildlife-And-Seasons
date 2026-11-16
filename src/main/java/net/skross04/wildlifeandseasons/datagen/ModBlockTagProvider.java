@@ -62,7 +62,10 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         // Plants that snow covers in winter (and that come back when it melts). Bush is optional: added in 1.21.5.
         var buriedBySnow = tag(ModTags.Blocks.BURIED_BY_SNOW);
         // The Dappled Forest's red shrub stays red all year, but snow covers it like the other low plants.
-        for (Block block : new Block[]{Blocks.SHORT_GRASS, Blocks.TALL_GRASS, Blocks.FERN, Blocks.LARGE_FERN, Blocks.RED_SHRUB}) {
+        // Sweet berry bushes are low shrubs too: snowed under in winter, back with their berries in spring
+        // (real lingonberries spend the winter under the snow).
+        for (Block block : new Block[]{Blocks.SHORT_GRASS, Blocks.TALL_GRASS, Blocks.FERN, Blocks.LARGE_FERN, Blocks.RED_SHRUB,
+                Blocks.SWEET_BERRY_BUSH}) {
             buriedBySnow.add(TagEntry.element(BuiltInRegistries.BLOCK.getKey(block)));
         }
         buriedBySnow.add(TagEntry.optionalElement(Identifier.fromNamespaceAndPath("minecraft", "bush")));

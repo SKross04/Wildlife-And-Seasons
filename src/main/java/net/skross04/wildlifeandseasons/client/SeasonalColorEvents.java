@@ -81,6 +81,10 @@ public class SeasonalColorEvents {
     public static final ColorResolver YELLOW_POPLAR_RESOLVER =
             (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.YELLOW, Mth.floor(x), Mth.floor(z));
 
+    /** Sweet berry bushes (own grey textures): leaf colour and flower colour through the year. */
+    public static final ColorResolver BERRY_LEAVES_RESOLVER = (biome, x, z) -> SeasonalColorState.berryLeaves(biome);
+    public static final ColorResolver BERRY_FLOWERS_RESOLVER = (biome, x, z) -> SeasonalColorState.berryFlowers(biome);
+
     /** Custom colour resolvers must be registered, so Minecraft gives them a colour cache. */
     @SubscribeEvent
     public static void registerColorResolvers(RegisterColorHandlersEvent.ColorResolvers event) {
@@ -96,6 +100,8 @@ public class SeasonalColorEvents {
         event.register(RED_POPLAR_RESOLVER);
         event.register(ORANGE_POPLAR_RESOLVER);
         event.register(YELLOW_POPLAR_RESOLVER);
+        event.register(BERRY_LEAVES_RESOLVER);
+        event.register(BERRY_FLOWERS_RESOLVER);
     }
 
     /**
@@ -125,6 +131,9 @@ public class SeasonalColorEvents {
                 Blocks.ORANGE_POPLAR_LEAVES);
         event.register(List.of(seasonalTint(SeasonalColors.Poplar.YELLOW.autumnColor(), YELLOW_POPLAR_RESOLVER)),
                 Blocks.YELLOW_POPLAR_LEAVES);
+        // Sweet berry bushes (stages 1–3 use our grey leaves): tint 0 = leaves, tint 1 = flowers (stage 1 only).
+        event.register(List.of(seasonalTint(SeasonalColors.berryLeavesPlain(), BERRY_LEAVES_RESOLVER),
+                seasonalTint(SeasonalColors.berryFlowersHidden(), BERRY_FLOWERS_RESOLVER)), Blocks.SWEET_BERRY_BUSH);
     }
 
     /** In the inventory: the normal colour. In the world: the colour from our resolver. */

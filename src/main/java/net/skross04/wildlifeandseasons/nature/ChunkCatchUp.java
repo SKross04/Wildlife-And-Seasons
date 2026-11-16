@@ -64,6 +64,7 @@ import net.skross04.wildlifeandseasons.ecology.farming.CropSeasonRules;
 import net.skross04.wildlifeandseasons.ecology.season.Season;
 import net.skross04.wildlifeandseasons.ecology.season.SeasonDate;
 import net.skross04.wildlifeandseasons.ecology.vegetation.FlowerRules;
+import net.skross04.wildlifeandseasons.ecology.vegetation.BerryRules;
 import net.skross04.wildlifeandseasons.ecology.vegetation.LeafLitterRules;
 import net.skross04.wildlifeandseasons.ecology.vegetation.MushroomRules;
 import net.skross04.wildlifeandseasons.farming.CropSeasons;
@@ -85,7 +86,8 @@ import net.skross04.wildlifeandseasons.util.ModTags;
  * </ul>
  * Catching up, column by column: warm → snow and lake ice melt, natural icicles melt; flowers wilt or bloom;
  * forest floors get the leaf litter they'd have by now; crops, stems (with their melons and pumpkins), sweet berries,
- * cocoa, nether wart, sugar cane, cactus (with its flowers) and bamboo grow for the days they were in season;
+ * cocoa, nether wart, sugar cane, cactus (with its flowers) and bamboo grow for the days they were in season
+ * (berry bushes day by day: berries only after flowering, old ones drop when they flower);
  * autumn mushrooms that would have rotted or frozen are gone;
  * cold and snowy → snow lies on the ground, still water freezes, icicles hang under snowy roof edges.
  * Brand-new chunks don't need it: world generation already follows the season.
@@ -635,6 +637,13 @@ public final class ChunkCatchUp {
      */
     private static void growCrop(ChunkBlocks blocks, BlockPos pos, BlockState state, Growth growth, long missed, long today,
                                  RandomSource random) {
+        if (state.getBlock() instanceof SweetBerryBushBlock && Config.seasonalBerries()) {
+            ClimateZone zone = BiomeZones.of(biomeAt(blocks.chunk(), pos).value()).zone();
+            if (BerryRules.hasBerrySeasons(zone)) {
+                growBerryBush(blocks, pos, state, zone, missed, today, random);
+                return;
+            }
+        }
         int age = growth.ageOf().applyAsInt(state);
         if (age >= growth.maxAge() && !(state.getBlock() instanceof StemBlock)) {
             return;
@@ -650,6 +659,35 @@ public final class ChunkCatchUp {
         int leftOver = age + stages - growth.maxAge();
         if (leftOver > 0 && state.getBlock() instanceof StemBlock) {
             growFruit(blocks, pos, state.getBlock(), leftOver, random);
+        }
+    }
+
+    /**
+     * A sweet berry bush, day by day (berries depend on the time of year, not just on how long it grew): last year's
+     * berries drop when it flowers, new ones form after flowering and ripen in late summer, and stay through winter.
+     */
+    private static void growBerryBush(ChunkBlocks blocks, BlockPos pos, BlockState state, ClimateZone zone, long missed,
+                                      long today, RandomSource random) {
+        EnumSet<Season> seasons = CropSeasons.seasonsFor(state);
+        boolean greenhouse = seasons != null && CropSeasons.isGreenhouse(blocks.chunk(), pos);
+        int start = state.getValue(SweetBerryBushBlock.AGE);
+        int age = start;
+        for (long day = today - missed; day < today; day++) {
+            double yearPosition = (Math.floorMod(day, (long) SeasonDate.DEFAULT_YEAR_LENGTH) + 0.5) / SeasonDate.DEFAULT_YEAR_LENGTH;
+            if (BerryRules.oldBerriesFall(zone, yearPosition)) {
+                age = Math.min(age, 1);
+                continue;
+            }
+            Season season = SeasonDate.fromDay(day, SeasonDate.DEFAULT_YEAR_LENGTH).season();
+            boolean inSeason = seasons == null || CropSeasonRules.isInSeason(seasons, season, zone, () -> greenhouse);
+            int stages = CropSeasonRules.catchUpStages(inSeason ? 1.0 : Config.outOfSeasonGrowth(), random.nextDouble());
+            if (stages > 0) {
+                int grown = Math.min(SweetBerryBushBlock.MAX_AGE, age + stages);
+                age = Math.max(age, BerryRules.allowedAge(zone, yearPosition, grown));
+            }
+        }
+        if (age != start) {
+            blocks.set(pos, state.setValue(SweetBerryBushBlock.AGE, age));
         }
     }
 

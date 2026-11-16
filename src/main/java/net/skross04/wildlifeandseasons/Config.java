@@ -55,6 +55,12 @@ public class Config {
                     "tree trunks; frost makes them disappear again. Mushrooms from world generation or players stay.")
             .define("autumnMushrooms", true);
 
+    public static final ModConfigSpec.BooleanValue SEASONAL_BERRIES = BUILDER
+            .comment("Sweet berry bushes follow the seasons like real lingonberries: white-pink flowers in early summer,",
+                    "berries ripen in late summer and stay through winter, leaves turn purple-red in autumn.",
+                    "Off = vanilla bushes (berries all the time the bush grows).")
+            .define("seasonalBerries", true);
+
     public static final ModConfigSpec.BooleanValue ICICLES = BUILDER
             .comment("Icicles grow under snowy roof edges in winter and melt in spring.")
             .define("icicles", true);
@@ -93,6 +99,10 @@ public class Config {
 
     public static boolean autumnMushrooms() {
         return SPEC.isLoaded() ? AUTUMN_MUSHROOMS.get() : AUTUMN_MUSHROOMS.getDefault();
+    }
+
+    public static boolean seasonalBerries() {
+        return SPEC.isLoaded() ? SEASONAL_BERRIES.get() : SEASONAL_BERRIES.getDefault();
     }
 
     public static boolean icicles() {

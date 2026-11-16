@@ -9,6 +9,7 @@
     "IceBlockMixin",
     "SnowLayerBlockMixin",
     "SpreadingSnowyBlockMixin",
+    "SweetBerryBushMixin",
     "ServerLevelMixin"
   ],
   "client": [

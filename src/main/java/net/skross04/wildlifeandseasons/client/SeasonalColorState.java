@@ -8,6 +8,7 @@ import org.jspecify.annotations.Nullable;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.skross04.wildlifeandseasons.Config;
 import net.skross04.wildlifeandseasons.climate.BiomeZones;
 import net.skross04.wildlifeandseasons.ecology.climate.ClimateZone;
 import net.skross04.wildlifeandseasons.ecology.climate.SeasonalColors;
@@ -54,6 +55,18 @@ public final class SeasonalColorState {
             base = ((BiomeAccessor) (Object) biome).wildlifeandseasons$getFoliageColorFromTexture();
         }
         return SeasonalColors.foliage(base, tint);
+    }
+
+    /** Sweet berry bush leaves: green, purple-red in autumn and winter (plain green when seasonal berries are off). */
+    public static int berryLeaves(Biome biome) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        return tint == null || !Config.seasonalBerries() ? SeasonalColors.berryLeavesPlain() : SeasonalColors.berryLeaves(tint);
+    }
+
+    /** Sweet berry bush flowers: white-pink in early summer, otherwise hidden in the leaf colour. */
+    public static int berryFlowers(Biome biome) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        return tint == null || !Config.seasonalBerries() ? SeasonalColors.berryFlowersHidden() : SeasonalColors.berryFlowers(tint);
     }
 
     /** Poplar leaves: green until autumn, then their own colour (Mojang's colour all year when switched off). */

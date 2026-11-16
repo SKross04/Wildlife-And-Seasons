@@ -35,6 +35,15 @@ public final class SeasonAccess {
         return Optional.of(new SeasonCalendar(ticks, 0).date(SeasonDate.DEFAULT_YEAR_LENGTH));
     }
 
+    /** How far through the year it is (0–1) on either side; empty on a client that hasn't heard the season yet. */
+    public static OptionalDouble yearPosition(Level level) {
+        if (level instanceof ServerLevel serverLevel) {
+            return OptionalDouble.of(SeasonSavedData.get(serverLevel.getServer()).calendar()
+                    .yearPosition(SeasonDate.DEFAULT_YEAR_LENGTH));
+        }
+        return clientYearPosition();
+    }
+
     /** Client side: how far through the year it is (0–1), if the server has sent the season yet. */
     public static OptionalDouble clientYearPosition() {
         long ticks = clientElapsedTicks;

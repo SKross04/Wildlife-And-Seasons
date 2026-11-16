@@ -1,5 +1,7 @@
 package net.skross04.wildlifeandseasons.ecology.climate;
 
+import net.skross04.wildlifeandseasons.ecology.vegetation.BerryRules;
+
 /**
  * Seasonal colours for grass and leaves, based on how real trees change through the year.
  * <p>
@@ -137,6 +139,15 @@ public final class SeasonalColors {
     /** How much of the Dappled Forest's own autumn grass colour shows at the peak of autumn. */
     private static final double AUTUMN_BIOME_GRASS_AMOUNT = 0.90;
 
+    /**
+     * Sweet berry bushes (our own grey textures, see the sweet_berry_bush_stage models): green leaves that turn
+     * purple-red in autumn and winter (like real lingonberries), and white-pink flowers in early summer. Out of
+     * flowering, the flower pixels take exactly the colour of the leaf shade under them, so they can't be seen.
+     */
+    private static final int BERRY_LEAVES = 0x52A167, BERRY_WINTER_LEAVES = 0x8A404A, BERRY_FLOWERS = 0xFFE4EA;
+    /** Grey of the leaf pixels under the flowers ÷ grey of the flower pixels (from the textures: 0xC8 / 0xF4). */
+    private static final double BERRY_FLOWER_TO_LEAF = 0xC8 / (double) 0xF4;
+
     /** Mangroves are evergreen, but the forest is less green at the end of the dry season, when most leaves fall. */
     private static final int MANGROVE_DRY = 0x8A8848;
     private static final double MANGROVE_DRY_AMOUNT = 0.40;
@@ -172,12 +183,13 @@ public final class SeasonalColors {
      * @param snow         snow lying on leaves (while the day's average stays below freezing)
      * @param flush        tropical red young leaves
      * @param tropicalDry  end of the tropical dry season (mangroves less green)
-     * @param yearPosition the point in the year, for deciduous trees (each patch of trees turns at its own time)
+     * @param yearPosition the point in the year (deciduous trees: each patch turns at its own time; berry bushes)
      * @param deciduous    true where trees go through the full deciduous year (temperate places)
+     * @param zone         the climate zone
      */
     public record Tint(double spring, double autumn, double leafAutumn, double winter, double dry, double wet, double snow,
-                       double flush, double tropicalDry, double yearPosition, boolean deciduous) {
-        public static final Tint NONE = new Tint(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false);
+                       double flush, double tropicalDry, double yearPosition, boolean deciduous, ClimateZone zone) {
+        public static final Tint NONE = new Tint(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, ClimateZone.NO_SEASONS);
 
         /** True if this tint differs noticeably from another (used to decide whether to redraw chunks). */
         public boolean differsFrom(Tint other) {
@@ -186,8 +198,8 @@ public final class SeasonalColors {
                     || Math.abs(dry - other.dry) > 0.005 || Math.abs(wet - other.wet) > 0.005
                     || Math.abs(snow - other.snow) > 0.005
                     || Math.abs(flush - other.flush) > 0.005 || Math.abs(tropicalDry - other.tropicalDry) > 0.005
-                    || deciduous != other.deciduous
-                    || deciduous && Math.abs(yearPosition - other.yearPosition) > 0.003;
+                    || deciduous != other.deciduous || zone != other.zone
+                    || (deciduous || BerryRules.hasBerrySeasons(zone)) && Math.abs(yearPosition - other.yearPosition) > 0.003;
         }
     }
 
@@ -202,22 +214,22 @@ public final class SeasonalColors {
                         grassAutumn,
                         bump(yearPosition, 0.65, 0.10),             // leaves fall from early to late autumn
                         bump(yearPosition, 0.88, 0.14),             // around mid-winter
-                        0, 0, snow, 0, 0, yearPosition, true);
+                        0, 0, snow, 0, 0, yearPosition, true, zone);
             }
             case COLD -> new Tint(
                     bump(yearPosition, 0.20, 0.12),                 // spring comes late
                     0.5 * bump(yearPosition, 0.56, 0.13),           // grass browns a little in a short, early autumn
                     0,                                              // taiga trees stay green
                     bump(yearPosition, 0.86, 0.22),                 // long winter
-                    0, 0, snow, 0, 0, 0, false);
+                    0, 0, snow, 0, 0, yearPosition, false, zone);
             case SAVANNA -> new Tint(0, 0, 0, 0,
                     bump(yearPosition, 0.85, 0.28),                 // dry season
                     bump(yearPosition, 0.35, 0.22),                 // rainy season (rain peaks mid-summer)
-                    0, 0, 0, 0, false);
+                    0, 0, 0, yearPosition, false, zone);
             case TROPICAL -> new Tint(0, 0, 0, 0, 0, 0, 0,
                     bump(yearPosition, 0.10, 0.07),                 // red young leaves when the rains start
                     bump(yearPosition, 0.96, 0.12),                 // end of the dry season
-                    0, false);
+                    yearPosition, false, zone);
             case ARID, NO_SEASONS -> Tint.NONE;
         };
     }
@@ -385,6 +397,26 @@ public final class SeasonalColors {
         int g = (int) Math.min(255, Math.round(((color >> 8) & 0xFF) * factor));
         int b = (int) Math.min(255, Math.round((color & 0xFF) * factor));
         return (color & 0xFF000000) | (r << 16) | (g << 8) | b;
+    }
+
+    /** Sweet berry bush leaves: green, purple-red from mid-autumn until the new growth in late spring. */
+    public static int berryLeaves(Tint t) {
+        return blend(BERRY_LEAVES, BERRY_WINTER_LEAVES, BerryRules.winterLeaves(t.zone(), t.yearPosition()));
+    }
+
+    /** Sweet berry bush flowers: white-pink while flowering, otherwise hidden in the leaf colour. */
+    public static int berryFlowers(Tint t) {
+        int hidden = darken(berryLeaves(t), BERRY_FLOWER_TO_LEAF);
+        return blend(hidden, BERRY_FLOWERS, Math.min(1.0, 1.6 * BerryRules.flowering(t.zone(), t.yearPosition())));
+    }
+
+    /** Berry bush colours for the inventory, no seasons, or seasonal berries switched off. */
+    public static int berryLeavesPlain() {
+        return BERRY_LEAVES;
+    }
+
+    public static int berryFlowersHidden() {
+        return darken(BERRY_LEAVES, BERRY_FLOWER_TO_LEAF);
     }
 
     /** Azalea leaves: evergreen, purple-bronze in the cold months (back to green with the new leaves), snowy in winter. */
