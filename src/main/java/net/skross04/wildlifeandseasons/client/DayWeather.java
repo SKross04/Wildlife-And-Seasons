@@ -4,6 +4,11 @@ import java.util.OptionalDouble;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.util.RandomSource;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -26,12 +31,15 @@ import net.skross04.wildlifeandseasons.season.SeasonAccess;
  * Foggy mornings and windy days on the player's screen (see DayWeatherRules). Every player in a world sees the same
  * days: they come from the date and the world's weather seed that the server sends.
  * Fog: the view distance closes in to about 32 blocks and the fog turns grey-white; not in caves, under water or
- * in rain. Wind: used by the rustling leaves and falling leaves.
+ * in rain. Wind: used by the rustling leaves and falling leaves. Blizzards: snow with strong wind closes the view in
+ * to about 20 blocks, turns it white and blows snowflakes past the player (also lying snow on windy days).
  */
 @EventBusSubscriber(modid = WildlifeAndSeasons.MODID, value = Dist.CLIENT)
 public final class DayWeather {
     /** How thick the fog around the player is now (smoothed, so it rolls in and out gently). */
     private static double fog;
+    /** How strong the blizzard around the player is now (smoothed). */
+    private static double blizzard;
 
     private DayWeather() {
     }
@@ -74,47 +82,106 @@ public final class DayWeather {
         return strength * outdoors * (1 - level.getRainLevel(1.0F));           // rain or clouds clear radiation fog
     }
 
+    /** How strong a blizzard is here now, 0..1 (only out in the open, in the overworld). */
+    private static double blizzardAt(Level level, BlockPos pos) {
+        if (!ClientConfig.blizzards() || level.dimension() != Level.OVERWORLD || level.getBrightness(LightLayer.SKY, pos) < 8) {
+            return 0;
+        }
+        Biome biome = level.getBiome(pos).value();
+        boolean snowsHere = biome.getPrecipitationAt(pos, level.getSeaLevel()) == Biome.Precipitation.SNOW;
+        if (!snowsHere) {
+            return 0;
+        }
+        double wind = ClientConfig.windyDays() ? windAt(level, pos) : 0;
+        BlockState feet = level.getBlockState(pos.below());
+        BlockState at = level.getBlockState(pos.below(2));
+        boolean snowOnGround = feet.is(Blocks.SNOW) || feet.is(Blocks.SNOW_BLOCK) || at.is(Blocks.SNOW_BLOCK)
+                || at.is(Blocks.POWDER_SNOW) || level.getBlockState(pos.below()).is(Blocks.POWDER_SNOW);
+        return DayWeatherRules.blizzard(level.getRainLevel(1.0F), wind, level.getThunderLevel(1.0F), snowOnGround);
+    }
+
+    /** Snowflakes blown past the player, along today's wind direction. */
+    private static void blowSnow(Level level, Player player, RandomSource random) {
+        int count = (int) Math.round(blizzard * 14);
+        if (count <= 0) {
+            return;
+        }
+        double direction = DayWeatherRules.windDirection(SeasonAccess.dayIndex(level), SeasonAccess.weatherSeed(level));
+        double speed = 0.35 + 0.35 * blizzard;
+        double dx = Math.cos(direction) * speed, dz = Math.sin(direction) * speed;
+        for (int i = 0; i < count; i++) {
+            double x = player.getX() + (random.nextDouble() - 0.5) * 20 - dx * 10;
+            double y = player.getY() + random.nextDouble() * 7 - 1.5;
+            double z = player.getZ() + (random.nextDouble() - 0.5) * 20 - dz * 10;
+            if (level.canSeeSky(BlockPos.containing(x, y, z))) {
+                level.addParticle(ParticleTypes.SNOWFLAKE, x, y, z, dx, -0.04 - random.nextDouble() * 0.04, dz);
+            }
+        }
+    }
+
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
         Minecraft minecraft = Minecraft.getInstance();
         Player player = minecraft.player;
         if (player == null || minecraft.level == null) {
             fog = 0;
+            blizzard = 0;
             return;
         }
         if (minecraft.isPaused()) {
             return;
         }
-        double target = fogAt(minecraft.level, BlockPos.containing(player.getEyePosition()));
+        BlockPos eyes = BlockPos.containing(player.getEyePosition());
+        double target = fogAt(minecraft.level, eyes);
         fog += (target - fog) * 0.02;   // about 5 seconds to roll in or out
+        double storm = blizzardAt(minecraft.level, eyes);
+        blizzard += (storm - blizzard) * 0.04;
+        blowSnow(minecraft.level, player, minecraft.level.getRandom());
     }
 
-    /** Thick fog: bring the view in to about 32 blocks (only ever closer than normal, only in open air). */
+    /** Thick fog (about 32 blocks) and blizzards (about 20): only ever closer than normal, only in open air. */
     @SubscribeEvent
     public static void onRenderFog(ViewportEvent.RenderFog event) {
         float strength = currentFog();
-        if (strength <= 0.01F) {
+        float storm = currentBlizzard();
+        if (strength <= 0.01F && storm <= 0.01F) {
             return;
         }
         float far = event.getFarPlaneDistance();
         float near = event.getNearPlaneDistance();
-        float foggyFar = Math.min(far, DayWeatherRules.FOG_DISTANCE);
-        event.setFarPlaneDistance(far + (foggyFar - far) * strength);
-        event.setNearPlaneDistance(Math.min(near, near * (1 - strength)));
+        far += (Math.min(far, DayWeatherRules.FOG_DISTANCE) - far) * strength;
+        far += (Math.min(far, DayWeatherRules.BLIZZARD_DISTANCE) - far) * storm;
+        event.setFarPlaneDistance(far);
+        event.setNearPlaneDistance(Math.min(near, near * (1 - Math.max(strength, storm))));
     }
 
-    /** Fog is grey-white: wash the colour out towards its own brightness (still dark at night). */
+    /** Fog is grey-white, a blizzard snow-white: wash the colour out towards its own brightness (dark at night). */
     @SubscribeEvent
     public static void onFogColor(ViewportEvent.ComputeFogColor event) {
         float strength = currentFog() * 0.7F;
-        if (strength <= 0.01F) {
+        float storm = currentBlizzard() * 0.85F;
+        if (strength <= 0.01F && storm <= 0.01F) {
             return;
         }
         float r = event.getRed(), g = event.getGreen(), b = event.getBlue();
-        float grey = Math.min(1.0F, (0.3F * r + 0.59F * g + 0.11F * b) * 1.05F + 0.04F);
-        event.setRed(r + (grey - r) * strength);
-        event.setGreen(g + (grey - g) * strength);
-        event.setBlue(b + (grey - b) * strength);
+        float light = 0.3F * r + 0.59F * g + 0.11F * b;
+        float grey = Math.min(1.0F, light * 1.05F + 0.04F);
+        float white = Math.min(1.0F, light * 1.25F + 0.12F);
+        r += (grey - r) * strength; g += (grey - g) * strength; b += (grey - b) * strength;
+        r += (white - r) * storm; g += (white - g) * storm; b += (white * 1.02F - b) * storm;
+        event.setRed(r);
+        event.setGreen(g);
+        event.setBlue(Math.min(1.0F, b));
+    }
+
+    private static float currentBlizzard() {
+        Minecraft minecraft = Minecraft.getInstance();
+        Player player = minecraft.player;
+        if (player == null || blizzard <= 0.01 || !minecraft.level.getFluidState(BlockPos.containing(player.getEyePosition())).isEmpty()
+                || player.hasEffect(MobEffects.BLINDNESS) || player.hasEffect(MobEffects.DARKNESS)) {
+            return 0;
+        }
+        return (float) blizzard;
     }
 
     /** The fog to draw: none under water or lava, in powder snow, or with blindness/darkness (they have their own). */

@@ -19,6 +19,15 @@ public final class DayWeatherRules {
     /** Fog seen at full strength brings the view down to this many blocks. */
     public static final float FOG_DISTANCE = 32;
 
+    /**
+     * In a blizzard the view closes in to this many blocks. Real blizzards: wind of at least 35 mph with falling or
+     * blowing snow that cuts the visibility below a quarter mile, for three hours or more.
+     */
+    public static final float BLIZZARD_DISTANCE = 20;
+
+    /** A ground blizzard (wind whipping up lying snow, none falling) is about half as thick. */
+    public static final double GROUND_BLIZZARD = 0.5;
+
     /** Share of midwinter fog days on which the fog doesn't lift all day. */
     public static final double ALL_DAY_SHARE = 0.35;
 
@@ -96,6 +105,25 @@ public final class DayWeatherRules {
         double s = gameTime / 20.0;   // seconds
         double gusts = 0.5 * Math.sin(s * 0.21) + 0.3 * Math.sin(s * 0.53 + 1.3) + 0.2 * Math.sin(s * 1.37 + 2.1);
         return Math.max(0.2, Math.min(1, 0.6 + 0.4 * gusts));
+    }
+
+    /** Where the wind blows to today (radians; the same for the whole world, as weather systems are big). */
+    public static double windDirection(long dayIndex, long seed) {
+        return hash(dayIndex, seed, 7) * 2 * Math.PI;
+    }
+
+    /**
+     * How strong a blizzard is, 0..1.
+     *
+     * @param snowing     how hard it snows here (0..1, vanilla's rain level where it snows)
+     * @param wind        the wind now (0..1)
+     * @param thunder     vanilla's thunder level (a snowstorm with thunder is a blizzard too)
+     * @param snowOnGround true if there's snow lying where the player is (for a ground blizzard)
+     */
+    public static double blizzard(double snowing, double wind, double thunder, boolean snowOnGround) {
+        double falling = snowing * Math.max(wind, thunder);
+        double ground = snowing < 0.2 && snowOnGround ? GROUND_BLIZZARD * wind : 0;
+        return Math.min(1, Math.max(falling, ground));
     }
 
     /** A random number 0..1 that's always the same for this day, world and salt. */

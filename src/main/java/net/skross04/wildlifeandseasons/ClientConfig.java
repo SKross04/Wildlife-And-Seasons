@@ -32,6 +32,11 @@ public class ClientConfig {
             .comment("Windy days (most in autumn and winter): the trees rustle louder and more leaves fall.")
             .define("windyDays", true);
 
+    public static final ModConfigSpec.BooleanValue BLIZZARDS = BUILDER
+            .comment("Blizzards: snow with strong wind (a windy day or a storm) closes the view in to about 20 blocks,",
+                    "turns everything white and blows snow past you; on windy days lying snow is whipped up too.")
+            .define("blizzards", true);
+
     public static final ModConfigSpec.BooleanValue SEASONAL_WATER_LILIES = BUILDER
             .comment("Lily pads follow the seasons: white and pink water lilies in summer, yellow and brown leaves",
                     "in autumn and winter, bronze new leaves in spring. Off = Mojang's green pads all year.")
@@ -73,6 +78,10 @@ public class ClientConfig {
 
     public static boolean windyDays() {
         return SPEC.isLoaded() ? WINDY_DAYS.get() : WINDY_DAYS.getDefault();
+    }
+
+    public static boolean blizzards() {
+        return SPEC.isLoaded() ? BLIZZARDS.get() : BLIZZARDS.getDefault();
     }
 
     public static boolean seasonalWaterLilies() {
