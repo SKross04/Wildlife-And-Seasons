@@ -42,54 +42,59 @@ public class SeasonalColorEvents {
 
     /** Vanilla leaves (oak, acacia, jungle, vines): seasonal, with yellow/orange/red patches in autumn. */
     public static final ColorResolver LEAVES_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.leaves(biome, Mth.floor(x), Mth.floor(z));
+            frost(0.45, 1.0, (biome, x, z) -> SeasonalColorState.leaves(biome, Mth.floor(x), Mth.floor(z)));
 
     /** Dark oak leaves: russet and brown in autumn, like real oaks. */
     public static final ColorResolver DARK_OAK_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.darkOak(biome, Mth.floor(x), Mth.floor(z));
+            frost(0.45, 1.0, (biome, x, z) -> SeasonalColorState.darkOak(biome, Mth.floor(x), Mth.floor(z)));
 
     /** Birch leaves start from birch green and turn bright yellow in autumn. */
     public static final ColorResolver BIRCH_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.birch(biome, FoliageColor.FOLIAGE_BIRCH, Mth.floor(x), Mth.floor(z));
+            frost(0.45, 1.0, (biome, x, z) -> SeasonalColorState.birch(biome, FoliageColor.FOLIAGE_BIRCH, Mth.floor(x), Mth.floor(z)));
 
     /** Spruce needles: evergreen, but snowy in winter. */
     public static final ColorResolver EVERGREEN_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.evergreen(biome, FoliageColor.FOLIAGE_EVERGREEN);
+            frost(0.45, 1.0, (biome, x, z) -> SeasonalColorState.evergreen(biome, FoliageColor.FOLIAGE_EVERGREEN));
 
     /** Cherry leaves: pink in spring, green in summer, autumn colours, snowy in winter. */
     public static final ColorResolver CHERRY_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.cherry(biome, Mth.floor(x), Mth.floor(z));
+            frost(0.45, SeasonalColors.CHERRY_TEXTURE_COMPENSATION, (biome, x, z) -> SeasonalColorState.cherry(biome, Mth.floor(x), Mth.floor(z)));
 
     /** Mangrove leaves: evergreen (tropical), a little less green late in the dry season, snowy if it ever gets that cold. */
     public static final ColorResolver MANGROVE_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.mangrove(biome, FoliageColor.FOLIAGE_MANGROVE);
+            frost(0.45, 1.0, (biome, x, z) -> SeasonalColorState.mangrove(biome, FoliageColor.FOLIAGE_MANGROVE));
 
     /** Azalea leaves (own grey texture): evergreen, purple-bronze in the cold months, snowy in winter. */
-    public static final ColorResolver AZALEA_RESOLVER = (biome, x, z) -> SeasonalColorState.azalea(biome);
+    public static final ColorResolver AZALEA_RESOLVER = frost(0.45, 0.77, (biome, x, z) -> SeasonalColorState.azalea(biome));
 
     /** The flowers of flowering azalea (second layer): pink in spring, leaf-coloured the rest of the year. */
-    public static final ColorResolver AZALEA_FLOWER_RESOLVER = (biome, x, z) -> SeasonalColorState.azaleaFlowers(biome);
+    public static final ColorResolver AZALEA_FLOWER_RESOLVER = frost(0.45, 0.77 * SeasonalColors.AZALEA_FLOWER_TO_LEAF, (biome, x, z) -> SeasonalColorState.azaleaFlowers(biome));
 
     /** Pale oak leaves (own grey texture): pale all year, snowy in winter. */
-    public static final ColorResolver PALE_OAK_RESOLVER = (biome, x, z) -> SeasonalColorState.paleOak(biome);
+    public static final ColorResolver PALE_OAK_RESOLVER = frost(0.45, 0.735, (biome, x, z) -> SeasonalColorState.paleOak(biome));
 
     /** Poplar leaves (own grey texture): green until autumn, then their own red, orange or yellow; snowy in winter. */
     public static final ColorResolver RED_POPLAR_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.RED, Mth.floor(x), Mth.floor(z));
+            frost(0.45, SeasonalColors.POPLAR_TEXTURE_COMPENSATION, (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.RED, Mth.floor(x), Mth.floor(z)));
     public static final ColorResolver ORANGE_POPLAR_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.ORANGE, Mth.floor(x), Mth.floor(z));
+            frost(0.45, SeasonalColors.POPLAR_TEXTURE_COMPENSATION, (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.ORANGE, Mth.floor(x), Mth.floor(z)));
     public static final ColorResolver YELLOW_POPLAR_RESOLVER =
-            (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.YELLOW, Mth.floor(x), Mth.floor(z));
+            frost(0.45, SeasonalColors.POPLAR_TEXTURE_COMPENSATION, (biome, x, z) -> SeasonalColorState.poplar(biome, SeasonalColors.Poplar.YELLOW, Mth.floor(x), Mth.floor(z)));
 
     /** Sweet berry bushes (own grey textures): leaf colour and flower colour through the year. */
-    public static final ColorResolver BERRY_LEAVES_RESOLVER = (biome, x, z) -> SeasonalColorState.berryLeaves(biome);
-    public static final ColorResolver BERRY_FLOWERS_RESOLVER = (biome, x, z) -> SeasonalColorState.berryFlowers(biome);
+    public static final ColorResolver BERRY_LEAVES_RESOLVER = frost(0.55, 0.915, (biome, x, z) -> SeasonalColorState.berryLeaves(biome));
+    public static final ColorResolver BERRY_FLOWERS_RESOLVER = frost(0.55, 0.915 * SeasonalColors.BERRY_FLOWER_TO_LEAF, (biome, x, z) -> SeasonalColorState.berryFlowers(biome));
 
     /** Lily pads (own grey texture): leaf colour through the year. */
     public static final ColorResolver LILY_PAD_RESOLVER = (biome, x, z) -> SeasonalColorState.lilyPad(biome);
 
     /** How much water lilies flower (0..255 in the lowest byte, not a real colour). */
     public static final ColorResolver LILY_BLOOM_RESOLVER = (biome, x, z) -> SeasonalColorState.lilyBloom(biome);
+
+    /** Hoarfrost on top of a leaf colour (see SeasonalColorState.frosted). */
+    private static ColorResolver frost(double weight, double scale, ColorResolver colour) {
+        return (biome, x, z) -> SeasonalColorState.frosted(colour.getColor(biome, x, z), biome, weight, scale);
+    }
 
     /** Custom colour resolvers must be registered, so Minecraft gives them a colour cache. */
     @SubscribeEvent
@@ -193,8 +198,11 @@ public class SeasonalColorEvents {
             return;
         }
         ClimateSnapshot.updateClient(SeasonAccess.clientYearPosition(), ClimateSnapshot.dayPosition(minecraft.level));
-        if (SeasonalColorState.update(SeasonAccess.clientYearPosition(), ClientConfig.seasonalColors(),
-                ClientConfig.seasonalPoplars(), ClientConfig.seasonalWaterLilies())) {
+        boolean colours = SeasonalColorState.update(SeasonAccess.clientYearPosition(), ClientConfig.seasonalColors(),
+                ClientConfig.seasonalPoplars(), ClientConfig.seasonalWaterLilies());
+        boolean frost = SeasonalColorState.updateFrost(ClientConfig.hoarfrost() && ClientConfig.seasonalColors()
+                ? DayWeather.frostByZone(minecraft.level) : null);
+        if (colours || frost) {
             minecraft.level.clearTintCaches();
             minecraft.levelExtractor.allChanged();
         }

@@ -208,6 +208,41 @@ public final class SeasonalColorState {
      *
      * @return true if the colours changed enough that the world should be redrawn
      */
+    /** Hoarfrost per climate zone right now, in steps of 0.5 (each step redraws the world, so only a few a day). */
+    private static volatile double[] frost = new double[ClimateZone.values().length];
+
+    /**
+     * Updates the hoarfrost for every zone; true if it changed a step (the world should be redrawn).
+     *
+     * @param amounts frost per zone (0..1), or null for none
+     */
+    public static boolean updateFrost(double[] amounts) {
+        double[] next = new double[ClimateZone.values().length];
+        if (amounts != null) {
+            for (int i = 0; i < next.length; i++) {
+                next[i] = Math.round(amounts[i] * 2) / 2.0;
+            }
+        }
+        boolean changed = !java.util.Arrays.equals(next, frost);
+        frost = next;
+        return changed;
+    }
+
+    /**
+     * A colour with this biome's hoarfrost (none where snow already covers the leaves).
+     *
+     * @param weight how much frost shows (grass more than leaves)
+     * @param scale  see SeasonalColors.frosted
+     */
+    public static int frosted(int color, Biome biome, double weight, double scale) {
+        SeasonalColors.Tint tint = tintFor(biome);
+        if (tint == null) {
+            return color;
+        }
+        double amount = frost[tint.zone().ordinal()] * weight * (1 - tint.snow());
+        return SeasonalColors.frosted(color, amount, scale);
+    }
+
     public static boolean update(OptionalDouble yearPosition, boolean enabled, boolean seasonalPoplars,
                                  boolean seasonalWaterLilies) {
         boolean poplarsChanged = poplars != seasonalPoplars || lilies != seasonalWaterLilies;

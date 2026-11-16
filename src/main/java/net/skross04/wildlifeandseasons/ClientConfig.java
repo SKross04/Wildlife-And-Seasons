@@ -37,6 +37,11 @@ public class ClientConfig {
                     "turns everything white and blows snow past you; on windy days lying snow is whipped up too.")
             .define("blizzards", true);
 
+    public static final ModConfigSpec.BooleanValue HOARFROST = BUILDER
+            .comment("Hoarfrost: on clear, calm mornings from autumn to spring, grass and leaves turn frosty white",
+                    "and thaw a few hours after sunrise. Each step of thawing redraws the world once.")
+            .define("hoarfrost", true);
+
     public static final ModConfigSpec.BooleanValue SEASONAL_WATER_LILIES = BUILDER
             .comment("Lily pads follow the seasons: white and pink water lilies in summer, yellow and brown leaves",
                     "in autumn and winter, bronze new leaves in spring. Off = Mojang's green pads all year.")
@@ -82,6 +87,10 @@ public class ClientConfig {
 
     public static boolean blizzards() {
         return SPEC.isLoaded() ? BLIZZARDS.get() : BLIZZARDS.getDefault();
+    }
+
+    public static boolean hoarfrost() {
+        return SPEC.isLoaded() ? HOARFROST.get() : HOARFROST.getDefault();
     }
 
     public static boolean seasonalWaterLilies() {

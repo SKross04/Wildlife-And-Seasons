@@ -12,8 +12,8 @@ package net.skross04.wildlifeandseasons.ecology.climate;
  */
 public final class DayWeatherRules {
     /** One day's weather character. */
-    public record Day(boolean foggy, boolean windy, boolean allDayFog) {
-        public static final Day CALM = new Day(false, false, false);
+    public record Day(boolean foggy, boolean windy, boolean allDayFog, boolean frosty) {
+        public static final Day CALM = new Day(false, false, false, false);
     }
 
     /** Fog seen at full strength brings the view down to this many blocks. */
@@ -72,7 +72,8 @@ public final class DayWeatherRules {
         boolean windy = hash(dayIndex, seed, 1) < windChance(zone, yearPosition);
         boolean foggy = !windy && hash(dayIndex, seed, 2) < fogChance(zone, yearPosition);
         boolean allDay = foggy && hash(dayIndex, seed, 3) < ALL_DAY_SHARE * winterness(yearPosition);
-        return new Day(foggy, windy, allDay);
+        boolean frosty = !windy && hash(dayIndex, seed, 4) < frostChance(zone, yearPosition);
+        return new Day(foggy, windy, allDay, frosty);
     }
 
     /**
@@ -105,6 +106,38 @@ public final class DayWeatherRules {
         double s = gameTime / 20.0;   // seconds
         double gusts = 0.5 * Math.sin(s * 0.21) + 0.3 * Math.sin(s * 0.53 + 1.3) + 0.2 * Math.sin(s * 1.37 + 2.1);
         return Math.max(0.2, Math.min(1, 0.6 + 0.4 * gusts));
+    }
+
+    /**
+     * Chance of a frosty morning (hoarfrost on grass and leaves). Real basis: hoar frost forms mostly on surfaces near
+     * the ground cooled by night radiation under a clear sky and light wind; grass can freeze even when the air
+     * stays just above 0 °C, so frosty mornings start in autumn and go on into spring.
+     */
+    public static double frostChance(ClimateZone zone, double yearPosition) {
+        double winter = Math.cos(2 * Math.PI * (yearPosition - 0.86));   // coldest nights around mid-January
+        double chance = switch (zone) {
+            case TEMPERATE -> 0.12 + 0.42 * winter;
+            case COLD -> 0.32 + 0.42 * winter;
+            case OCEAN -> 0.03 + 0.28 * winter;
+            case TROPICAL, SAVANNA, ARID, NO_SEASONS -> 0;
+        };
+        return Math.max(0, Math.min(1, chance));
+    }
+
+    /**
+     * How frosty it is now, 0..1: the frost forms in the second half of the night and melts a few hours after
+     * sunrise (around 8–9 a.m. in autumn, towards noon in midwinter).
+     */
+    public static double hoarfrost(Day today, Day tomorrow, double yearPosition, long timeOfDay) {
+        long t = Math.floorMod(timeOfDay, 24000L);
+        if (t >= 18000) {
+            return tomorrow.frosty() ? smoothstep(19000, 23500, t) : 0;
+        }
+        if (!today.frosty()) {
+            return 0;
+        }
+        double melt = 2500 + 3500 * winterness(yearPosition);
+        return 1 - smoothstep(melt * 0.35, melt, t);
     }
 
     /** Where the wind blows to today (radians; the same for the whole world, as weather systems are big). */

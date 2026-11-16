@@ -87,7 +87,7 @@ public final class SeasonalColors {
      * vanilla's grey oak leaves. Leaf colours are darkened by this much so cherry trees look like the other trees
      * outside spring.
      */
-    private static final double CHERRY_TEXTURE_COMPENSATION = 0.66;
+    public static final double CHERRY_TEXTURE_COMPENSATION = 0.66;
     private static final double CHERRY_BLOSSOM_STRENGTH = 1.6;
 
     /**
@@ -103,14 +103,14 @@ public final class SeasonalColors {
     /** Azaleas flower from mid spring into early summer (about April to early June), later than cherries. */
     private static final double AZALEA_BLOOM_CENTER = 0.20, AZALEA_BLOOM_HALF_WIDTH = 0.12;
     /** The flower layer's texture is brighter than the leaf layer's: this darkens a leaf colour to match it. */
-    private static final double AZALEA_FLOWER_TO_LEAF = 0.84;
+    public static final double AZALEA_FLOWER_TO_LEAF = 0.84;
     private static final int PALE_OAK_LEAVES = 0x979D94, PALE_OAK_SNOW = 0xAEB1B3;
 
     /**
      * Poplar leaves use our own bright grey texture (so autumn can be as vivid as Mojang's red, orange and yellow
      * leaves). It's brighter than vanilla's grey oak leaves, so the other colours are darkened by this much.
      */
-    private static final double POPLAR_TEXTURE_COMPENSATION = 0.78;
+    public static final double POPLAR_TEXTURE_COMPENSATION = 0.78;
     /** A poplar's own colour shows a little even in summer. */
     private static final double POPLAR_OWN_COLOR_HINT = 0.12;
     private static final int POPLAR_GREEN = darken(0x59AE30, POPLAR_TEXTURE_COMPENSATION);
@@ -147,7 +147,7 @@ public final class SeasonalColors {
      */
     private static final int BERRY_LEAVES = 0x52A167, BERRY_WINTER_LEAVES = 0x8A404A, BERRY_FLOWERS = 0xFFE4EA;
     /** Grey of the leaf pixels under the flowers ÷ grey of the flower pixels (from the textures: 0xC8 / 0xF4). */
-    private static final double BERRY_FLOWER_TO_LEAF = 0xC8 / (double) 0xF4;
+    public static final double BERRY_FLOWER_TO_LEAF = 0xC8 / (double) 0xF4;
 
     /**
      * Lily pads (our own grey pad texture, see the lily_pad model): Mojang's green in summer, bronze when new in spring,
@@ -214,6 +214,20 @@ public final class SeasonalColors {
                     || deciduous != other.deciduous || zone != other.zone
                     || (deciduous || BerryRules.hasBerrySeasons(zone)) && Math.abs(yearPosition - other.yearPosition) > 0.003;
         }
+    }
+
+    /** Hoarfrost: a frosty blue-white. */
+    private static final int FROST = 0xE2ECF2;
+
+    /**
+     * A colour with hoarfrost on it.
+     *
+     * @param amount how frosty (0..1, already weighted for grass or leaves)
+     * @param scale  brightness of the texture compared to vanilla's (so frost looks equally white on our brighter
+     *               textures); also used for hidden flower layers so they stay exactly hidden in the frost
+     */
+    public static int frosted(int color, double amount, double scale) {
+        return amount <= 0 ? color : blend(color, darken(FROST, scale), amount);
     }
 
     /** The seasonal look for a zone at a point in the year (0 = start of spring … 1 = end of winter). */

@@ -55,6 +55,25 @@ public final class DayWeather {
         return DayWeatherRules.day(zone, p - Math.floor(p), day + daysAhead, SeasonAccess.weatherSeed(level));
     }
 
+    /** Hoarfrost per climate zone now (0..1), for the grass and leaf colours; less when it rains (clouds). */
+    public static double[] frostByZone(Level level) {
+        double[] amounts = new double[ClimateZone.values().length];
+        OptionalDouble year = SeasonAccess.yearPosition(level);
+        if (year.isEmpty() || level.dimension() != Level.OVERWORLD) {
+            return amounts;
+        }
+        long timeOfDay = Math.round(ClimateSnapshot.dayPosition(level) * 24000);
+        double clear = 1 - level.getRainLevel(1.0F);
+        for (ClimateZone zone : ClimateZone.values()) {
+            DayWeatherRules.Day today = day(level, zone, 0);
+            DayWeatherRules.Day tomorrow = day(level, zone, 1);
+            if (today != null && tomorrow != null) {
+                amounts[zone.ordinal()] = DayWeatherRules.hoarfrost(today, tomorrow, year.getAsDouble(), timeOfDay) * clear;
+            }
+        }
+        return amounts;
+    }
+
     /** How hard the wind blows here now, 0..1 (0 when windy days are switched off or outside the overworld). */
     public static double windAt(Level level, BlockPos pos) {
         if (!ClientConfig.windyDays() || level.dimension() != Level.OVERWORLD) {
