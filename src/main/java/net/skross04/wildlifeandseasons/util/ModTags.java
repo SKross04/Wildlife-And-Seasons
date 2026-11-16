@@ -76,6 +76,9 @@ public class ModTags {
          */
         public static final TagKey<Biome> AUTUMN_COLORED = createTag("autumn_colored");
 
+        /** Biomes where mushrooms come up on the forest floor in autumn (forests and taigas by default). */
+        public static final TagKey<Biome> HAS_AUTUMN_MUSHROOMS = createTag("has_autumn_mushrooms");
+
         /** Biomes where leaf litter gathers in autumn (forests by default). */
         public static final TagKey<Biome> HAS_LEAF_LITTER = createTag("has_leaf_litter");
 

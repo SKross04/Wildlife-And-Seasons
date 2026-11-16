@@ -50,6 +50,11 @@ public class Config {
                     "winter snow melts in summer, flowers wilt or bloom, autumn leaves have fallen.")
             .define("catchUpUnvisitedChunks", true);
 
+    public static final ModConfigSpec.BooleanValue AUTUMN_MUSHROOMS = BUILDER
+            .comment("In autumn, mushrooms come up on shady forest floors (mostly after rain) and shelf mushrooms grow on",
+                    "tree trunks; frost makes them disappear again. Mushrooms from world generation or players stay.")
+            .define("autumnMushrooms", true);
+
     public static final ModConfigSpec.BooleanValue ICICLES = BUILDER
             .comment("Icicles grow under snowy roof edges in winter and melt in spring.")
             .define("icicles", true);
@@ -84,6 +89,10 @@ public class Config {
 
     public static boolean seasonalDayLength() {
         return SPEC.isLoaded() ? SEASONAL_DAY_LENGTH.get() : SEASONAL_DAY_LENGTH.getDefault();
+    }
+
+    public static boolean autumnMushrooms() {
+        return SPEC.isLoaded() ? AUTUMN_MUSHROOMS.get() : AUTUMN_MUSHROOMS.getDefault();
     }
 
     public static boolean icicles() {

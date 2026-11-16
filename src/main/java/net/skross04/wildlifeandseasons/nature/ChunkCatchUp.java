@@ -65,6 +65,7 @@ import net.skross04.wildlifeandseasons.ecology.season.Season;
 import net.skross04.wildlifeandseasons.ecology.season.SeasonDate;
 import net.skross04.wildlifeandseasons.ecology.vegetation.FlowerRules;
 import net.skross04.wildlifeandseasons.ecology.vegetation.LeafLitterRules;
+import net.skross04.wildlifeandseasons.ecology.vegetation.MushroomRules;
 import net.skross04.wildlifeandseasons.farming.CropSeasons;
 import net.skross04.wildlifeandseasons.season.SeasonSavedData;
 import net.skross04.wildlifeandseasons.util.ModTags;
@@ -85,6 +86,7 @@ import net.skross04.wildlifeandseasons.util.ModTags;
  * Catching up, column by column: warm → snow and lake ice melt, natural icicles melt; flowers wilt or bloom;
  * forest floors get the leaf litter they'd have by now; crops, stems (with their melons and pumpkins), sweet berries,
  * cocoa, nether wart, sugar cane, cactus (with its flowers) and bamboo grow for the days they were in season;
+ * autumn mushrooms that would have rotted or frozen are gone;
  * cold and snowy → snow lies on the ground, still water freezes, icicles hang under snowy roof edges.
  * Brand-new chunks don't need it: world generation already follows the season.
  */
@@ -258,6 +260,7 @@ public final class ChunkCatchUp {
             }
         }
         catchUpFlowersThatWilted(level, blocks, yearPosition);
+        catchUpMushrooms(level, blocks, missed, random);
         catchUpIciclesAndCrops(level, blocks, missed, random);
         chunk.markUnsaved();
     }
@@ -436,6 +439,35 @@ public final class ChunkCatchUp {
             if (comesBack) {
                 placeFlower(blocks, pos, flower);
                 memory.takeWilted(pos);
+            }
+        }
+    }
+
+    /**
+     * Autumn mushrooms grown here before: most have rotted while nobody was here (they last about a week), and frost
+     * collapses them. Shelf mushrooms only thin out in frost.
+     */
+    private static void catchUpMushrooms(ServerLevel level, ChunkBlocks blocks, long missed, RandomSource random) {
+        LevelChunk chunk = blocks.chunk();
+        ChunkFlowers memory = chunk.getExistingDataOrNull(ModAttachments.CHUNK_FLOWERS.get());
+        if (memory == null || !memory.hasMushrooms()) {
+            return;
+        }
+        for (BlockPos pos : memory.mushroomPositions()) {
+            BlockState state = blocks.get(pos);
+            boolean ground = AutumnMushrooms.isGroundMushroom(state);
+            boolean shelf = state.is(Blocks.SHELF_MUSHROOM);
+            if (!ground && !shelf) {
+                memory.removeMushroom(pos);
+                continue;
+            }
+            boolean frost = MushroomRules.frost(WorldClimate.dailyMeanAt(level, biomeAt(chunk, pos), pos));
+            boolean gone = shelf
+                    ? frost && random.nextDouble() > MushroomRules.shelfCatchUpSurvival(missed)
+                    : frost || random.nextDouble() > MushroomRules.catchUpSurvival(missed);
+            if (gone) {
+                blocks.set(pos, Blocks.AIR.defaultBlockState());
+                memory.removeMushroom(pos);
             }
         }
     }

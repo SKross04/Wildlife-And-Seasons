@@ -51,6 +51,10 @@ public class ModBiomeTagProvider extends BiomeTagsProvider {
         tag(ModTags.Biomes.HAS_LEAF_LITTER)
                 .addTag(Tags.Biomes.IS_FOREST);
 
+        tag(ModTags.Biomes.HAS_AUTUMN_MUSHROOMS)
+                .addTag(Tags.Biomes.IS_FOREST)
+                .addTag(Tags.Biomes.IS_TAIGA);
+
         // Mojang made the Dappled Forest look like autumn all year; with the seasons it's green until autumn.
         tag(ModTags.Biomes.AUTUMN_COLORED)
                 .add(Biomes.DAPPLED_FOREST);

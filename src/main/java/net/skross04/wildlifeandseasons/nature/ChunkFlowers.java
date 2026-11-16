@@ -19,7 +19,9 @@ import net.minecraft.world.level.block.state.BlockState;
  * Flower memory for one chunk, saved with the chunk:
  * <ul>
  *     <li>{@code wilted}: wild flowers that wilted after their bloom time, and where (they regrow there in spring),</li>
- *     <li>{@code planted}: positions where a player planted a flower (those become dormant buds instead of disappearing).</li>
+ *     <li>{@code planted}: positions where a player planted a flower (those become dormant buds instead of disappearing),</li>
+ *     <li>{@code mushrooms}: autumn mushrooms (and shelf mushrooms) the seasons grew here; only these rot and freeze
+ *     away again, so worldgen and player mushrooms stay.</li>
  * </ul>
  */
 public final class ChunkFlowers {
@@ -32,18 +34,21 @@ public final class ChunkFlowers {
 
     public static final MapCodec<ChunkFlowers> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Wilted.CODEC.listOf().optionalFieldOf("wilted", List.of()).forGetter(ChunkFlowers::wiltedList),
-            BlockPos.CODEC.listOf().optionalFieldOf("planted", List.of()).forGetter(flowers -> List.copyOf(flowers.planted))
+            BlockPos.CODEC.listOf().optionalFieldOf("planted", List.of()).forGetter(flowers -> List.copyOf(flowers.planted)),
+            BlockPos.CODEC.listOf().optionalFieldOf("mushrooms", List.of()).forGetter(flowers -> List.copyOf(flowers.mushrooms))
     ).apply(instance, ChunkFlowers::new));
 
     private final Map<BlockPos, BlockState> wilted = new HashMap<>();
     private final Set<BlockPos> planted = new HashSet<>();
+    private final Set<BlockPos> mushrooms = new HashSet<>();
 
     public ChunkFlowers() {
     }
 
-    private ChunkFlowers(List<Wilted> wiltedList, List<BlockPos> plantedList) {
+    private ChunkFlowers(List<Wilted> wiltedList, List<BlockPos> plantedList, List<BlockPos> mushroomList) {
         wiltedList.forEach(entry -> wilted.put(entry.pos(), entry.flower()));
         planted.addAll(plantedList);
+        mushrooms.addAll(mushroomList);
     }
 
     private List<Wilted> wiltedList() {
@@ -83,5 +88,26 @@ public final class ChunkFlowers {
 
     public boolean isPlanted(BlockPos pos) {
         return planted.contains(pos);
+    }
+
+    public void addMushroom(BlockPos pos) {
+        mushrooms.add(pos.immutable());
+    }
+
+    public void removeMushroom(BlockPos pos) {
+        mushrooms.remove(pos);
+    }
+
+    /** True if the seasons grew a mushroom here (so it may rot or freeze away again). */
+    public boolean isSeasonalMushroom(BlockPos pos) {
+        return mushrooms.contains(pos);
+    }
+
+    public boolean hasMushrooms() {
+        return !mushrooms.isEmpty();
+    }
+
+    public List<BlockPos> mushroomPositions() {
+        return List.copyOf(mushrooms);
     }
 }
