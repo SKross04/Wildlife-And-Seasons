@@ -42,6 +42,16 @@ public class ClientConfig {
                     "and thaw a few hours after sunrise. Each step of thawing redraws the world once.")
             .define("hoarfrost", true);
 
+    public static final ModConfigSpec.BooleanValue NORTHERN_LIGHTS = BUILDER
+            .comment("Northern lights: on some clear nights (mostly autumn to spring) green aurora curtains glow in the",
+                    "northern sky, with red above and a violet edge in strong displays. Mostly in cold biomes.")
+            .define("northernLights", true);
+
+    public static final ModConfigSpec.BooleanValue SHOOTING_STARS = BUILDER
+            .comment("Shooting stars on clear nights, with meteor showers: Perseids (mid-August), Geminids (mid-December)",
+                    "and Quadrantids (early January).")
+            .define("shootingStars", true);
+
     public static final ModConfigSpec.BooleanValue SEASONAL_WATER_LILIES = BUILDER
             .comment("Lily pads follow the seasons: white and pink water lilies in summer, yellow and brown leaves",
                     "in autumn and winter, bronze new leaves in spring. Off = Mojang's green pads all year.")
@@ -91,6 +101,14 @@ public class ClientConfig {
 
     public static boolean hoarfrost() {
         return SPEC.isLoaded() ? HOARFROST.get() : HOARFROST.getDefault();
+    }
+
+    public static boolean northernLights() {
+        return SPEC.isLoaded() ? NORTHERN_LIGHTS.get() : NORTHERN_LIGHTS.getDefault();
+    }
+
+    public static boolean shootingStars() {
+        return SPEC.isLoaded() ? SHOOTING_STARS.get() : SHOOTING_STARS.getDefault();
     }
 
     public static boolean seasonalWaterLilies() {

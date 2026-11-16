@@ -160,7 +160,7 @@ public final class DayWeatherRules {
     }
 
     /** A random number 0..1 that's always the same for this day, world and salt. */
-    static double hash(long day, long seed, int salt) {
+    public static double hash(long day, long seed, int salt) {
         long h = day * 0x9E3779B97F4A7C15L ^ seed ^ (salt + 1L) * 0xC2B2AE3D27D4EB4FL;
         h ^= h >>> 33;
         h *= 0xFF51AFD7ED558CCDL;

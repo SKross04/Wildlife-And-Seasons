@@ -30,6 +30,7 @@ public class WildlifeAndSeasons {
         ModBlocks.register(modEventBus);
         ModBlockEntities.register(modEventBus);
         ModAttachments.register(modEventBus);
+        net.skross04.wildlifeandseasons.particle.ModParticles.register(modEventBus);
 
         modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
         modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
